@@ -6,11 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class FormsController {
     @GetMapping
-    public String showMainForm(){
+    public String showMainForm() {
         return "mainPage";
     }
+
     @GetMapping("/registration")
-    public String showRegistrationForm(){
+    public String showRegistrationForm() {
         return "registrationForm";
     }
 }

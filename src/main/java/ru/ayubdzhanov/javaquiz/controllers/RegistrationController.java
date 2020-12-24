@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class RegistrationController {
-    @PostMapping("/register")
-    public String register(@RequestParam(value = "username", required = false) String name, @RequestParam(value = "password", required = false) String password) {
+
+    @PostMapping("/api/private/registration")
+    public String register(@RequestParam(value = "username") String name, @RequestParam(value = "password") String password) {
         log.info("Name " + name + " Password " + password);
         return "Data received successfully by server";
 
