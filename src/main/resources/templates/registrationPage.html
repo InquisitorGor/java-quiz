@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .note {
+            text-align: center;
+            height: 80px;
+            background: -webkit-linear-gradient(left, #2e77f1, #0a36ac);
+            color: #ffffff;
+            font-weight: bold;
+            line-height: 80px;
+        }
+
+        .form-content {
+            padding: 5%;
+            border: 1px solid #ced4da;
+            margin-bottom: 2%;
+        }
+
+        .form-control {
+            border-radius: 1.5rem;
+        }
+
+        .btnSubmit {
+            border: none;
+            border-radius: 1.5rem;
+            padding: 1%;
+            width: 20%;
+            cursor: pointer;
+            background: #0062cc;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Java Quiz</a>
+        </div>
+        <div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div style="padding-top: 100px" class="container register-form">
+    <div class="form">
+        <div class="note">
+            <p>Регистрация</p>
+        </div>
+        <div class="form-content">
+            <form name="registrationForm" method="post" action="/registration" onsubmit="return(validateFields());">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input name="username" type="text" class="form-control" placeholder="Ваще имя *" value=""/>
+                        </div>
+                        <div class="form-group">
+                            <input name="telephone" type="text" class="form-control" placeholder="Ваш номер телефона *" value=""/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input name="password" type="text" class="form-control" placeholder="Ваш пароль *" value=""/>
+                        </div>
+                        <div class="form-group">
+                            <input name="samePassword" type="text" class="form-control" placeholder="Подтвердить пароль *" value=""/>
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" class="btnSubmit" value="Зарегистрироваться"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateFields() {
+        var username = document.registrationForm.username.value;
+        var telephone = document.registrationForm.telephone.value;
+        var password = document.registrationForm.password.value;
+        var samePassword = document.registrationForm.samePassword.value;
+        if (username === "") {
+            alert('Enter the username');
+            return false;
+        } else if (telephone === "") {
+            alert('Enter the telephone');
+            return false;
+        } else if (password === "") {
+            alert('Enter the password');
+            return false;
+        } else if (samePassword === "") {
+            alert('Approve you password');
+            return false;
+        } else if (samePassword !== password) {
+            alert('Passwords dont match');
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+</script>
+</body>
+</html>
