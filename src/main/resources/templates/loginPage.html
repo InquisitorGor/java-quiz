@@ -16,16 +16,9 @@
             font-weight: bold;
             line-height: 80px;
         }
-
-        .form {
-            width: 800px;
-        }
-
         .form-content {
-            padding-top: 50px;
-            padding-bottom: 50px;
-            padding-left: 30%;
             border: 1px solid #ced4da;
+            padding: 5%;
             margin-bottom: 2%;
         }
 
@@ -66,7 +59,7 @@
     </div>
 </nav>
 
-<div style="padding-top: 100px" class="container register-form">
+<div style="padding-top: 100px;width: auto" class="container register-form">
     <div class="form">
         <div class="note">
             <p>Вход</p>
@@ -74,14 +67,12 @@
         <div class="form-content">
             <form name="loginForm" method="post" action="/login" onsubmit="return(validateFields());">
                 <div class="row">
-                    <div class="col-md-6">
                         <div class="form-group">
                             <input name="username" type="text" class="form-control" placeholder="Ваш логин *" value=""/>
                         </div>
                         <div class="form-group">
                             <input name="password" type="text" class="form-control" placeholder="Ваш пароль *"
                                    value=""/>
-                        </div>
                     </div>
                 </div>
                 <input type="submit" class="btnSubmit" value="Войти"/>

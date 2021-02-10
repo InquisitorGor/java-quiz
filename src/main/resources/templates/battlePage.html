@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Битвы</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Java Quiz</a>
+        </div>
+        <div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/user_page"><span class="glyphicon glyphicon-user"></span> Личный кабинет</a>
+                    </li>
+                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container" style="padding-top: 40px">
+    <h2>Битвы</h2>
+    <p>Ответьте на все вопросы до истечения времени</p>
+    <ul class="nav nav-tabs">
+        <li><a data-toggle="tab" href="#menu1">1</a></li>
+        <li><a data-toggle="tab" href="#menu2">2</a></li>
+        <li><a data-toggle="tab" href="#menu3">3</a></li>
+        <li><a data-toggle="tab" href="#menu3">4</a></li>
+        <li><a data-toggle="tab" href="#menu3">5</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="menu1" class="tab-pane fade">
+            <h3>Что такое класс?</h3>
+            <div class="checkbox">
+                <label><input type="checkbox" value="">Шутка из мира программирования</label>
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" value="">Рецепт ухи</label>
+            </div>
+            <div class="checkbox disabled">
+                <label><input type="checkbox" value="" disabled>В объектно-ориентированном программировании,
+                    представляет собой шаблон для создания объектов</label>
+            </div>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <h3>Есть ли смысл учить другие ЯП помимо C#</h3>
+            <div class="checkbox">
+                <label><input type="checkbox" value="">Конечно нет. Нет лучше языка чем C#.</label>
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" value="">Остальные ЯП не имеют право называться ЯП в принципе. Особенно
+                    Java. На нем пишут негодяи</label>
+            </div>
+            <div class="checkbox disabled">
+                <label><input type="checkbox" value="" disabled>Алтернативное мнение</label>
+            </div>
+        </div>
+        <div id="menu3" class="tab-pane fade">
+            <h3>Ходят слухи, что нету лучшего СУБД, чем MS SQL Server. Это верно или все таки это бред сумашедшего?</h3>
+            <div class="checkbox">
+                <label><input type="checkbox" value="">Ну как это. Как грится это божественный дар. А какой графический
+                    интерфейс!!! Ммм. Максимально удобно. Делалось богами для людей</label>
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" value="">Не, ну по факту лучшего нету. Какой-то выскочка один раз упомянул
+                    на паре про Postgre. Я был в бешенстве. Как таких идиотов земля носит</label>
+            </div>
+            <div class="checkbox disabled">
+                <label><input type="checkbox" value="" disabled>Алтернативное мнение</label>
+            </div>
+        </div>
+        <div id="menu4" class="tab-pane fade">
+            <h3>Menu 3</h3>
+            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </div>
+        <div id="menu5" class="tab-pane fade">
+            <h3>Menu 3</h3>
+            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </div>
+    </div>
+</div>
+<div>
+    <div style="position: relative; padding-top: 50px; text-align: center;">
+        <button type="button" class="btn btn-primary">Закончить</button>
+    </div>
+    <div style="position: relative; padding-top: 50px; text-align: center;" >
+        <p id="demo"></p>
+    </div>
+</div>
+<script>
+    // Set the date we're counting down to
+    var countDownDate = new Date("Jan 5, 2022 15:37:25").getTime();
+
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the result in the element with id="demo"
+        document.getElementById("demo").innerHTML = seconds + "s ";
+
+        // If the count down is finished, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("demo").innerHTML = "EXPIRED";
+        }
+    }, 1000);
+</script>
+</body>
+</html>

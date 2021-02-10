@@ -6,6 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Controller
 public class PageController {
 
@@ -25,7 +28,7 @@ public class PageController {
 
     @GetMapping("/theory")
     public String showTheoryPage() {
-        return "mainPage";
+        return "theoryPage";
     }
 
     @GetMapping("/registration")
@@ -37,8 +40,19 @@ public class PageController {
     public String showLoginPage() {
         return "loginPage";
     }
-    @GetMapping("/personal")
-    public String showPersonalPage() {
-        return "personalPage";
+
+    @GetMapping("/battle")
+    public String showBattlePage() {
+        return "battlePage";
+    }
+
+    @GetMapping("/user_page")
+    public String showUserPage() {
+        return "userPage";
+    }
+
+    @GetMapping("/competition")
+    public String showCompetitionPage(Model model) {
+        return "competitionPage";
     }
 }

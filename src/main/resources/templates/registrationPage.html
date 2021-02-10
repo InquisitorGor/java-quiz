@@ -59,7 +59,7 @@
     </div>
 </nav>
 
-<div style="padding-top: 100px" class="container register-form">
+<div style="padding-top: 100px;width: auto" class="container register-form">
     <div class="form">
         <div class="note">
             <p>Регистрация</p>
@@ -67,22 +67,15 @@
         <div class="form-content">
             <form name="registrationForm" method="post" action="/registration" onsubmit="return(validateFields());">
                 <div class="row">
-                    <div class="col-md-6">
                         <div class="form-group">
-                            <input name="username" type="text" class="form-control" placeholder="Ваще имя *" value=""/>
+                            <input name="username" type="text" class="form-control" placeholder="Ваше имя *" value=""/>
                         </div>
-                        <div class="form-group">
-                            <input name="telephone" type="text" class="form-control" placeholder="Ваш номер телефона *" value=""/>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
                         <div class="form-group">
                             <input name="password" type="text" class="form-control" placeholder="Ваш пароль *" value=""/>
                         </div>
                         <div class="form-group">
                             <input name="samePassword" type="text" class="form-control" placeholder="Подтвердить пароль *" value=""/>
                         </div>
-                    </div>
                 </div>
                 <input type="submit" class="btnSubmit" value="Зарегистрироваться"/>
             </form>
@@ -93,14 +86,10 @@
 <script>
     function validateFields() {
         var username = document.registrationForm.username.value;
-        var telephone = document.registrationForm.telephone.value;
         var password = document.registrationForm.password.value;
         var samePassword = document.registrationForm.samePassword.value;
         if (username === "") {
             alert('Enter the username');
-            return false;
-        } else if (telephone === "") {
-            alert('Enter the telephone');
             return false;
         } else if (password === "") {
             alert('Enter the password');
