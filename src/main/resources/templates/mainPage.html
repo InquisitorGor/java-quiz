@@ -63,7 +63,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li th:if="${isAuthenticated == false}"><a href="/registration"><span class="glyphicon glyphicon-user"></span> Зарегистрироваться</a></li>
                     <li th:if="${isAuthenticated == false}"><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
-                    <li th:if="${isAuthenticated == true}"><a href="/competition"><span class="glyphicon glyphicon-knight"></span> Состязания</a></li>
+                    <li th:if="${isAuthenticated == true}"><a href="/competition/list"><span class="glyphicon glyphicon-knight"></span> Состязания</a></li>
                     <li th:if="${isAuthenticated == true}"><a href="/theory"><span class="glyphicon glyphicon-book"></span> Теория</a></li>
                     <li th:if="${isAuthenticated == true}"><a href="/user_page"><span th:text="${user}" class="glyphicon glyphicon-user" ></span></a></li>
                     <li th:if="${isAuthenticated == true}"><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
@@ -77,17 +77,17 @@
     <div class="jumbotron" id="jumbotron">
         <h1>Java quiz</h1>
         <p>Желаешь улучшить свои знания по Java и другим технологиям? Надоели дыры в знаниях?</p>
-        <img src="images/logo.png" alt="Cinque Terre"
+        <img src="images/main/logo.png" alt="Cinque Terre"
              style="width:350px;height:350px;padding-right:50px">
-        <img src="images/apache.png" class="img-rounded" alt="Cinque Terre"
+        <img src="images/main/apache.png" class="img-rounded" alt="Cinque Terre"
              style="width:350px;height:350px;padding-right:50px">
-        <img src="images/hibernate.png" class="img-rounded" alt="Cinque Terre"
+        <img src="images/main/hibernate.png" class="img-rounded" alt="Cinque Terre"
              style="width:350px;height:350px;padding-right:50px">
-        <img src="images/spring.png" class="img-rounded" alt="Cinque Terre"
+        <img src="images/main/spring.png" class="img-rounded" alt="Cinque Terre"
              style="width:350px;height:350px;padding-right:50px">
-        <img src="images/db.png" class="img-rounded" alt="Cinque Terre"
+        <img src="images/main/db.png" class="img-rounded" alt="Cinque Terre"
              style="width:350px;height:350px;padding-right:50px">
-        <img src="images/jboss.png" alt="Cinque Terre"
+        <img src="images/main/jboss.png" alt="Cinque Terre"
              style="width:350px;height:350px;padding-right:50px">
     </div>
 </div>
@@ -95,11 +95,11 @@
     <div class="jumbotron" id="jumbotron1">
         <h1 style="padding-bottom: 40px">Соревнуйся с реальными участниками</h1>
         <p style="padding-bottom: 60px">Битвы ждут тебя. Поддайся инстинктам и ринься в бой с реальными противниками в онлайне</p>
-        <img align="center" src="images/nerd.jpg" class="img-rounded" alt="Cinque Terre"
+        <img align="center" src="images/main/nerd.jpg" class="img-rounded" alt="Cinque Terre"
              style="width:350px;height:350px;padding-right:50px">
-        <img align="center" src="images/nerd1.jpg" class="img-rounded" alt="Cinque Terre"
+        <img align="center" src="images/main/nerd1.jpg" class="img-rounded" alt="Cinque Terre"
              style="width:350px;height:350px;padding-right:50px">
-        <img align="center" src="images/nerd3.jpg" class="img-rounded" alt="Cinque Terre"
+        <img align="center" src="images/main/nerd3.jpg" class="img-rounded" alt="Cinque Terre"
              style="width:350px;height:350px;padding-right:50px">
     </div>
 </div>

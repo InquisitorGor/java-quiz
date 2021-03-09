@@ -22,7 +22,7 @@
         <div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/competition"><span class="glyphicon glyphicon-knight"></span> Состязания</a></li>
+                    <li><a href="/competition/list"><span class="glyphicon glyphicon-knight"></span> Состязания</a></li>
                     <li><a href="/user_page"><span class="glyphicon glyphicon-user"></span> Личный кабинет</a>
                     </li>
                     <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
@@ -33,11 +33,14 @@
 </nav>
 <div class="container" style="padding-top: 40px">
     <h2>Теория</h2>
-    <p>Выберите уровень сложности теории</p>
     <ul class="nav nav-tabs">
-        <li><a data-toggle="tab" href="#menu1">Базовый</a></li>
-        <li><a data-toggle="tab" href="#menu2">Средний</a></li>
-        <li><a data-toggle="tab" href="#menu3">Продвинутый</a></li>
+        <li><a data-toggle="tab" href="#menu1">Основы ООП</a></li>
+        <li><a data-toggle="tab" href="#menu2">JVM</a></li>
+        <li><a data-toggle="tab" href="#menu3">Java Core</a></li>
+        <li><a data-toggle="tab" href="#menu4">Java Collection Framework</a></li>
+        <li><a data-toggle="tab" href="#menu5">Базы данных</a></li>
+        <li><a data-toggle="tab" href="#menu6">SQL</a></li>
+        <li><a data-toggle="tab" href="#menu7">JDBC</a></li>
     </ul>
 
     <div class="tab-content">
@@ -49,10 +52,27 @@
                 а классы образуют иерархию наследования.</p>
         </div>
         <div id="menu2" class="tab-pane fade">
-            <h3>Menu 2</h3>
-            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+            <h3>За что отвечает JVM?</h3>
+            <p>Виртуальная машина Java (Java Virtual Machine) - это механизм, предоставляющий среду выполнения для управления Java-кодом или приложениями. Виртуальная машина является независимой оболочкой исполнения кода, благодаря которой возможен её запуск на любой ОС, без влияния ОС на выполняемую программу.</p>
         </div>
         <div id="menu3" class="tab-pane fade">
+            <h3>Чем различаются JRE, JVM и JDK?</h3>
+            <p>JVM, Java Virtual Machine (Виртуальная машина Java) — основная часть среды времени исполнения Java (JRE). Виртуальная машина Java исполняет байт-код Java, предварительно созданный из исходного текста Java-программы компилятором Java. JVM может также использоваться для выполнения программ, написанных на других языках программирования.
+                JRE, Java Runtime Environment (Среда времени выполнения Java) - минимально-необходимая реализация виртуальной машины для исполнения Java-приложений. Состоит из JVM и стандартного набора библиотек классов Java.</p>
+        </div>
+        <div id="menu4" class="tab-pane fade">
+            <h3>Что такое «коллекция»?</h3>
+            <p>«Коллекция» - это структура данных, набор каких-либо объектов. Данными (объектами в наборе) могут быть числа, строки, объекты пользовательских классов и т.п.</p>
+        </div>
+        <div id="menu5" class="tab-pane fade">
+            <h3>Menu 3</h3>
+            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </div>
+        <div id="menu6" class="tab-pane fade">
+            <h3>Menu 3</h3>
+            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </div>
+        <div id="menu7" class="tab-pane fade">
             <h3>Menu 3</h3>
             <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
         </div>
