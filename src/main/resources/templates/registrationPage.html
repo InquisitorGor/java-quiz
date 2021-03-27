@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -65,7 +65,7 @@
             <p>Регистрация</p>
         </div>
         <div class="form-content">
-            <form name="registrationForm" method="post" action="/registration" onsubmit="return(validateFields());">
+            <form name="registrationForm" method="post" action="/registration/register" onsubmit="return(validateFields());">
                 <div class="row">
                         <div class="form-group">
                             <input name="username" type="text" class="form-control" placeholder="Ваше имя *" value=""/>
@@ -79,6 +79,12 @@
                 </div>
                 <input type="submit" class="btnSubmit" value="Зарегистрироваться"/>
             </form>
+        </div>
+        <div th:if="${success == false}">
+            <button type="button" class="btn btn-danger">Пользователь уже существует</button>
+        </div>
+        <div th:if="${success == true}">
+            <button type="button" class="btn btn-info">Вы успешно зарегистрировались!</button>
         </div>
     </div>
 </div>

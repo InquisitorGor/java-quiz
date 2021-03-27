@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/battle")
 public class BattlePageController {
+
     @PostMapping("/startBattle")
     public String showBattlePage(@RequestParam String value) {
         System.out.println("We got this value " + value);
