@@ -6,6 +6,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,7 +16,6 @@ import javax.persistence.Table;
 public class UserCredential {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -21,6 +23,11 @@ public class UserCredential {
     private String password;
 
     private String role;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "user_data")
+    private UserData userData;
 
     public UserCredential() {
     }
