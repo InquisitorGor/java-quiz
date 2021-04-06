@@ -11,8 +11,5 @@ public class JavaQuizApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(JavaQuizApplication.class, args);
-        log.debug("Debug");
     }
-
-
 }

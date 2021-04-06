@@ -8,8 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name = "user_credential")
@@ -28,6 +30,9 @@ public class UserCredential {
     @MapsId
     @JoinColumn(name = "user_data")
     private UserData userData;
+
+    @OneToMany(mappedBy = "userCredential")
+    private List<ContestantInfo> contestantInfos;
 
     public UserCredential() {
     }
@@ -68,5 +73,21 @@ public class UserCredential {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public UserData getUserData() {
+        return userData;
+    }
+
+    public void setUserData(UserData userData) {
+        this.userData = userData;
+    }
+
+    public List<ContestantInfo> getContestantInfos() {
+        return contestantInfos;
+    }
+
+    public void setContestantInfos(List<ContestantInfo> contestantInfos) {
+        this.contestantInfos = contestantInfos;
     }
 }
