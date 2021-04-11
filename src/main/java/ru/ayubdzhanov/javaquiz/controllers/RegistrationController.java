@@ -14,11 +14,9 @@ import ru.ayubdzhanov.javaquiz.service.UserCredentialService;
 public class RegistrationController {
 
     private final UserCredentialService userCredentialService;
-    private final PasswordEncoder passwordEncoder;
 
-    public RegistrationController(UserCredentialService userCredentialService, PasswordEncoder passwordEncoder) {
+    public RegistrationController(UserCredentialService userCredentialService) {
         this.userCredentialService = userCredentialService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
@@ -26,7 +24,7 @@ public class RegistrationController {
                                        @RequestParam String password,
                                        Model model) {
         try {
-            userCredentialService.saveUser(username, passwordEncoder.encode(password));
+            userCredentialService.saveUser(username, password);
             model.addAttribute("success", Boolean.TRUE);
         } catch (UserException ex) {
             model.addAttribute("success", Boolean.FALSE);

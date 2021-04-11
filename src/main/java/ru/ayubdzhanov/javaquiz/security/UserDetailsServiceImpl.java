@@ -6,21 +6,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import ru.ayubdzhanov.javaquiz.dao.UserRepository;
+import ru.ayubdzhanov.javaquiz.dao.UserCredentialRepository;
 import ru.ayubdzhanov.javaquiz.domain.UserCredential;
 
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserCredentialRepository userCredentialRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserDetailsServiceImpl(UserCredentialRepository userCredentialRepository) {
+        this.userCredentialRepository = userCredentialRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserCredential credential = userRepository.findByName(username);
+        UserCredential credential = userCredentialRepository.findByName(username);
         if (credential == null) throw new UsernameNotFoundException(username + " was not found");
         UserBuilder user = User
             .withUsername(username)

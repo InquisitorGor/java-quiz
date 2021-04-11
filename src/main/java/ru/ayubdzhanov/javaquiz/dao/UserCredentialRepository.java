@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.ayubdzhanov.javaquiz.domain.UserCredential;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserCredential, Long> {
+public interface UserCredentialRepository extends JpaRepository<UserCredential, Long> {
     UserCredential findByName(String name);
 }

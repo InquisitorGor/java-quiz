@@ -23,11 +23,6 @@ public class PageController {
         return "mainPage";
     }
 
-    @GetMapping("/theory")
-    public String showTheoryPage() {
-        return "theoryPage";
-    }
-
     @GetMapping("/registration")
     public String showRegistrationPage() {
         return "registrationPage";

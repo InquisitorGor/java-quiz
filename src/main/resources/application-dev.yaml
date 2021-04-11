@@ -3,12 +3,17 @@ spring:
     url: jdbc:postgresql://localhost:5432/quiz_db
     username: postgres
     password: 1234
+    initialization-mode: always
+    data: classpath:data.sql
   jpa:
     hibernate:
       ddl-auto: create-drop
-#logging:
-#  level:
-#    root: debug
-#    ru:
-#      ayubdzhanov:
-#        javaquiz: debug
+    show-sql: true
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+        SQL: trace

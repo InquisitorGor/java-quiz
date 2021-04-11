@@ -37,10 +37,11 @@ public class UserCredential {
     public UserCredential() {
     }
 
-    public UserCredential(String name, String password, String role) {
+    public UserCredential(String name, String password, String role, UserData userData) {
         this.name = name;
         this.password = password;
         this.role = role;
+        this.userData = userData;
     }
 
     public Long getId() {
