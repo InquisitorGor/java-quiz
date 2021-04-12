@@ -33,6 +33,13 @@ public class UserData {
 
     private Integer amountOfBattles;
 
+    public UserData() {
+    }
+
+    public UserData(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import ru.ayubdzhanov.javaquiz.dao.UserCredentialRepository;
 import ru.ayubdzhanov.javaquiz.domain.UserCredential;
+import ru.ayubdzhanov.javaquiz.domain.UserData;
 import ru.ayubdzhanov.javaquiz.service.UserDataContainer;
 
 @Component

@@ -8,11 +8,11 @@ import ru.ayubdzhanov.javaquiz.domain.UserData;
 import ru.ayubdzhanov.javaquiz.exception.UserException;
 
 @Service
-public class UserCredentialService {
+public class RegistrationService {
     private final UserCredentialRepository userCredentialRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserCredentialService(UserCredentialRepository userCredentialRepository, PasswordEncoder passwordEncoder) {
+    public RegistrationService(UserCredentialRepository userCredentialRepository, PasswordEncoder passwordEncoder) {
         this.userCredentialRepository = userCredentialRepository;
         this.passwordEncoder = passwordEncoder;
     }

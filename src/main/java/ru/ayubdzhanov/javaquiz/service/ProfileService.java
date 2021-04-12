@@ -6,7 +6,7 @@ import ru.ayubdzhanov.javaquiz.dao.UserDataRepository;
 import ru.ayubdzhanov.javaquiz.domain.UserData;
 
 @Service
-public class UserDataService {
+public class ProfileService {
 
     @Autowired
     private UserDataContainer userDataContainer;
@@ -14,6 +14,9 @@ public class UserDataService {
     private UserDataRepository userDataRepository;
 
     public UserData getUserData(){
-        return userDataRepository.getOne(userDataContainer.getId());
+        if (userDataContainer.getUserData() == null) {
+            userDataContainer.setUserData(userDataRepository.getOne(userDataContainer.getId()));
+        }
+        return userDataContainer.getUserData();
     }
 }
