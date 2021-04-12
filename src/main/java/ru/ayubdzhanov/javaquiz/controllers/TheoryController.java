@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import ru.ayubdzhanov.javaquiz.domain.Theory;
 import ru.ayubdzhanov.javaquiz.service.TheoryService;
+
+import java.util.List;
 
 @Controller
 public class TheoryController {
@@ -14,7 +17,8 @@ public class TheoryController {
 
     @GetMapping("/theory")
     public String showTheoryPage(Model model) {
-        model.addAttribute("content", theoryService.findAll());
+        List<Theory> all = theoryService.findAll();
+        model.addAttribute("theories", all);
         return "theoryPage";
     }
 }

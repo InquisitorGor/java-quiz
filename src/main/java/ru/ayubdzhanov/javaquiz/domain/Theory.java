@@ -1,5 +1,7 @@
 package ru.ayubdzhanov.javaquiz.domain;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +19,7 @@ public class Theory {
     private String title;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String description;
 
     @ManyToOne

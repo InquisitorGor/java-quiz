@@ -16,4 +16,5 @@ public class TheoryService {
     public List<Theory> findAll(){
         return theoryRepository.findAll();
     }
+
 }

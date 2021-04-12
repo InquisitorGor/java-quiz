@@ -7,7 +7,7 @@ spring:
     data: classpath:data.sql
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
 logging:
   level:
