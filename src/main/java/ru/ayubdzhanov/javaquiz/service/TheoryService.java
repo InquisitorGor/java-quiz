@@ -12,9 +12,26 @@ public class TheoryService {
 
     @Autowired
     private TheoryRepository theoryRepository;
+    private List<Theory> theories;
 
-    public List<Theory> findAll(){
-        return theoryRepository.findAll();
+    public List<Theory> getTheories(Boolean forceUpdate) {
+        if (theories == null || forceUpdate == Boolean.TRUE) {
+            theories = theoryRepository.findAll();
+            wrapTheories(theories);
+        }
+        return theories;
+    }
+
+    public List<Theory> getTheories() {
+        return getTheories(Boolean.FALSE);
+    }
+
+    public void wrapTheories(List<Theory> theories){
+        theories.forEach(theory -> theory.setMenu("menu" + theory.getId()));
+    }
+
+    public class Content {
+
     }
 
 }

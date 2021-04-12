@@ -18,7 +18,7 @@ public class UserCredentialService {
     }
 
     public void saveUser(String name, String password) throws UserException{
-        if (userCredentialRepository.findByName(name) != null) throw new UserException("User already exists");
+        if (userCredentialRepository.findByLogin(name) != null) throw new UserException("User already exists");
         UserData userData = new UserData();
         userCredentialRepository.save(new UserCredential(name, passwordEncoder.encode(password), "USER", userData));
     }

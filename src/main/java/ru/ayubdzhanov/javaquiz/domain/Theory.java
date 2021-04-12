@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class Theory {
@@ -25,6 +26,9 @@ public class Theory {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @Transient
+    private String menu;
 
     public Long getId() {
         return id;
@@ -56,5 +60,13 @@ public class Theory {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getMenu() {
+        return menu;
+    }
+
+    public void setMenu(String menu) {
+        this.menu = menu;
     }
 }

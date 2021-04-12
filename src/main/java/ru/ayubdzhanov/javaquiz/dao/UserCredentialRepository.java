@@ -6,5 +6,5 @@ import ru.ayubdzhanov.javaquiz.domain.UserCredential;
 
 @Repository
 public interface UserCredentialRepository extends JpaRepository<UserCredential, Long> {
-    UserCredential findByName(String name);
+    UserCredential findByLogin(String login);
 }

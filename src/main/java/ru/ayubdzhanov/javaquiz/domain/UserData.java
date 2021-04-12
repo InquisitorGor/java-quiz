@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class UserData {
@@ -19,11 +21,17 @@ public class UserData {
     @PrimaryKeyJoinColumn
     private UserCredential userCredential;
 
+    private String name;
+
     private Integer prestige;
 
     private Integer victories;
 
     private Integer defeats;
+
+    private LocalDate registrationDate;
+
+    private Integer amountOfBattles;
 
     public Long getId() {
         return id;
@@ -39,6 +47,14 @@ public class UserData {
 
     public void setUserCredential(UserCredential userCredential) {
         this.userCredential = userCredential;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getPrestige() {
@@ -63,5 +79,21 @@ public class UserData {
 
     public void setDefeats(Integer defeats) {
         this.defeats = defeats;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public Integer getAmountOfBattles() {
+        return amountOfBattles;
+    }
+
+    public void setAmountOfBattles(Integer amountOfBattles) {
+        this.amountOfBattles = amountOfBattles;
     }
 }

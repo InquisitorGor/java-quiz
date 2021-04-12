@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<title>User page</title>
@@ -37,15 +37,15 @@
 		<div class="panel-group">
 			<div class="panel panel-default">
 				<div class="panel-heading">Краткая информация</div>
-				<div class="panel-body">Имя: Михаил</div>
-				<div class="panel-body">Участник с: 13.04.20</div>
+				<div th:utext="${'Имя: ' + profile.getName()}" class="panel-body">Михаил</div>
+				<div th:utext="${'Участник с: ' + profile.getRegistrationDate()}" class="panel-body">Участник с: 13.04.20</div>
 			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">Прогресс</div>
-				<div class="panel-body">Престиж: 140</div>
-				<div class="panel-body">Провел количество битв: 230</div>
-				<div class="panel-body">Количество побед: 150</div>
-				<div class="panel-body">Количество проигрышей: 80</div>
+				<div th:utext="${'Престиж: ' + profile.getPrestige()}" class="panel-body">Престиж: 140</div>
+				<div th:utext="${'Провел количество битв: ' + profile.getAmountOfBattles()}" class="panel-body">Провел количество битв: 230</div>
+				<div th:utext="${'Количество побед: ' + profile.getVictories()}" class="panel-body">Количество побед: 150</div>
+				<div th:utext="${'Количество проигрышей: ' + profile.getDefeats()}" class="panel-body">Количество проигрышей: 80</div>
 			</div>
 		</div>
 	</div>

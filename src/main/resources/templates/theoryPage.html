@@ -34,28 +34,13 @@
 <div class="container" style="padding-top: 40px">
 	<h2>Теория</h2>
 	<ul class="nav nav-tabs">
-		<li th:each="theory : ${theories}"><a th:utext="${theory.getCategory().getCategory()}" data-toggle="tab" href="#menu1">Основы ООП</a></li>
-		<!--        <li><a data-toggle="tab" href="#menu1">Основы ООП</a></li>-->
-		<!--        <li><a data-toggle="tab" href="#menu2">JVM</a></li>-->
-		<!--        <li><a data-toggle="tab" href="#menu3">Java Core</a></li>-->
-		<!--        <li><a data-toggle="tab" href="#menu4">Java Collection Framework</a></li>-->
-		<!--        <li><a data-toggle="tab" href="#menu5">Базы данных</a></li>-->
-		<!--        <li><a data-toggle="tab" href="#menu6">SQL</a></li>-->
-		<!--        <li><a data-toggle="tab" href="#menu7">JDBC</a></li>-->
+		<li th:each="theory : ${theories}"><a th:utext="${theory.getCategory().getCategory()}" data-toggle="tab" th:href="${'#' + theory.getMenu()}">Основы ООП</a></li>
 	</ul>
-
 	<div class="tab-content">
-		        <div id="menu1" class="tab-pane fade">
-		            <h3>Что такое ООП?</h3>
-		            <p>Объектно-ориентированное программирование (ООП) — методология программирования,
-		                основанная на представлении программы в виде совокупности объектов,
-		                каждый из которых является экземпляром определенного класса,
-		                а классы образуют иерархию наследования.</p>
-		        </div>
-		<!--        <div id="menu2" class="tab-pane fade">-->
-		<!--            <h3>За что отвечает JVM?</h3>-->
-		<!--            <p>Виртуальная машина Java (Java Virtual Machine) - это механизм, предоставляющий среду выполнения для управления Java-кодом или приложениями. Виртуальная машина является независимой оболочкой исполнения кода, благодаря которой возможен её запуск на любой ОС, без влияния ОС на выполняемую программу.</p>-->
-		<!--        </div>-->
+		<div th:each="theory : ${theories}" th:id="${theory.getMenu()}" class="tab-pane fade">
+			<h3 th:utext="${theory.getTitle()}">Что такое ООП?</h3>
+			<p th:utext="${theory.getDescription()}">Объектно-ориентированное программирование (ООП) — методология программирования</p>
+		</div>
 	</div>
 </div>
 </body>

@@ -1,10 +1,6 @@
 package ru.ayubdzhanov.javaquiz.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -20,7 +16,7 @@ public class UserCredential {
     @Id
     private Long id;
 
-    private String name;
+    private String login;
 
     private String password;
 
@@ -28,7 +24,7 @@ public class UserCredential {
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "user_data")
+    @JoinColumn(name = "id")
     private UserData userData;
 
     @OneToMany(mappedBy = "userCredential")
@@ -37,8 +33,8 @@ public class UserCredential {
     public UserCredential() {
     }
 
-    public UserCredential(String name, String password, String role, UserData userData) {
-        this.name = name;
+    public UserCredential(String login, String password, String role, UserData userData) {
+        this.login = login;
         this.password = password;
         this.role = role;
         this.userData = userData;
@@ -52,12 +48,12 @@ public class UserCredential {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getLogin() {
+        return login;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLogin(String name) {
+        this.login = name;
     }
 
     public String getPassword() {

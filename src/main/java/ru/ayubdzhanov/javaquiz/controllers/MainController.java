@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class PageController {
+public class MainController {
 
     @GetMapping("/")
     public String showMainPage(Model model) {
@@ -23,33 +23,4 @@ public class PageController {
         return "mainPage";
     }
 
-    @GetMapping("/registration")
-    public String showRegistrationPage() {
-        return "registrationPage";
-    }
-
-    @GetMapping("/login")
-    public String showLoginPage() {
-        return "loginPage";
-    }
-
-    @GetMapping("/battle")
-    public String showBattlePage() {
-        return "battlePage";
-    }
-
-    @GetMapping("/user_page")
-    public String showUserPage() {
-        return "userPage";
-    }
-
-    @GetMapping("/competition/list")
-    public String showCompetitionListPage(Model model) {
-        return "competitionListPage";
-    }
-
-    @GetMapping("/competition")
-    public String showCompetitionPage(Model model) {
-        return "competitionPage";
-    }
 }
