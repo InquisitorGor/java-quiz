@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 public class UserData {

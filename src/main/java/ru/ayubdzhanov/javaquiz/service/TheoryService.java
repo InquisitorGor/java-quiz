@@ -27,7 +27,7 @@ public class TheoryService {
         return getCategories(Boolean.FALSE);
     }
 
-    public void wrapCategories(List<Category> categories){
+    private void wrapCategories(List<Category> categories){
         categories.forEach(category -> category.setMenu("menu" + category.getId()));
     }
 

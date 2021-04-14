@@ -38,38 +38,15 @@
         <h1>Выберите тест:</h1>
     </div>
     <div>
-        <div style="float: left; padding-right: 30px">
+        <div th:each="competition : ${competitionList}" style="float: left; padding-right: 30px">
             <div style="text-align: center;  padding-bottom: 10px">
-                <a href="/competition" title="">
-                    <img src="/images/mini/java_mini.png" alt="Cinque Terre"
+                <a th:href="'/competition/' + ${competition.getCategory().getId()}" href="/competition" title="">
+                    <img th:src="${competition.getImageLink()}" src="/images/mini/java_mini.png" alt="Cinque Terre"
                          style="width:50px;height:50px;">
                 </a>
             </div>
             <div style="text-align: center;">
-                <a href="/competition/2" title=""></a>
-                <p>Java</p>
-            </div>
-        </div>
-        <div style="float: left; padding-right: 30px">
-            <div style="text-align: center;  padding-bottom: 10px">
-                <a href="/competition/3" title="">
-                <img src="/images/mini/oop_mini.png" alt="Cinque Terre"
-                     style="width:50px;height:50px;">
-                </a>
-            </div>
-            <div style="text-align: center;">
-                <p>ООП</p>
-            </div>
-        </div>
-        <div style="float: left; padding-right: 30px">
-            <div style="text-align: center;  padding-bottom: 10px">
-                <a href="/competition" title="">
-                <img src="/images/mini/collection_mini.png" alt="Cinque Terre"
-                     style="width:50px;height:50px;">
-                </a>
-            </div>
-            <div style="text-align: center;">
-                <p>Коллекции</p>
+                <p th:utext="${competition.getCategory().getCategory()}">Java</p>
             </div>
         </div>
     </div>

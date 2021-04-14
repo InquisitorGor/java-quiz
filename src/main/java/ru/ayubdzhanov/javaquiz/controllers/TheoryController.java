@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.ayubdzhanov.javaquiz.domain.Category;
-import ru.ayubdzhanov.javaquiz.domain.Theory;
 import ru.ayubdzhanov.javaquiz.service.TheoryService;
 
 import java.util.List;

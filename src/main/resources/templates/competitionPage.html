@@ -24,6 +24,7 @@
         <div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/competition/list"><span class="glyphicon glyphicon-th-list"></span> Список тестов</a></li>
                     <li><a href="/theory"><span class="glyphicon glyphicon-book"></span> Теория</a></li>
                     <li><a href="/user_page"><span class="glyphicon glyphicon-user"></span> Личный кабинет</a>
                     </li>
@@ -36,21 +37,21 @@
 <div style="padding-top: 50px">
     <div style="float: left;  padding-top: 15px; padding-left: 20px">
         <div style="text-align: center;padding-bottom: 15px">
-                <img src="/images/mini/java_mini.png" alt="Cinque Terre"
+                <img th:src="${competitionInfo.getImageLink()}" src="/images/mini/java_mini.png" alt="Cinque Terre"
                      style="width:50px;height:50px;">
         </div>
         <div>
-            <a href="/battle" type="button" class="btn btn-primary">Начать битву</a>
+            <a th:href="'battle/' + ${competitionInfo.getCategory().getId()}" href="/battle" type="button" class="btn btn-primary">Начать битву</a>
         </div>
     </div>
-    <div style="float: left; padding-top: 15px; padding-left: 20px; width: 500px">
-        <p>Соревнование по Java Core</p>
-        <p>В данном соревновании будут рассмотрены следующие моменты:</p>
-        <ul>
-            <li>Основы синтаксиса</li>
-            <li>Парадигмы</li>
-            <li>Условия</li>
-        </ul>
+    <div th:utext="${competitionInfo.getDescription()}" style="float: left; padding-top: 15px; padding-left: 20px; width: 500px">
+<!--        <p>Соревнование по Java Core</p>-->
+<!--        <p>В данном соревновании будут рассмотрены следующие моменты:</p>-->
+<!--        <ul>-->
+<!--            <li>Основы синтаксиса</li>-->
+<!--            <li>Парадигмы</li>-->
+<!--            <li>Условия</li>-->
+<!--        </ul>-->
     </div>
     <div style="float: right">
         <h1>Прошедшие соревнования:</h1>

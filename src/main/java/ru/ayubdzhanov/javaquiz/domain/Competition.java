@@ -1,5 +1,6 @@
 package ru.ayubdzhanov.javaquiz.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,7 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -35,6 +38,9 @@ public class Competition {
         inverseJoinColumns = @JoinColumn(name = "task_id")
     )
     private Set<Task> tasks;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "competition")
+    private List<ContestantInfo> contestants;
 
     public Long getId() {
         return id;
@@ -82,5 +88,13 @@ public class Competition {
 
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public List<ContestantInfo> getContestants() {
+        return contestants;
+    }
+
+    public void setContestants(List<ContestantInfo> contestants) {
+        this.contestants = contestants;
     }
 }

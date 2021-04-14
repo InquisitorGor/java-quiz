@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,12 @@ public class Task {
 
     @OneToMany(mappedBy = "task")
     private List<Option> options;
+
+    @Transient
+    private String menu;
+
+    @Transient
+    private Integer menuCounter;
 
     public Long getId() {
         return id;
@@ -62,5 +69,22 @@ public class Task {
 
     public void setOptions(List<Option> options) {
         this.options = options;
+    }
+
+    public String getMenu() {
+        return menu;
+    }
+
+    public void setMenu(String menu) {
+        this.menu = menu;
+    }
+
+    public Integer getMenuCounter() {
+        if (menuCounter == null) menuCounter = 0;
+        return menuCounter;
+    }
+
+    public void setMenuCounter(Integer menuCounter) {
+        this.menuCounter = menuCounter;
     }
 }
