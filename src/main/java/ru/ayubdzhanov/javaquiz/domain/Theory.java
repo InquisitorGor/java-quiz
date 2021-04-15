@@ -25,7 +25,6 @@ public class Theory {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
     private Category category;
 
     public Long getId() {

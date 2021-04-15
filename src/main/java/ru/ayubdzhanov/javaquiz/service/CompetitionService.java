@@ -12,7 +12,6 @@ import ru.ayubdzhanov.javaquiz.domain.ContestantInfo;
 import ru.ayubdzhanov.javaquiz.domain.Task;
 import ru.ayubdzhanov.javaquiz.domain.UserData;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,17 +27,16 @@ public class CompetitionService {
     private UserDataRepository userDataRepository;
     @Autowired
     private UserDataContainer userDataContainer;
+
     private List<CompetitionInfo> competitionsList;
 
     public UserData findOpponent(Long categoryId){
-        List<Competition> competitions = competitionRepository.findAllStartedCompetitions(categoryId, userDataContainer.getId());
-        if (competitions.isEmpty()) {
+        Optional<Competition> competition = competitionRepository.findAllStartedCompetitions(categoryId, userDataContainer.getId()).stream().findFirst();
+        if (!competition.isPresent()) {
             return null;
         }
-        Competition competition = competitions.get(0);
-        ContestantInfo opponent = competition.getContestants().get(0);
-        return userDataRepository.getOne(opponent);
-        return null;
+        ContestantInfo opponent = competition.get().getContestants().get(0);
+        return userDataRepository.getOne(opponent.getId());
     }
 
     public List<CompetitionInfo> getCompetitionsList(){

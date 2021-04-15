@@ -23,7 +23,7 @@ public class Task {
     private Category category;
 
     @OneToMany(mappedBy = "task")
-    private List<Option> options;
+    private List<TaskOption> taskOption;
 
     @Transient
     private String menu;
@@ -63,12 +63,12 @@ public class Task {
         this.category = category;
     }
 
-    public List<Option> getOptions() {
-        return options;
+    public List<TaskOption> getTaskOption() {
+        return taskOption;
     }
 
-    public void setOptions(List<Option> options) {
-        this.options = options;
+    public void setTaskOption(List<TaskOption> taskOption) {
+        this.taskOption = taskOption;
     }
 
     public String getMenu() {

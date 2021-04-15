@@ -4,7 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Option {
@@ -15,8 +16,8 @@ public class Option {
 
     private String option;
 
-    @ManyToOne
-    private Task task;
+    @OneToMany(mappedBy = "option")
+    private List<TaskOption> taskOptions;
 
     public Long getId() {
         return id;
@@ -34,11 +35,11 @@ public class Option {
         this.option = option;
     }
 
-    public Task getTask() {
-        return task;
+    public List<TaskOption> getTaskOptions() {
+        return taskOptions;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTaskOptions(List<TaskOption> taskOptions) {
+        this.taskOptions = taskOptions;
     }
 }

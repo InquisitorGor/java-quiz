@@ -1,83 +1,87 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Битвы</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<meta charset="UTF-8">
+	<title>Битвы</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Java Quiz</a>
-        </div>
-        <div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/user_page"><span class="glyphicon glyphicon-user"></span> Личный кабинет</a>
-                    </li>
-                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">Java Quiz</a>
+		</div>
+		<div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/user_page"><span class="glyphicon glyphicon-user"></span> Личный кабинет</a>
+					</li>
+					<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 </nav>
-<div class="container" style="padding-top: 40px">
-    <h2>Битвы</h2>
-    <p>Ответьте на все вопросы до истечения времени</p>
-    <ul class="nav nav-tabs">
-        <li th:each="task : ${tasks}"><a data-toggle="tab" th:utext="${task.getMenuCounter()}" th:href="${'#' + task.getMenu()}" href="#menu1"></a></li>
-    </ul>
-    <div class="tab-content">
-        <div th:each="task : ${tasks}"  th:id="${task.getMenu()}" id="menu1" class="tab-pane fade">
-            <h3 th:utext="${task.getQuestion()}">Что такое класс?</h3>
-            <div th:each="option : ${task.getOptions()}" class="checkbox">
-                <label><input type="checkbox" th:utext="${option.getOption()}" value=""></label>
-            </div>
-        </div>
-    </div>
-</div>
-<div>
-    <div style="position: relative; padding-top: 50px; text-align: center;">
-        <button type="button" class="btn btn-primary">Закончить</button>
-    </div>
-    <div style="position: relative; padding-top: 50px; text-align: center;" >
-        <p id="demo"></p>
-    </div>
-</div>
+<form method="post" action="/competition/battle/finish">
+	<div class="container" style="padding-top: 40px">
+		<h2 style="text-align: center; padding-top: 40px; padding-bottom: 40px;" th:if="${opponent != null}" th:utext="'Ваш соперник' - ${opponent.getName()}"></h2>
+		<h2 style="text-align: center; padding-top: 40px; padding-bottom: 40px;" th:if="${opponent == null}" th:utext="'Вы первый участник соревнования'"></h2>
+		<input th:if="${opponent != null}" type="hidden" name="opponentId" th:value="${10}">
+		<input type="hidden" name="competitionId" th:value="${10}">
+		<ul class="nav nav-tabs">
+			<li th:each="task : ${tasks}"><a data-toggle="tab" th:utext="${task.getMenuCounter()}" th:href="${'#' + task.getMenu()}" href="#menu1"></a></li>
+		</ul>
+		<div class="tab-content">
+			<div th:each="task : ${tasks}" th:id="${task.getMenu()}" id="menu1" class="tab-pane fade">
+				<h3 th:utext="${task.getQuestion()}">Что такое класс?</h3>
+				<div th:each="option : ${task.getTaskOption()}" class="checkbox">
+					<label><input type="checkbox" th:name="${task.getId()}" th:utext="${option.getOption().getOption()}" th:value="${option.getOption().getId()}"></label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<div style="position: relative; padding-top: 50px; text-align: center;">
+			<input type="submit" class="btn btn-primary" value="Закончить"/>
+		</div>
+		<div style="position: relative; padding-top: 50px; text-align: center;">
+			<p id="demo"></p>
+		</div>
+	</div>
+</form>
 <script>
-    // Set the date we're counting down to
-    var countDownDate = new Date("Jan 5, 2022 15:37:25").getTime();
+	// Set the date we're counting down to
+	var countDownDate = new Date("Jan 5, 2022 15:37:25").getTime();
 
-    // Update the count down every 1 second
-    var x = setInterval(function() {
+	// Update the count down every 1 second
+	var x = setInterval(function () {
 
-        // Get today's date and time
-        var now = new Date().getTime();
+		// Get today's date and time
+		var now = new Date().getTime();
 
-        // Find the distance between now and the count down date
-        var distance = countDownDate - now;
+		// Find the distance between now and the count down date
+		var distance = countDownDate - now;
 
-        // Time calculations for days, hours, minutes and seconds
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+		// Time calculations for days, hours, minutes and seconds
+		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // Display the result in the element with id="demo"
-        document.getElementById("demo").innerHTML = seconds + "s ";
+		// Display the result in the element with id="demo"
+		document.getElementById("demo").innerHTML = seconds + "s ";
 
-        // If the count down is finished, write some text
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("demo").innerHTML = "EXPIRED";
-        }
-    }, 1000);
+		// If the count down is finished, write some text
+		if (distance < 0) {
+			clearInterval(x);
+			document.getElementById("demo").innerHTML = "EXPIRED";
+		}
+	}, 1000);
 </script>
 </body>
 </html>
