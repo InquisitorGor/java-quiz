@@ -11,6 +11,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,15 +23,14 @@ public class Competition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate startedAt;
+    private LocalDateTime startedAt;
 
-    private LocalDate finishedAt;
+    private LocalDateTime finishedAt;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    private String description;
 
     @ManyToMany
     @JoinTable(
@@ -50,19 +51,19 @@ public class Competition {
         this.id = id;
     }
 
-    public LocalDate getStartedAt() {
+    public LocalDateTime getStartedAt() {
         return startedAt;
     }
 
-    public void setStartedAt(LocalDate startedAt) {
+    public void setStartedAt(LocalDateTime startedAt) {
         this.startedAt = startedAt;
     }
 
-    public LocalDate getFinishedAt() {
+    public LocalDateTime getFinishedAt() {
         return finishedAt;
     }
 
-    public void setFinishedAt(LocalDate finishedAt) {
+    public void setFinishedAt(LocalDateTime finishedAt) {
         this.finishedAt = finishedAt;
     }
 
@@ -74,15 +75,8 @@ public class Competition {
         this.category = category;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Set<Task> getTasks() {
+        if (tasks == null) tasks = new HashSet<>();
         return tasks;
     }
 

@@ -27,9 +27,6 @@ public class UserCredential {
     @JoinColumn(name = "id")
     private UserData userData;
 
-    @OneToMany(mappedBy = "userCredential")
-    private List<ContestantInfo> contestantInfos;
-
     public UserCredential() {
     }
 
@@ -80,11 +77,4 @@ public class UserCredential {
         this.userData = userData;
     }
 
-    public List<ContestantInfo> getContestantInfos() {
-        return contestantInfos;
-    }
-
-    public void setContestantInfos(List<ContestantInfo> contestantInfos) {
-        this.contestantInfos = contestantInfos;
-    }
 }

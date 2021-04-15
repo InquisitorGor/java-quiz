@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.ayubdzhanov.javaquiz.domain.Competition;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CompetitionRepository extends JpaRepository<Competition, Long> {
@@ -16,6 +17,5 @@ public interface CompetitionRepository extends JpaRepository<Competition, Long> 
         "AND c.category.id = ?1 " +
         "AND NOT con.id = ?2 ")
     List<Competition> findAllStartedCompetitions(Long categoryId, Long currentUserId);
-
 
 }

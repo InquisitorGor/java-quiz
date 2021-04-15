@@ -36,6 +36,7 @@
 		<h2 style="text-align: center; padding-top: 40px; padding-bottom: 40px;" th:if="${opponent == null}" th:utext="'Вы первый участник соревнования'"></h2>
 		<input th:if="${opponent != null}" type="hidden" name="opponentId" th:value="${10}">
 		<input type="hidden" name="competitionId" th:value="${10}">
+		<input type="hidden" name="currentContestant" th:value="${currentContestantId}">
 		<ul class="nav nav-tabs">
 			<li th:each="task : ${tasks}"><a data-toggle="tab" th:utext="${task.getMenuCounter()}" th:href="${'#' + task.getMenu()}" href="#menu1"></a></li>
 		</ul>

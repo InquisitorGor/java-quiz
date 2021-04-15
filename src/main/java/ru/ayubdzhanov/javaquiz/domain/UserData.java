@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class UserData {
@@ -31,6 +33,9 @@ public class UserData {
     private LocalDate registrationDate;
 
     private Integer amountOfBattles;
+
+    @OneToMany(mappedBy = "userData")
+    private List<ContestantInfo> contestantInfos;
 
     public UserData() {
     }
@@ -101,5 +106,13 @@ public class UserData {
 
     public void setAmountOfBattles(Integer amountOfBattles) {
         this.amountOfBattles = amountOfBattles;
+    }
+
+    public List<ContestantInfo> getContestantInfos() {
+        return contestantInfos;
+    }
+
+    public void setContestantInfos(List<ContestantInfo> contestantInfos) {
+        this.contestantInfos = contestantInfos;
     }
 }

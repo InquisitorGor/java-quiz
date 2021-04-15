@@ -1,6 +1,7 @@
 package ru.ayubdzhanov.javaquiz.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionInfoRepository;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionRepository;
@@ -12,6 +13,9 @@ import ru.ayubdzhanov.javaquiz.domain.ContestantInfo;
 import ru.ayubdzhanov.javaquiz.domain.Task;
 import ru.ayubdzhanov.javaquiz.domain.UserData;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +34,7 @@ public class CompetitionService {
 
     private List<CompetitionInfo> competitionsList;
 
-    public UserData findOpponent(Long categoryId){
+    public UserData findOpponent(Long categoryId) {
         Optional<Competition> competition = competitionRepository.findAllStartedCompetitions(categoryId, userDataContainer.getId()).stream().findFirst();
         if (!competition.isPresent()) {
             return null;
@@ -39,26 +43,38 @@ public class CompetitionService {
         return userDataRepository.getOne(opponent.getId());
     }
 
-    public List<CompetitionInfo> getCompetitionsList(){
+    public Competition getCompetition(Long categoryId) {
+        Optional<Competition> competition = competitionRepository.findAllStartedCompetitions(categoryId, userDataContainer.getId()).stream().findFirst();
+        if (!competition.isPresent()) {
+            Competition newCompetition = new Competition();
+            ContestantInfo contestant = new ContestantInfo();
+            contestant.setUserData(userDataContainer.getUserData());
+            List<Task> tasks = taskRepository.findAllByCategoryId(categoryId, PageRequest.of(0,5));
+            wrapTasks(tasks);
+            newCompetition.getTasks().addAll(tasks);
+            newCompetition.setStartedAt(LocalDateTime.now());
+            newCompetition.setContestants(Collections.singletonList(contestant));
+            competitionRepository.save(newCompetition);
+            return newCompetition;
+        }
+        return null;
+    }
+
+    public List<CompetitionInfo> getCompetitionsList() {
         if (competitionsList == null) {
             competitionsList = competitionInfoRepository.findAll();
         }
         return competitionsList;
     }
 
-    public CompetitionInfo getCompetitionInfo(Long categoryId){
+    public CompetitionInfo getCompetitionInfo(Long categoryId) {
         Optional<CompetitionInfo> competitionInfo = competitionsList.stream()
             .filter(competition -> competition.getCategory().getId().equals(categoryId))
             .findFirst();
         return competitionInfo.orElseGet(() -> competitionInfoRepository.findByCategoryId(categoryId));
     }
-    public List<Task> getTasks(Long categoryId){
-        List<Task> tasks = taskRepository.findAllByCategoryId(categoryId);
-        wrapTasks(tasks);
-        return tasks;
-    }
 
-    private void wrapTasks(List<Task> tasks){
+    private void wrapTasks(List<Task> tasks) {
         tasks.forEach(task -> {
             task.setMenu("menu" + task.getId());
         });
@@ -66,6 +82,5 @@ public class CompetitionService {
             tasks.get(i).setMenuCounter(i + 1);
         }
     }
-
 
 }

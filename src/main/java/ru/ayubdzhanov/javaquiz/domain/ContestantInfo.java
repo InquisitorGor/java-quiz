@@ -16,7 +16,7 @@ public class ContestantInfo {
     private Competition competition;
 
     @ManyToOne
-    private UserCredential userCredential;
+    private UserData userData;
 
     private Long score;
 
@@ -38,12 +38,12 @@ public class ContestantInfo {
         this.competition = competition;
     }
 
-    public UserCredential getUserCredential() {
-        return userCredential;
+    public UserData getUserData() {
+        return userData;
     }
 
-    public void setUserCredential(UserCredential userCredential) {
-        this.userCredential = userCredential;
+    public void setUserData(UserData userData) {
+        this.userData = userData;
     }
 
     public Long getScore() {

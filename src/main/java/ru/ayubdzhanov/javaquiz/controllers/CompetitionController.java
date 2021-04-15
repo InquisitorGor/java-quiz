@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.ayubdzhanov.javaquiz.service.CompetitionService;
+import ru.ayubdzhanov.javaquiz.service.UserDataContainer;
 
 
 @Controller
@@ -18,11 +19,14 @@ public class CompetitionController {
 
     @Autowired
     private CompetitionService competitionService;
+    @Autowired
+    private UserDataContainer userDataContainer;
 
     @GetMapping("/battle/{category_id}")
     public String showBattlePage(Model model, @PathVariable("category_id") Long categoryId) {
-        model.addAttribute("tasks", competitionService.getTasks(categoryId));
+        //model.addAttribute("tasks", competitionService.getCompetition(categoryId));
         model.addAttribute("opponent", competitionService.findOpponent(categoryId));
+        model.addAttribute("currentContestantId", userDataContainer.getId());
         return "battlePage";
     }
 
