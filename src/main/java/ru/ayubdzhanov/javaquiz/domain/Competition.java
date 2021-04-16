@@ -38,7 +38,7 @@ public class Competition {
         joinColumns = @JoinColumn(name = "competition_id"),
         inverseJoinColumns = @JoinColumn(name = "task_id")
     )
-    private Set<Task> tasks;
+    private List<Task> tasks;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "competition")
     private List<ContestantInfo> contestants;
@@ -75,12 +75,11 @@ public class Competition {
         this.category = category;
     }
 
-    public Set<Task> getTasks() {
-        if (tasks == null) tasks = new HashSet<>();
+    public List<Task> getTasks() {
         return tasks;
     }
 
-    public void setTasks(Set<Task> tasks) {
+    public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
 

@@ -15,7 +15,7 @@ public interface CompetitionRepository extends JpaRepository<Competition, Long> 
         "INNER JOIN c.contestants con " +
         "WHERE c.finishedAt IS NULL " +
         "AND c.category.id = ?1 " +
-        "AND NOT con.id = ?2 ")
+        "AND NOT con.userData.id = ?2 ")
     List<Competition> findAllStartedCompetitions(Long categoryId, Long currentUserId);
 
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.ayubdzhanov.javaquiz.domain.Competition;
 import ru.ayubdzhanov.javaquiz.service.CompetitionService;
 import ru.ayubdzhanov.javaquiz.service.UserDataContainer;
 
@@ -24,8 +25,9 @@ public class CompetitionController {
 
     @GetMapping("/battle/{category_id}")
     public String showBattlePage(Model model, @PathVariable("category_id") Long categoryId) {
-        //model.addAttribute("tasks", competitionService.getCompetition(categoryId));
-        model.addAttribute("opponent", competitionService.findOpponent(categoryId));
+        Competition competition = competitionService.getCompetition(categoryId);
+        model.addAttribute("competition", competition);
+        model.addAttribute("opponent", competition.getContestants().stream().filter(contestant -> !contestant.getUserData().getId().equals(userDataContainer.getId())).findFirst().orElse(null));
         model.addAttribute("currentContestantId", userDataContainer.getId());
         return "battlePage";
     }
@@ -44,7 +46,7 @@ public class CompetitionController {
 
     @PostMapping("/battle/finish")
     public String showBattleResultPage(@RequestParam MultiValueMap<String,String> allParams){
-        allParams.forEach((key, value) -> System.out.println(key + " " + value));
+        competitionService.finishCompetition(allParams);
         return "competitionListPage";
     }
 }

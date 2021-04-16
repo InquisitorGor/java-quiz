@@ -3,6 +3,8 @@ package ru.ayubdzhanov.javaquiz.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
+import ru.ayubdzhanov.javaquiz.dao.CategoryRepository;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionInfoRepository;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionRepository;
 import ru.ayubdzhanov.javaquiz.dao.TaskRepository;
@@ -31,33 +33,49 @@ public class CompetitionService {
     private UserDataRepository userDataRepository;
     @Autowired
     private UserDataContainer userDataContainer;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     private List<CompetitionInfo> competitionsList;
-
-    public UserData findOpponent(Long categoryId) {
-        Optional<Competition> competition = competitionRepository.findAllStartedCompetitions(categoryId, userDataContainer.getId()).stream().findFirst();
-        if (!competition.isPresent()) {
-            return null;
-        }
-        ContestantInfo opponent = competition.get().getContestants().get(0);
-        return userDataRepository.getOne(opponent.getId());
-    }
 
     public Competition getCompetition(Long categoryId) {
         Optional<Competition> competition = competitionRepository.findAllStartedCompetitions(categoryId, userDataContainer.getId()).stream().findFirst();
         if (!competition.isPresent()) {
             Competition newCompetition = new Competition();
             ContestantInfo contestant = new ContestantInfo();
-            contestant.setUserData(userDataContainer.getUserData());
-            List<Task> tasks = taskRepository.findAllByCategoryId(categoryId, PageRequest.of(0,5));
+            contestant.setUserData(userDataRepository.getOne(userDataContainer.getId()));
+            List<Task> tasks = taskRepository.findAllByCategoryId(categoryId, PageRequest.of(0, 5));
             wrapTasks(tasks);
-            newCompetition.getTasks().addAll(tasks);
+            newCompetition.setTasks(tasks);
             newCompetition.setStartedAt(LocalDateTime.now());
             newCompetition.setContestants(Collections.singletonList(contestant));
+            newCompetition.setCategory(categoryRepository.getOne(categoryId));
             competitionRepository.save(newCompetition);
             return newCompetition;
         }
-        return null;
+        Competition existedCompetition = competition.get();
+        ContestantInfo contestant = new ContestantInfo();
+        contestant.setUserData(userDataContainer.getUserData());
+        existedCompetition.getContestants().add(contestant);
+        return existedCompetition;
+    }
+
+    public void finishCompetition(MultiValueMap<String, String> allParams) {
+        Competition competition = competitionRepository.getOne(Long.parseLong(allParams.get("competitionId").get(0)));
+        if (competition.getContestants().size() == 1) {
+            List<Task> tasks = competition.getTasks();
+            tasks.forEach(task -> {
+                if (allParams.containsKey(task.getId() + "")) {
+                    task.getTaskOption().forEach(option -> {
+                        List<String> userAnswers = allParams.get(task.getId() + "");
+                        if (option.getCorrect() && userAnswers.contains(option.getId() + "") ||
+                            !option.getCorrect() && !userAnswers.contains(option.getId() + "")) {
+                            competition.getContestants().get(0).setScore(competition.getContestants().get(0).getScore() + 1);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     public List<CompetitionInfo> getCompetitionsList() {

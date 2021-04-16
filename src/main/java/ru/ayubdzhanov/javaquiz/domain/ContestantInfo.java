@@ -1,5 +1,6 @@
 package ru.ayubdzhanov.javaquiz.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +16,7 @@ public class ContestantInfo {
     @ManyToOne
     private Competition competition;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private UserData userData;
 
     private Long score;
@@ -47,6 +48,7 @@ public class ContestantInfo {
     }
 
     public Long getScore() {
+        if (score == null) return 0L;
         return score;
     }
 

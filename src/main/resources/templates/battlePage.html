@@ -32,16 +32,16 @@
 </nav>
 <form method="post" action="/competition/battle/finish">
 	<div class="container" style="padding-top: 40px">
-		<h2 style="text-align: center; padding-top: 40px; padding-bottom: 40px;" th:if="${opponent != null}" th:utext="'Ваш соперник' - ${opponent.getName()}"></h2>
+		<h2 style="text-align: center; padding-top: 40px; padding-bottom: 40px;" th:if="${opponent != null}" th:utext="'Ваш соперник' - ${opponent.getUserData().getName()}"></h2>
 		<h2 style="text-align: center; padding-top: 40px; padding-bottom: 40px;" th:if="${opponent == null}" th:utext="'Вы первый участник соревнования'"></h2>
-		<input th:if="${opponent != null}" type="hidden" name="opponentId" th:value="${10}">
-		<input type="hidden" name="competitionId" th:value="${10}">
+		<input th:if="${opponent != null}" type="hidden" name="opponentId" th:value="${opponent.getId()}">
+		<input type="hidden" name="competitionId" th:value="${competition.getId()}">
 		<input type="hidden" name="currentContestant" th:value="${currentContestantId}">
 		<ul class="nav nav-tabs">
-			<li th:each="task : ${tasks}"><a data-toggle="tab" th:utext="${task.getMenuCounter()}" th:href="${'#' + task.getMenu()}" href="#menu1"></a></li>
+			<li th:each="task : ${competition.getTasks()}"><a data-toggle="tab" th:utext="${task.getMenuCounter()}" th:href="${'#' + task.getMenu()}" href="#menu1"></a></li>
 		</ul>
 		<div class="tab-content">
-			<div th:each="task : ${tasks}" th:id="${task.getMenu()}" id="menu1" class="tab-pane fade">
+			<div th:each="task : ${competition.getTasks()}" th:id="${task.getMenu()}" id="menu1" class="tab-pane fade">
 				<h3 th:utext="${task.getQuestion()}">Что такое класс?</h3>
 				<div th:each="option : ${task.getTaskOption()}" class="checkbox">
 					<label><input type="checkbox" th:name="${task.getId()}" th:utext="${option.getOption().getOption()}" th:value="${option.getOption().getId()}"></label>
