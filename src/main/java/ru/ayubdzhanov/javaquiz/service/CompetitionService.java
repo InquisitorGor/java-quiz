@@ -13,13 +13,14 @@ import ru.ayubdzhanov.javaquiz.domain.Competition;
 import ru.ayubdzhanov.javaquiz.domain.CompetitionInfo;
 import ru.ayubdzhanov.javaquiz.domain.ContestantInfo;
 import ru.ayubdzhanov.javaquiz.domain.Task;
-import ru.ayubdzhanov.javaquiz.domain.UserData;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class CompetitionService {
@@ -44,11 +45,12 @@ public class CompetitionService {
             Competition newCompetition = new Competition();
             ContestantInfo contestant = new ContestantInfo();
             contestant.setUserData(userDataRepository.getOne(userDataContainer.getId()));
+            contestant.setCompetition(newCompetition);
             List<Task> tasks = taskRepository.findAllByCategoryId(categoryId, PageRequest.of(0, 5));
             wrapTasks(tasks);
             newCompetition.setTasks(tasks);
             newCompetition.setStartedAt(LocalDateTime.now());
-            newCompetition.setContestants(Collections.singletonList(contestant));
+            newCompetition.setContestants(Collections.singletonList(contestant)); // Can i add an opponent to this collection?
             newCompetition.setCategory(categoryRepository.getOne(categoryId));
             competitionRepository.save(newCompetition);
             return newCompetition;
@@ -61,21 +63,35 @@ public class CompetitionService {
     }
 
     public void finishCompetition(MultiValueMap<String, String> allParams) {
+        allParams.entrySet().forEach(System.out::println);
         Competition competition = competitionRepository.getOne(Long.parseLong(allParams.get("competitionId").get(0)));
-        if (competition.getContestants().size() == 1) {
-            List<Task> tasks = competition.getTasks();
-            tasks.forEach(task -> {
-                if (allParams.containsKey(task.getId() + "")) {
-                    task.getTaskOption().forEach(option -> {
-                        List<String> userAnswers = allParams.get(task.getId() + "");
-                        if (option.getCorrect() && userAnswers.contains(option.getId() + "") ||
-                            !option.getCorrect() && !userAnswers.contains(option.getId() + "")) {
-                            competition.getContestants().get(0).setScore(competition.getContestants().get(0).getScore() + 1);
-                        }
-                    });
+        AtomicInteger score = new AtomicInteger(5);
+        ContestantInfo currentContestant = competition.getContestants().stream().filter(contestant -> contestant.getUserData().getId() == Long.parseLong(allParams.get("currentContestant").get(0))).findFirst().get();
+        competition.getTasks().forEach(task -> {
+            if (!allParams.containsKey(task.getId() + "")) {
+                currentContestant.setScore(score.decrementAndGet());
+                return;
+            }
+            AtomicBoolean decrement = new AtomicBoolean(true);
+            task.getTaskOption().forEach(taskOption -> {
+                currentContestant.getContestantResults().add(taskOption);
+                if (decrement.get() && (taskOption.getCorrect() && !allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "") ||
+                    !taskOption.getCorrect() && allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + ""))) {
+                    currentContestant.setScore(score.decrementAndGet());
+                    decrement.set(false);
                 }
             });
+
+        });
+        if (currentContestant.getScore() == null) {
+            currentContestant.setScore(score.get());
         }
+        competition.setFinishedAt(LocalDateTime.now());
+        competitionRepository.save(competition);
+    }
+
+    public ContestantInfo getOpponent(Competition competition){
+        return competition.getContestants().stream().filter(contestant -> !contestant.getUserData().getId().equals(userDataContainer.getId())).findFirst().orElse(null);
     }
 
     public List<CompetitionInfo> getCompetitionsList() {

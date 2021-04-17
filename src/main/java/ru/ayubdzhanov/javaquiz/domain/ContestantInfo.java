@@ -5,7 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 public class ContestantInfo {
@@ -19,9 +24,15 @@ public class ContestantInfo {
     @ManyToOne(cascade = CascadeType.ALL)
     private UserData userData;
 
-    private Long score;
+    @ManyToMany
+    @JoinTable(
+        name = "contestant_result",
+        joinColumns = @JoinColumn(name = "contestant_info_id"),
+        inverseJoinColumns = @JoinColumn(name = "task_option_id")
+    )
+    private List<TaskOption> contestantResults;
 
-    private String time;
+    private Integer score;
 
     public Long getId() {
         return id;
@@ -47,20 +58,20 @@ public class ContestantInfo {
         this.userData = userData;
     }
 
-    public Long getScore() {
-        if (score == null) return 0L;
+    public Integer getScore() {
         return score;
     }
 
-    public void setScore(Long score) {
+    public void setScore(Integer score) {
         this.score = score;
     }
 
-    public String getTime() {
-        return time;
+    public List<TaskOption> getContestantResults() {
+        if (contestantResults == null) contestantResults = new LinkedList<>();
+        return contestantResults;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setContestantResults(List<TaskOption> contestantResults) {
+        this.contestantResults = contestantResults;
     }
 }

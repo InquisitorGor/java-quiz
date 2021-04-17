@@ -27,7 +27,7 @@ public class CompetitionController {
     public String showBattlePage(Model model, @PathVariable("category_id") Long categoryId) {
         Competition competition = competitionService.getCompetition(categoryId);
         model.addAttribute("competition", competition);
-        model.addAttribute("opponent", competition.getContestants().stream().filter(contestant -> !contestant.getUserData().getId().equals(userDataContainer.getId())).findFirst().orElse(null));
+        model.addAttribute("opponent", competitionService.getOpponent(competition));
         model.addAttribute("currentContestantId", userDataContainer.getId());
         return "battlePage";
     }
