@@ -7,6 +7,7 @@ import org.springframework.util.MultiValueMap;
 import ru.ayubdzhanov.javaquiz.dao.CategoryRepository;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionInfoRepository;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionRepository;
+import ru.ayubdzhanov.javaquiz.dao.ContestantInfoRepository;
 import ru.ayubdzhanov.javaquiz.dao.TaskRepository;
 import ru.ayubdzhanov.javaquiz.dao.UserDataRepository;
 import ru.ayubdzhanov.javaquiz.domain.Competition;
@@ -15,7 +16,6 @@ import ru.ayubdzhanov.javaquiz.domain.ContestantInfo;
 import ru.ayubdzhanov.javaquiz.domain.Task;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -35,33 +35,48 @@ public class CompetitionService {
     private UserDataContainer userDataContainer;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ContestantInfoRepository contestantInfoRepository;
 
     private List<CompetitionInfo> competitionsList;
 
     public Competition getCompetition(Long categoryId) {
-        Optional<Competition> competition = competitionRepository.findAllStartedCompetitions(categoryId, userDataContainer.getId()).stream().findFirst();
-        if (!competition.isPresent()) {
-            Competition newCompetition = new Competition();
-            ContestantInfo contestant = new ContestantInfo();
-            contestant.setUserData(userDataRepository.getOne(userDataContainer.getId()));
-            contestant.setCompetition(newCompetition);
-            List<Task> tasks = taskRepository.findAllByCategoryId(categoryId, PageRequest.of(0, 5));
-            wrapTasks(tasks);
-            newCompetition.setTasks(tasks);
-            newCompetition.setStartedAt(LocalDateTime.now());
-            newCompetition.getContestants().add(contestant);
-            newCompetition.setCategory(categoryRepository.getOne(categoryId));
-            competitionRepository.save(newCompetition);
-            return newCompetition;
+//        Optional<Competition> competition = competitionRepository.findAllStartedCompetitions(categoryId, userDataContainer.getId()).stream().findFirst();
+//        if (!competition.isPresent()) {
+//            return getNewCompetition(categoryId);
+//        }
+//        Competition existedCompetition = competition.get();
+//        ContestantInfo contestant = new ContestantInfo();
+//        contestant.setUserData(userDataRepository.getOne(userDataContainer.getId()));
+//        contestant.setCompetition(existedCompetition);
+//        existedCompetition.getContestants().add(contestant);
+//        wrapTasks(existedCompetition.getTasks());
+//        competitionRepository.save(existedCompetition);
+//        return existedCompetition;
+        return getNewCompetition(categoryId);
+    }
+
+    private Competition getNewCompetition(Long categoryId){
+        Competition newCompetition = new Competition();
+        ContestantInfo currentContestant = new ContestantInfo();
+        currentContestant.setUserData(userDataRepository.getOne(userDataContainer.getId()));
+        currentContestant.setCompetition(newCompetition);
+        List<ContestantInfo> allAccessibleContestants = contestantInfoRepository.findAllAccessibleContestants(userDataContainer.getId(), categoryId);
+        if (!allAccessibleContestants.isEmpty()) {
+            ContestantInfo possibleContestant = allAccessibleContestants.stream().findFirst().get();
+            ContestantInfo opponent = new ContestantInfo();
+            opponent.setCompetition(newCompetition);
+            opponent.setUserData(possibleContestant.getUserData());
+            newCompetition.getContestants().add(opponent);
         }
-        Competition existedCompetition = competition.get();
-        ContestantInfo contestant = new ContestantInfo();
-        contestant.setUserData(userDataRepository.getOne(userDataContainer.getId()));
-        contestant.setCompetition(existedCompetition);
-        existedCompetition.getContestants().add(contestant);
-        wrapTasks(existedCompetition.getTasks());
-        competitionRepository.save(existedCompetition);
-        return existedCompetition;
+        List<Task> tasks = taskRepository.findAllByCategoryId(categoryId, PageRequest.of(0, 5));
+        wrapTasks(tasks);
+        newCompetition.setTasks(tasks);
+        newCompetition.setStartedAt(LocalDateTime.now());
+        newCompetition.getContestants().add(currentContestant);
+        newCompetition.setCategory(categoryRepository.getOne(categoryId));
+        competitionRepository.save(newCompetition);
+        return newCompetition;
     }
 
     public void finishCompetition(MultiValueMap<String, String> allParams) {
@@ -87,7 +102,7 @@ public class CompetitionService {
         if (currentContestant.getScore() == null) {
             currentContestant.setScore(score.get());
         }
-        if (competition.getContestants().size() == 2) {
+        if (competition.getContestants().stream().allMatch(contestant -> contestant.getScore() != null)) {
             competition.setFinishedAt(LocalDateTime.now());
         }
         competitionRepository.save(competition);
