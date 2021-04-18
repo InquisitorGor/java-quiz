@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -81,6 +82,7 @@ public class Competition {
     }
 
     public List<ContestantInfo> getContestants() {
+        if (contestants == null) contestants = new LinkedList<>();
         return contestants;
     }
 

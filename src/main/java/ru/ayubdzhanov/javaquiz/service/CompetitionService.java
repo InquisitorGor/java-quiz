@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class CompetitionService {
@@ -50,15 +49,18 @@ public class CompetitionService {
             wrapTasks(tasks);
             newCompetition.setTasks(tasks);
             newCompetition.setStartedAt(LocalDateTime.now());
-            newCompetition.setContestants(Collections.singletonList(contestant)); // Can i add an opponent to this collection?
+            newCompetition.getContestants().add(contestant);
             newCompetition.setCategory(categoryRepository.getOne(categoryId));
             competitionRepository.save(newCompetition);
             return newCompetition;
         }
         Competition existedCompetition = competition.get();
         ContestantInfo contestant = new ContestantInfo();
-        contestant.setUserData(userDataContainer.getUserData());
+        contestant.setUserData(userDataRepository.getOne(userDataContainer.getId()));
+        contestant.setCompetition(existedCompetition);
         existedCompetition.getContestants().add(contestant);
+        wrapTasks(existedCompetition.getTasks());
+        competitionRepository.save(existedCompetition);
         return existedCompetition;
     }
 
@@ -81,12 +83,13 @@ public class CompetitionService {
                     decrement.set(false);
                 }
             });
-
         });
         if (currentContestant.getScore() == null) {
             currentContestant.setScore(score.get());
         }
-        competition.setFinishedAt(LocalDateTime.now());
+        if (competition.getContestants().size() == 2) {
+            competition.setFinishedAt(LocalDateTime.now());
+        }
         competitionRepository.save(competition);
     }
 
