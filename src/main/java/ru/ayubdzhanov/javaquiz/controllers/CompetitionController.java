@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.ayubdzhanov.javaquiz.domain.Competition;
+import ru.ayubdzhanov.javaquiz.domain.UserData;
 import ru.ayubdzhanov.javaquiz.service.CompetitionService;
 import ru.ayubdzhanov.javaquiz.service.UserDataContainer;
 
@@ -23,9 +24,9 @@ public class CompetitionController {
     @Autowired
     private UserDataContainer userDataContainer;
 
-    @GetMapping("/battle/{category_id}")
-    public String showBattlePage(Model model, @PathVariable("category_id") Long categoryId) {
-        Competition competition = competitionService.getCompetition(categoryId);
+    @RequestMapping("/battle/{category_id}")
+    public String showBattlePage(Model model, @PathVariable("category_id") Long categoryId, @RequestParam(required = false) Long existedCompetitionId) {
+        Competition competition = competitionService.getCompetition(categoryId, existedCompetitionId);
         model.addAttribute("competition", competition);
         model.addAttribute("opponent", competitionService.getOpponent(competition));
         model.addAttribute("currentContestantId", userDataContainer.getId());
@@ -35,6 +36,9 @@ public class CompetitionController {
     @GetMapping("/list")
     public String showCompetitionListPage(Model model) {
         model.addAttribute("competitionList", competitionService.getCompetitionsList());
+        model.addAttribute("challenges", competitionService.getChallenges());
+        model.addAttribute("oldBattles", competitionService.getContestantBattleHistory());
+        model.addAttribute("currentContestantId", userDataContainer.getId());
         return "competitionListPage";
     }
 

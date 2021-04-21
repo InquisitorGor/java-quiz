@@ -16,10 +16,13 @@ import ru.ayubdzhanov.javaquiz.domain.ContestantInfo;
 import ru.ayubdzhanov.javaquiz.domain.Task;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 public class CompetitionService {
@@ -40,23 +43,31 @@ public class CompetitionService {
 
     private List<CompetitionInfo> competitionsList;
 
-    public Competition getCompetition(Long categoryId) {
-//        Optional<Competition> competition = competitionRepository.findAllStartedCompetitions(categoryId, userDataContainer.getId()).stream().findFirst();
-//        if (!competition.isPresent()) {
-//            return getNewCompetition(categoryId);
-//        }
-//        Competition existedCompetition = competition.get();
-//        ContestantInfo contestant = new ContestantInfo();
-//        contestant.setUserData(userDataRepository.getOne(userDataContainer.getId()));
-//        contestant.setCompetition(existedCompetition);
-//        existedCompetition.getContestants().add(contestant);
-//        wrapTasks(existedCompetition.getTasks());
-//        competitionRepository.save(existedCompetition);
-//        return existedCompetition;
-        return getNewCompetition(categoryId);
+    public Competition getCompetition(Long categoryId, Long existedCompetitionId) {
+        return existedCompetitionId == null ? getNewCompetition(categoryId) : getExistedCompetition(existedCompetitionId);
     }
 
-    private Competition getNewCompetition(Long categoryId){
+    public Competition getExistedCompetition(Long existedCompetitionId) {
+        Competition existedCompetition = competitionRepository.getOne(existedCompetitionId);
+        wrapTasks(existedCompetition.getTasks());
+        return existedCompetition;
+    }
+
+    public List<Competition> getChallenges() {
+        List<Competition> allChallenges = competitionRepository.findAllChallenges(userDataContainer.getId(), PageRequest.of(0, 10));
+        allChallenges = allChallenges.stream().filter(competition -> {
+            ContestantInfo currentContestant = competition.getContestants().stream().filter(contestant -> contestant.getUserData().getId().equals(userDataContainer.getId())).findFirst().get();
+            return currentContestant.getScore() == null;
+        }).collect(Collectors.toList());
+        if (allChallenges.isEmpty()) return Collections.emptyList();
+        return wrapCompetitions(allChallenges);
+    }
+
+    public List<Competition> getContestantBattleHistory() {
+        return wrapCompetitions(competitionRepository.findAllCompletedCompetitions(userDataContainer.getId(), PageRequest.of(0, 10)));
+    }
+
+    private Competition getNewCompetition(Long categoryId) {
         Competition newCompetition = new Competition();
         ContestantInfo currentContestant = new ContestantInfo();
         currentContestant.setUserData(userDataRepository.getOne(userDataContainer.getId()));
@@ -80,24 +91,19 @@ public class CompetitionService {
     }
 
     public void finishCompetition(MultiValueMap<String, String> allParams) {
-        allParams.entrySet().forEach(System.out::println);
         Competition competition = competitionRepository.getOne(Long.parseLong(allParams.get("competitionId").get(0)));
-        AtomicInteger score = new AtomicInteger(5);
+        AtomicInteger score = new AtomicInteger(0);
         ContestantInfo currentContestant = competition.getContestants().stream().filter(contestant -> contestant.getUserData().getId() == Long.parseLong(allParams.get("currentContestant").get(0))).findFirst().get();
         competition.getTasks().forEach(task -> {
             if (!allParams.containsKey(task.getId() + "")) {
-                currentContestant.setScore(score.decrementAndGet());
                 return;
             }
-            AtomicBoolean decrement = new AtomicBoolean(true);
-            task.getTaskOption().forEach(taskOption -> {
-                currentContestant.getContestantResults().add(taskOption);
-                if (decrement.get() && (taskOption.getCorrect() && !allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "") ||
-                    !taskOption.getCorrect() && allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + ""))) {
-                    currentContestant.setScore(score.decrementAndGet());
-                    decrement.set(false);
-                }
-            });
+            currentContestant.getContestantResults().addAll(task.getTaskOption());
+            if (task.getTaskOption().stream().allMatch(taskOption ->
+                        (taskOption.getCorrect() &&  allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "")) ||
+                        (!taskOption.getCorrect() && !allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "")))) {
+                currentContestant.setScore(score.incrementAndGet());
+            }
         });
         if (currentContestant.getScore() == null) {
             currentContestant.setScore(score.get());
@@ -108,7 +114,7 @@ public class CompetitionService {
         competitionRepository.save(competition);
     }
 
-    public ContestantInfo getOpponent(Competition competition){
+    public ContestantInfo getOpponent(Competition competition) {
         return competition.getContestants().stream().filter(contestant -> !contestant.getUserData().getId().equals(userDataContainer.getId())).findFirst().orElse(null);
     }
 
@@ -133,6 +139,25 @@ public class CompetitionService {
         for (int i = 0; i < tasks.size(); i++) {
             tasks.get(i).setMenuCounter(i + 1);
         }
+    }
+
+    private List<Competition> wrapCompetitions(List<Competition> competitions) {
+        competitions.forEach(competition -> {
+            competition.setImageLink(competitionsList.stream().filter(c -> c.getCategory().getId().equals(competition.getCategory().getId())).findFirst().get().getImageLink());
+            competition.setUserData(userDataRepository.getOne(competition.getContestants().stream().filter(con -> !con.getUserData().getId().equals(userDataContainer.getId())).findFirst().get().getUserData().getId()));
+            ContestantInfo currentPlayer = competition.getContestants().stream().filter(com -> com.getUserData().getId().equals(userDataContainer.getId())).findFirst().get();
+            ContestantInfo opponent = competition.getContestants().stream().filter(com -> !com.getUserData().getId().equals(userDataContainer.getId())).findFirst().get();
+            competition.setContestants(Arrays.asList(currentPlayer, opponent));
+            if (currentPlayer.getScore() == null || opponent.getScore() == null) return;
+            if (currentPlayer.getScore() > opponent.getScore()) {
+                competition.setStyle("border-width: 2px; border-color: #2df622; border-radius: 15px;");
+            } else if (currentPlayer.getScore() < opponent.getScore()) {
+                competition.setStyle("border-width: 2px; border-color: red; border-radius: 15px;");
+            } else {
+                competition.setStyle("border-width: 2px; border-color: grey; border-radius: 15px;");
+            }
+        });
+        return competitions;
     }
 
 }

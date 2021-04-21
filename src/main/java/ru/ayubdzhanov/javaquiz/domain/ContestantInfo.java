@@ -34,6 +34,8 @@ public class ContestantInfo {
 
     private Integer score;
 
+    private Integer prestige;
+
     public Long getId() {
         return id;
     }
@@ -73,5 +75,13 @@ public class ContestantInfo {
 
     public void setContestantResults(List<TaskOption> contestantResults) {
         this.contestantResults = contestantResults;
+    }
+
+    public Integer getPrestige() {
+        return prestige;
+    }
+
+    public void setPrestige(Integer prestige) {
+        this.prestige = prestige;
     }
 }

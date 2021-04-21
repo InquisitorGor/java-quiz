@@ -108,13 +108,13 @@ INSERT INTO competition(finished_at, started_at, category_id)
 VALUES ('2021-04-18 14:50:30.838000', '2021-04-18 14:50:02.653000', 1),
        ('2021-04-18 14:53:48.322000', '2021-04-18 14:50:53.241000', 1),
        ('2021-04-18 14:54:11.241000', '2021-04-18 14:51:19.160000', 1);
-INSERT INTO contestant_info(score, competition_id, user_data_id)
-VALUES (1, 1, 1),
-       (0, 1, 2),
-       (1, 2, 2),
-       (0, 3, 2),
-       (0, 2, 1),
-       (2, 3, 1);
+INSERT INTO contestant_info(score, competition_id, user_data_id, prestige)
+VALUES (1, 1, 1, 20),
+       (0, 1, 2,-30),
+       (1, 2, 2, 15),
+       (0, 3, 2, -9),
+       (0, 2, 1, -8),
+       (2, 3, 1, 40);
 INSERT INTO contestant_result(contestant_info_id, task_option_id)
 VALUES (1, 5),
        (1, 6),

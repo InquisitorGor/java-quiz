@@ -10,6 +10,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +30,6 @@ public class Competition {
     @JoinColumn(name = "category_id")
     private Category category;
 
-
     @ManyToMany
     @JoinTable(
         name = "competition_task",
@@ -40,6 +40,15 @@ public class Competition {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "competition")
     private List<ContestantInfo> contestants;
+
+    @Transient
+    private String imageLink;
+
+    @Transient
+    private UserData userData;
+
+    @Transient
+    private String style;
 
     public Long getId() {
         return id;
@@ -88,5 +97,29 @@ public class Competition {
 
     public void setContestants(List<ContestantInfo> contestants) {
         this.contestants = contestants;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
+
+    public UserData getUserData() {
+        return userData;
+    }
+
+    public void setUserData(UserData userData) {
+        this.userData = userData;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
     }
 }

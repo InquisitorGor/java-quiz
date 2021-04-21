@@ -14,9 +14,6 @@ public class ProfileService {
     private UserDataRepository userDataRepository;
 
     public UserData getUserData(){
-        if (userDataContainer.getUserData() == null) {
-            userDataContainer.setUserData(userDataRepository.getOne(userDataContainer.getId()));
-        }
-        return userDataContainer.getUserData();
+        return userDataRepository.getOne(userDataContainer.getId());
     }
 }

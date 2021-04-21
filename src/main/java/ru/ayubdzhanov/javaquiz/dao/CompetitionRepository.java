@@ -1,5 +1,6 @@
 package ru.ayubdzhanov.javaquiz.dao;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,8 +14,14 @@ public interface CompetitionRepository extends JpaRepository<Competition, Long> 
     @Query("SELECT c FROM Competition c " +
         "INNER JOIN c.contestants con " +
         "WHERE c.finishedAt IS NULL " +
-        "AND c.category.id = ?1 " +
-        "AND NOT con.userData.id = ?2 ")
-    List<Competition> findAllStartedCompetitions(Long categoryId, Long currentUserId);
+        "AND con.userData.id = ?1 ")
+    List<Competition> findAllChallenges(Long currentUserId, Pageable pageable);
+
+    @Query("SELECT c FROM Competition c " +
+        "INNER JOIN c.contestants con " +
+        "WHERE c.finishedAt IS NOT NULL " +
+        "AND con.userData.id = ?1 " +
+        "ORDER BY c.finishedAt ")
+    List<Competition> findAllCompletedCompetitions(Long currentUserId, Pageable pageable);
 
 }
