@@ -14,10 +14,13 @@ import ru.ayubdzhanov.javaquiz.domain.Competition;
 import ru.ayubdzhanov.javaquiz.domain.CompetitionInfo;
 import ru.ayubdzhanov.javaquiz.domain.ContestantInfo;
 import ru.ayubdzhanov.javaquiz.domain.Task;
+import ru.ayubdzhanov.javaquiz.domain.TaskOption;
+import ru.ayubdzhanov.javaquiz.domain.UserData;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -63,6 +66,16 @@ public class CompetitionService {
         return wrapCompetitions(allChallenges);
     }
 
+    public List<Competition> getWaitingCompetitions() {
+        List<Competition> allChallenges = competitionRepository.findAllChallenges(userDataContainer.getId(), PageRequest.of(0, 10));
+        allChallenges = allChallenges.stream().filter(competition -> {
+            ContestantInfo currentContestant = competition.getContestants().stream().filter(contestant -> contestant.getUserData().getId().equals(userDataContainer.getId())).findFirst().get();
+            return currentContestant.getScore() != null;
+        }).collect(Collectors.toList());
+        if (allChallenges.isEmpty()) return Collections.emptyList();
+        return wrapCompetitions(allChallenges);
+    }
+
     public List<Competition> getContestantBattleHistory() {
         return wrapCompetitions(competitionRepository.findAllCompletedCompetitions(userDataContainer.getId(), PageRequest.of(0, 10)));
     }
@@ -93,26 +106,69 @@ public class CompetitionService {
     public void finishCompetition(MultiValueMap<String, String> allParams) {
         Competition competition = competitionRepository.getOne(Long.parseLong(allParams.get("competitionId").get(0)));
         AtomicInteger score = new AtomicInteger(0);
+        AtomicInteger prestige = new AtomicInteger(0);
         ContestantInfo currentContestant = competition.getContestants().stream().filter(contestant -> contestant.getUserData().getId() == Long.parseLong(allParams.get("currentContestant").get(0))).findFirst().get();
         competition.getTasks().forEach(task -> {
             if (!allParams.containsKey(task.getId() + "")) {
                 return;
             }
-            currentContestant.getContestantResults().addAll(task.getTaskOption());
+            currentContestant.getContestantResults()
+                .addAll(task.getTaskOption()
+                    .stream()
+                    .filter(taskOption -> allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + ""))
+                    .collect(Collectors.toList()));
             if (task.getTaskOption().stream().allMatch(taskOption ->
-                        (taskOption.getCorrect() &&  allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "")) ||
-                        (!taskOption.getCorrect() && !allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "")))) {
-                currentContestant.setScore(score.incrementAndGet());
+                (taskOption.getCorrect() && allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "")) ||
+                    (!taskOption.getCorrect() && !allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "")))) {
+                score.incrementAndGet();
+                prestige.addAndGet(task.getPrestige());
             }
         });
-        if (currentContestant.getScore() == null) {
-            currentContestant.setScore(score.get());
-        }
+        currentContestant.setScore(score.get());
+        currentContestant.setPrestige(prestige.get());
         if (competition.getContestants().stream().allMatch(contestant -> contestant.getScore() != null)) {
             competition.setFinishedAt(LocalDateTime.now());
+            ContestantInfo opponent = competition.getContestants().stream().filter(contestant -> !contestant.getId().equals(currentContestant.getId())).findFirst().get();
+            if (currentContestant.getScore() > opponent.getScore()) {
+                opponent.setPrestige(getNegativePrestige(opponent, competition));
+                opponent.getUserData().setDefeats(opponent.getUserData().getDefeats() + 1);
+                currentContestant.getUserData().setVictories(currentContestant.getUserData().getVictories() + 1);
+            } else if (currentContestant.getScore() < opponent.getScore()) {
+                currentContestant.setPrestige(getNegativePrestige(currentContestant, competition));
+                currentContestant.getUserData().setDefeats(currentContestant.getUserData().getDefeats() + 1);
+                opponent.getUserData().setVictories(opponent.getUserData().getVictories() + 1);
+            } else {
+                opponent.getUserData().setDraws(opponent.getUserData().getDraws());
+                opponent.setPrestige(0);
+                currentContestant.setPrestige(0);
+                currentContestant.getUserData().setDraws(currentContestant.getUserData().getDraws());
+            }
         }
         competitionRepository.save(competition);
     }
+
+    private Integer getNegativePrestige(ContestantInfo info, Competition competition) {
+        List<TaskOption> contestantResults = info.getContestantResults();
+        AtomicInteger prestige = new AtomicInteger(0);
+        List<Task> tasks = competition.getTasks();
+        tasks.forEach(task -> {
+            System.out.println(task.getId());
+            task.getTaskOption().stream().forEach(taskOption -> {
+                System.out.println(taskOption.getCorrect() && contestantResults.stream().anyMatch(tOption -> tOption.equals(taskOption)));
+                System.out.println(!taskOption.getCorrect() && contestantResults.stream().noneMatch(tOption -> tOption.equals(taskOption)));
+                System.out.println((taskOption.getCorrect() && contestantResults.stream().anyMatch(tOption -> tOption.equals(taskOption)) ||
+                    (!taskOption.getCorrect() && contestantResults.stream().noneMatch(tOption -> tOption.equals(taskOption)))));
+            });
+            if (task.getTaskOption().stream().allMatch(taskOption ->
+                (taskOption.getCorrect() && contestantResults.stream().anyMatch(tOption -> tOption.equals(taskOption))) ||
+                    (!taskOption.getCorrect() && contestantResults.stream().noneMatch(tOption -> tOption.equals(taskOption))))) {
+                prestige.addAndGet(task.getPrestige());
+            }
+        });
+        Integer totalPrestige = tasks.stream().map(Task::getPrestige).reduce(Integer::sum).get();
+        return prestige.get() - totalPrestige;
+    }
+
 
     public ContestantInfo getOpponent(Competition competition) {
         return competition.getContestants().stream().filter(contestant -> !contestant.getUserData().getId().equals(userDataContainer.getId())).findFirst().orElse(null);

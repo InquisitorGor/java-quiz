@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Option {
@@ -41,5 +42,18 @@ public class Option {
 
     public void setTaskOptions(List<TaskOption> taskOptions) {
         this.taskOptions = taskOptions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Option option1 = (Option) o;
+        return id.equals(option1.id) && option.equals(option1.option) && taskOptions.equals(option1.taskOptions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, option, taskOptions);
     }
 }

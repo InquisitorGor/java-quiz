@@ -60,7 +60,7 @@
 					<form method="post" th:action="'/competition/battle/' + ${challenge.getCategory().getId()}" action="/competition/battle/">
 						<input type="hidden" name="existedCompetitionId" th:value="${challenge.getId()}">
 						<div class="panel-body">
-							<img src="/images/mini/oop_mini.png" alt="Cinque Terre"
+							<img th:src="${challenge.getImageLink()}" src="/images/mini/oop_mini.png" alt="Cinque Terre"
 							     style="width:50px;height:50px; float: left;">
 							<div style="float: left; padding-left: 15px; line-height: 80%; padding-top: 7px">
 								<p th:utext="${challenge.getUserData().getName()}">Федор</p>
@@ -69,6 +69,22 @@
 							<input type="submit" class="btn btn-danger" style="float: right;background-color: red;padding-bottom: 10px; padding-top: 10px; " value="Начать"/>
 						</div>
 					</form>
+				</div>
+			</div>
+		</div>
+		<div th:if="${waitingCompetitions.isEmpty() == false}"  style="padding-top: 10px;">
+			<div style="padding-bottom: 20px">
+				<h1>Брошенные вызовы другим участникам:</h1>
+			</div>
+			<div>
+				<div th:each="competition : ${waitingCompetitions}" class="panel panel-danger" style=" border-width: 2px; border-color: grey; border-radius: 15px;">
+						<div class="panel-body">
+							<img th:src="${competition.getImageLink()}" src="/images/mini/oop_mini.png" alt="Cinque Terre"
+							     style="width:50px;height:50px; float: left;">
+							<div th:each="contestant : ${competition.getContestants()}" style="float: left; padding-left: 15px; padding-top: 15px">
+								<p th:if="${contestant.getScore() == null}" th:utext="${contestant.getUserData().getName() + ' (' + contestant.getUserData().getPrestige() + ' prestige)'}">Федор</p>
+							</div>
+						</div>
 				</div>
 			</div>
 		</div>
@@ -100,46 +116,6 @@
 						</div>
 					</div>
 				</a>
-<!--					<div class="panel panel-danger" th:if="${oldBattle.getStatus() == 'RED'}" th:style="${'border-width: 2px; border-color: red; border-radius: 15px;'}" style="">-->
-<!--						<div class="panel-body">-->
-<!--							<img th:src="${oldBattle.getImageLink()}" src="/images/mini/java_mini.png" alt="Cinque Terre"-->
-<!--							     style="width:50px;height:50px; float: left;">-->
-<!--							<div th:each="contestant : ${oldBattle.getContestants()}">-->
-<!--								<div  style="float: left;text-align: center; padding-left: 17px; line-height: 80%; padding-top: 7px;">-->
-<!--									<p th:if="${currentContestantId == contestant.getUserData().getId()}">Вы</p>-->
-<!--									<p th:if="${currentContestantId != contestant.getUserData().getId()}" th:utext="${contestant.getUserData().getName()}">Вы</p>-->
-<!--									<p th:utext="${contestant.getScore()}">4</p>-->
-<!--								</div>-->
-<!--								<div th:if="${currentContestantId == contestant.getUserData().getId()}">-->
-<!--									<h3 style="float: left; text-align: center; padding-left: 15px;">VS</h3>-->
-<!--								</div>-->
-<!--								<div th:if="${currentContestantId == contestant.getUserData().getId()}" style="float: right">-->
-<!--									<h3 th:if="${contestant.getPrestige() > 0}" th:utext="${'+'+contestant.getPrestige() + ' prestige'}">+ 120 prestige</h3>-->
-<!--									<h3 th:if="${contestant.getPrestige() < 0}" th:utext="${contestant.getPrestige() + ' prestige'}">+ 120 prestige</h3>-->
-<!--								</div>-->
-<!--							</div>-->
-<!--						</div>-->
-<!--					</div>-->
-<!--					<div class="panel panel-danger" th:if="${oldBattle.getStatus() == 'GREEN'}" th:style="${'border-width: 2px; border-color: grey; border-radius: 15px;'}" style="">-->
-<!--						<div class="panel-body">-->
-<!--							<img th:src="${oldBattle.getImageLink()}" src="/images/mini/java_mini.png" alt="Cinque Terre"-->
-<!--							     style="width:50px;height:50px; float: left;">-->
-<!--							<div th:each="contestant : ${oldBattle.getContestants()}">-->
-<!--								<div  style="float: left;text-align: center; padding-left: 17px; line-height: 80%; padding-top: 7px;">-->
-<!--									<p th:if="${currentContestantId == contestant.getUserData().getId()}">Вы</p>-->
-<!--									<p th:if="${currentContestantId != contestant.getUserData().getId()}" th:utext="${contestant.getUserData().getName()}">Вы</p>-->
-<!--									<p th:utext="${contestant.getScore()}">4</p>-->
-<!--								</div>-->
-<!--								<div th:if="${currentContestantId == contestant.getUserData().getId()}">-->
-<!--									<h3 style="float: left; text-align: center; padding-left: 15px;">VS</h3>-->
-<!--								</div>-->
-<!--								<div th:if="${currentContestantId == contestant.getUserData().getId()}" style="float: right">-->
-<!--									<h3 th:if="${contestant.getPrestige() > 0}" th:utext="${'+'+contestant.getPrestige() + ' prestige'}">+ 120 prestige</h3>-->
-<!--									<h3 th:if="${contestant.getPrestige() < 0}" th:utext="${contestant.getPrestige() + ' prestige'}">+ 120 prestige</h3>-->
-<!--								</div>-->
-<!--							</div>-->
-<!--						</div>-->
-<!--					</div>-->
 			</div>
 		</div>
 	</div>

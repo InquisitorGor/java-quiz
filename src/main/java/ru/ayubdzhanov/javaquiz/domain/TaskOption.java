@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.util.Objects;
 
 @Entity
 public class TaskOption {
@@ -50,5 +51,18 @@ public class TaskOption {
 
     public void setCorrect(Boolean correct) {
         isCorrect = correct;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskOption that = (TaskOption) o;
+        return id.equals(that.id) && task.equals(that.task) && option.equals(that.option) && isCorrect.equals(that.isCorrect);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, task, option, isCorrect);
     }
 }

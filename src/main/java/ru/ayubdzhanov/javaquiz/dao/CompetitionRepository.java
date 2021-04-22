@@ -21,7 +21,7 @@ public interface CompetitionRepository extends JpaRepository<Competition, Long> 
         "INNER JOIN c.contestants con " +
         "WHERE c.finishedAt IS NOT NULL " +
         "AND con.userData.id = ?1 " +
-        "ORDER BY c.finishedAt ")
+        "ORDER BY c.finishedAt DESC ")
     List<Competition> findAllCompletedCompetitions(Long currentUserId, Pageable pageable);
 
 }

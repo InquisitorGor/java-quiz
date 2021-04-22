@@ -17,7 +17,7 @@ public class Task {
 
     private String question;
 
-    private Long prestige;
+    private Integer prestige;
 
     @ManyToOne
     private Category category;
@@ -47,11 +47,11 @@ public class Task {
         this.question = question;
     }
 
-    public Long getPrestige() {
+    public Integer getPrestige() {
         return prestige;
     }
 
-    public void setPrestige(Long prestige) {
+    public void setPrestige(Integer prestige) {
         this.prestige = prestige;
     }
 

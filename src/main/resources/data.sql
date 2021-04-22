@@ -46,12 +46,12 @@ VALUES ('Что такое ООП?', 'Объектно-ориентирован�
                            'промышленный стандарт взаимодействия Java-приложений с различными СУБД. ' ||
                            'Реализован в виде пакета java.sql, входящего в состав Java SE.',
         7);
-INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles)
-VALUES (1, 'Михаил', 100, 140, 5, '01.01.2021', 145);
+INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES (1, 'Михаил', 100, 140, 5, '01.01.2021', 145, 2);
 INSERT INTO user_credential (id, login, password, role)
 VALUES (1, 'gg', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
-INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles)
-VALUES (2, 'Антон', 100, 140, 5, '01.01.2021', 145);
+INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES (2, 'Антон', 100, 140, 5, '01.01.2021', 145, 6);
 INSERT INTO user_credential (id, login, password, role)
 VALUES (2, 'ggg', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
 INSERT INTO competition_info (image_link, description, category_id)

@@ -30,6 +30,8 @@ public class UserData {
 
     private Integer defeats;
 
+    private Integer draws;
+
     private LocalDate registrationDate;
 
     private Integer amountOfBattles;
@@ -81,6 +83,7 @@ public class UserData {
     }
 
     public void setVictories(Integer victories) {
+        this.amountOfBattles++;
         this.victories = victories;
     }
 
@@ -89,6 +92,7 @@ public class UserData {
     }
 
     public void setDefeats(Integer defeats) {
+        this.amountOfBattles++;
         this.defeats = defeats;
     }
 
@@ -114,5 +118,14 @@ public class UserData {
 
     public void setContestantInfos(List<ContestantInfo> contestantInfos) {
         this.contestantInfos = contestantInfos;
+    }
+
+    public Integer getDraws() {
+        return draws;
+    }
+
+    public void setDraws(Integer draws) {
+        this.amountOfBattles++;
+        this.draws = draws;
     }
 }

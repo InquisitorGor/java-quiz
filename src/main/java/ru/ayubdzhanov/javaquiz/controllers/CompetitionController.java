@@ -37,6 +37,7 @@ public class CompetitionController {
     public String showCompetitionListPage(Model model) {
         model.addAttribute("competitionList", competitionService.getCompetitionsList());
         model.addAttribute("challenges", competitionService.getChallenges());
+        model.addAttribute("waitingCompetitions", competitionService.getWaitingCompetitions());
         model.addAttribute("oldBattles", competitionService.getContestantBattleHistory());
         model.addAttribute("currentContestantId", userDataContainer.getId());
         return "competitionListPage";
@@ -51,6 +52,6 @@ public class CompetitionController {
     @PostMapping("/battle/finish")
     public String showBattleResultPage(@RequestParam MultiValueMap<String,String> allParams){
         competitionService.finishCompetition(allParams);
-        return "redirect:/";
+        return "redirect:/competition/list";
     }
 }
