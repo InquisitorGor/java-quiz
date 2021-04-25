@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.SerializationUtils;
 import ru.ayubdzhanov.javaquiz.dao.CategoryRepository;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionInfoRepository;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionRepository;
@@ -18,6 +19,7 @@ import ru.ayubdzhanov.javaquiz.domain.Task;
 import ru.ayubdzhanov.javaquiz.domain.TaskOption;
 import ru.ayubdzhanov.javaquiz.domain.UserData;
 
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -152,12 +154,6 @@ public class CompetitionService {
         AtomicInteger prestige = new AtomicInteger(0);
         List<Task> tasks = competition.getTasks();
         tasks.forEach(task -> {
-            task.getTaskOption().stream().forEach(taskOption -> {
-                System.out.println(taskOption.getCorrect() && contestantResults.stream().anyMatch(tOption -> tOption.equals(taskOption)));
-                System.out.println(!taskOption.getCorrect() && contestantResults.stream().noneMatch(tOption -> tOption.equals(taskOption)));
-                System.out.println((taskOption.getCorrect() && contestantResults.stream().anyMatch(tOption -> tOption.equals(taskOption)) ||
-                    (!taskOption.getCorrect() && contestantResults.stream().noneMatch(tOption -> tOption.equals(taskOption)))));
-            });
             if (task.getTaskOption().stream().allMatch(taskOption ->
                 (taskOption.getCorrect() && contestantResults.stream().anyMatch(tOption -> tOption.equals(taskOption))) ||
                     (!taskOption.getCorrect() && contestantResults.stream().noneMatch(tOption -> tOption.equals(taskOption))))) {
@@ -223,8 +219,64 @@ public class CompetitionService {
         return competition.getTasks();
     }
 
-    public List<TaskOption> getCurrentContestantResults(Competition competition) {
-        List<Task> tasks = competition.getTasks();
-        return getCurrentContestant(competition).getContestantResults();
+    public List<ResultHelper> getContestantResults(Competition competition, Boolean isForCurrentContestant) {
+        ContestantInfo contestant;
+        if (isForCurrentContestant) {
+            contestant = getCurrentContestant(competition);
+        } else {
+            contestant = getOpponent(competition);
+        }
+        List<Task> currentContestantTasks = contestant.getContestantResults()
+            .stream()
+            .map(TaskOption::getTask)
+            .distinct()
+            .collect(Collectors.toList());
+        List<TaskOption> contestantResults = contestant.getContestantResults();
+        List<ResultHelper> resultHelperList = new LinkedList<>();
+        currentContestantTasks.forEach(task -> {
+            resultHelperList.add(new ResultHelper(task, contestantResults.stream().filter(taskOption -> taskOption.getTask().equals(task)).collect(Collectors.toList())));
+        });
+        resultHelperList.forEach(result->{
+            if (result.getTaskOptions().stream().anyMatch(taskOption -> !taskOption.getCorrect())){
+                result.setCorrect(Boolean.FALSE);
+            } else {
+                result.setCorrect(Boolean.TRUE);
+            }
+        });
+        return resultHelperList;
+    }
+    class ResultHelper{
+        private Task task;
+        private List<TaskOption> taskOptions;
+        private Boolean isCorrect;
+
+        public ResultHelper(Task task, List<TaskOption> taskOptions) {
+            this.task = task;
+            this.taskOptions = taskOptions;
+        }
+
+        public Task getTask() {
+            return task;
+        }
+
+        public void setTask(Task task) {
+            this.task = task;
+        }
+
+        public List<TaskOption> getTaskOptions() {
+            return taskOptions;
+        }
+
+        public void setTaskOptions(List<TaskOption> taskOptions) {
+            this.taskOptions = taskOptions;
+        }
+
+        public Boolean getCorrect() {
+            return isCorrect;
+        }
+
+        public void setCorrect(Boolean correct) {
+            isCorrect = correct;
+        }
     }
 }

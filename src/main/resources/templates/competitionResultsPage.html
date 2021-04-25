@@ -51,31 +51,31 @@
 				<h2>Ваши результаты</h2>
 			</div>
 			<div class="container" style="padding-top: 40px; width: 300px">
-				<div th:each="correctResult : ${correctResults}">
+				<div th:each="result : ${currentContestantResults}">
 					<div class="row">
-						<div class="col-sm-9" th:utext="${correctResult.getQuestion()}" style="text-align: center">Основные принципы ООП</div>
+						<div class="col-sm-12" th:utext="${result.getTask().getQuestion()}" style="text-align: center">Основные принципы ООП</div>
 					</div>
-					<div th:each="option : ${currentContestantResults}">
-						<div class="row" style="background-color: #2df622">
-							<div class="col-sm-9" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
+					<div th:each="option : ${result.getTaskOptions()}">
+						<div th:if="${option.getCorrect()}" class="row" style="background-color: #2df622">
+							<div class="col-sm-12" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
+						</div>
+						<div th:if="${!option.getCorrect()}" class="row" style="background-color: red">
+							<div class="col-sm-12" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
 						</div>
 					</div>
-					<div class="row" style="">
-						<div class="col-sm-9" style="">Итог: +10 prestige</div>
+					<div class="row" style="text-align: center">
+						<div th:if="${result.getCorrect()}" class="col-sm-12" th:utext="'+' + ${result.getTask().getPrestige()} + ' prestige' " style="">Итог: +10 prestige</div>
 					</div>
+					<div class="row" style="text-align: center">
+						<div th:if="${!result.getCorrect()}" class="col-sm-12" th:utext="'-' + ${result.getTask().getPrestige()} + ' prestige' " style="">Итог: +10 prestige</div>
+					</div>
+					<hr/>
 				</div>
-				<div>
-					<div class="row">
-						<div class="col-sm-9" style="text-align: center">Что не относится к ООП</div>
-					</div>
-					<div>
-						<div class="row" style="background-color: #2df622">
-							<div class="col-sm-9">Сегрегация</div>
-						</div>
-					</div>
-					<div class="row" style="">
-						<div class="col-sm-9" style="">Итог: +10 prestige</div>
-					</div>
+				<div class="row" style="text-align: center">
+					<div class="col-sm-12">Заработанный престиж</div>
+					<div class="col-sm-12" style="background-color: grey" th:if="${opponent.getScore() == currentContestant.getScore()}" th:utext="${0 + ' prestige'}"></div>
+					<div class="col-sm-12" style="background-color: #2df622" th:if="${opponent.getPrestige() < currentContestant.getPrestige()}" th:utext="${'+' + currentContestant.getPrestige() + ' prestige'}"></div>
+					<div class="col-sm-12" style="background-color: red" th:if="${opponent.getPrestige() > currentContestant.getPrestige()}" th:utext="${'-' + currentContestant.getPrestige() + ' prestige'}"></div>
 				</div>
 			</div>
 		</div>
@@ -93,9 +93,10 @@
 					</div>
 					<div th:each="option : ${correctResult.getTaskOption()}">
 						<div th:if="${option.getCorrect() == true}" class="row">
-							<div class="col-sm-12" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
+							<div class="col-sm-12" style="background-color: #2df622" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
 						</div>
 					</div>
+					<hr/>
 				</div>
 			</div>
 		</div>
@@ -105,40 +106,31 @@
 			<h2>Результаты соперника</h2>
 		</div>
 		<div class="container" style="padding-top: 40px; width: 300px">
-			<div>
+			<div th:each="result : ${opponentResults}">
+				<div class="row">
+					<div class="col-sm-12" th:utext="${result.getTask().getQuestion()}" style="text-align: center">Основные принципы ООП</div>
+				</div>
+				<div th:each="option : ${result.getTaskOptions()}">
+					<div th:if="${option.getCorrect()}" class="row" style="background-color: #2df622">
+						<div class="col-sm-12" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
+					</div>
+					<div th:if="${!option.getCorrect()}" class="row" style="background-color: red">
+						<div class="col-sm-12" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
+					</div>
+				</div>
 				<div class="row" style="text-align: center">
-					<div class="col-sm-9">Основные принципы ООП</div>
+					<div th:if="${result.getCorrect()}" class="col-sm-12" th:utext="'+' + ${result.getTask().getPrestige()} + ' prestige' " style="">Итог: +10 prestige</div>
 				</div>
-				<div>
-					<div class="row" style="background-color: red">
-						<div class="col-sm-9">Полиморфизм</div>
-					</div>
-					<div class="row" style="background-color: red">
-						<div class="col-sm-9">Инкапсуляция</div>
-					</div>
-					<div class="row" style="background-color: red">
-						<div class="col-sm-9">Наследование</div>
-					</div>
-					<div class="row" style="background-color: red">
-						<div class="col-sm-9">Сегрегация</div>
-					</div>
+				<div class="row" style="text-align: center">
+					<div th:if="${!result.getCorrect()}" class="col-sm-12" th:utext="'-' + ${result.getTask().getPrestige()} + ' prestige' " style="">Итог: +10 prestige</div>
 				</div>
-				<div class="row" style="">
-					<div class="col-sm-9" style="">Итог: -10 prestige</div>
-				</div>
+				<hr/>
 			</div>
-			<div>
-				<div class="row" style="text-align: center">
-					<div class="col-sm-9">Что не относится к ООП?</div>
-				</div>
-				<div>
-					<div class="row" style="background-color: red">
-						<div class="col-sm-9">Наследование</div>
-					</div>
-				</div>
-				<div class="row" style="">
-					<div class="col-sm-9" style="">Итог: -10 prestige</div>
-				</div>
+			<div class="row" style="text-align: center">
+				<div class="col-sm-12">Заработанный престиж</div>
+				<div class="col-sm-12" style="background-color: grey" th:if="${opponent.getScore() == currentContestant.getScore()}" th:utext="${0 + ' prestige'}"></div>
+				<div class="col-sm-12" style="background-color: #2df622" th:if="${opponent.getPrestige() > currentContestant.getPrestige()}" th:utext="${'+' + opponent.getPrestige() + ' prestige'}"></div>
+				<div class="col-sm-12" style="background-color: red" th:if="${opponent.getPrestige() < currentContestant.getPrestige()}" th:utext="${'-' + opponent.getPrestige() + ' prestige'}"></div>
 			</div>
 		</div>
 	</div>
