@@ -93,7 +93,7 @@
 				<h1>Прошлые битвы:</h1>
 			</div>
 			<div style="">
-				<a th:if="${oldBattles.isEmpty() == false}" th:each="oldBattle : ${oldBattles}" href="/main">
+				<a th:if="${oldBattles.isEmpty() == false}" th:each="oldBattle : ${oldBattles}" th:href="'/competition/result/' + ${oldBattle.getId()}" href="/main">
 					<div class="panel panel-danger" th:style="${oldBattle.getStyle()}" style="border-width: 2px; border-color: #2df622; border-radius: 15px;">
 						<div class="panel-body">
 							<img th:src="${oldBattle.getImageLink()}" src="/images/mini/java_mini.png" alt="Cinque Terre"

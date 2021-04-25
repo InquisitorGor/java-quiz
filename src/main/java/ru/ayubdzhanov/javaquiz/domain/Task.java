@@ -1,6 +1,7 @@
 package ru.ayubdzhanov.javaquiz.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -86,5 +87,18 @@ public class Task {
 
     public void setMenuCounter(Integer menuCounter) {
         this.menuCounter = menuCounter;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+            "id=" + id +
+            ", question='" + question + '\'' +
+            ", prestige=" + prestige +
+            ", category=" + category +
+            ", taskOption=" + taskOption +
+            ", menu='" + menu + '\'' +
+            ", menuCounter=" + menuCounter +
+            '}';
     }
 }

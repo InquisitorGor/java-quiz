@@ -1,5 +1,6 @@
 package ru.ayubdzhanov.javaquiz.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -152,7 +152,6 @@ public class CompetitionService {
         AtomicInteger prestige = new AtomicInteger(0);
         List<Task> tasks = competition.getTasks();
         tasks.forEach(task -> {
-            System.out.println(task.getId());
             task.getTaskOption().stream().forEach(taskOption -> {
                 System.out.println(taskOption.getCorrect() && contestantResults.stream().anyMatch(tOption -> tOption.equals(taskOption)));
                 System.out.println(!taskOption.getCorrect() && contestantResults.stream().noneMatch(tOption -> tOption.equals(taskOption)));
@@ -172,6 +171,10 @@ public class CompetitionService {
 
     public ContestantInfo getOpponent(Competition competition) {
         return competition.getContestants().stream().filter(contestant -> !contestant.getUserData().getId().equals(userDataContainer.getId())).findFirst().orElse(null);
+    }
+
+    public ContestantInfo getCurrentContestant(Competition competition) {
+        return competition.getContestants().stream().filter(contestant -> contestant.getUserData().getId().equals(userDataContainer.getId())).findFirst().orElse(null);
     }
 
     public List<CompetitionInfo> getCompetitionsList() {
@@ -216,4 +219,12 @@ public class CompetitionService {
         return competitions;
     }
 
+    public List<Task> getCompetitionsCorrectResults(Competition competition) {
+        return competition.getTasks();
+    }
+
+    public List<TaskOption> getCurrentContestantResults(Competition competition) {
+        List<Task> tasks = competition.getTasks();
+        return getCurrentContestant(competition).getContestantResults();
+    }
 }

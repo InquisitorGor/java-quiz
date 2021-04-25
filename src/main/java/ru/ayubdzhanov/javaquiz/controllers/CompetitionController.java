@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.ayubdzhanov.javaquiz.domain.Competition;
+import ru.ayubdzhanov.javaquiz.domain.Task;
 import ru.ayubdzhanov.javaquiz.domain.UserData;
 import ru.ayubdzhanov.javaquiz.service.CompetitionService;
 import ru.ayubdzhanov.javaquiz.service.UserDataContainer;
+
+import java.util.List;
 
 
 @Controller
@@ -43,8 +46,11 @@ public class CompetitionController {
         return "competitionListPage";
     }
 
-    @GetMapping("/result/123")
-    public String showCompetitionResultPage(){
+    @GetMapping("/result/{competitionId}")
+    public String showCompetitionResultPage(Model model, @PathVariable Long competitionId){
+        Competition competition = competitionService.getCompetition(null, competitionId);
+        model.addAttribute("correctResults", competitionService.getCompetitionsCorrectResults(competition));
+        //model.addAttribute("currentContestantResults", competitionService.getCurrentContestantResults(competition));
         return "competitionResultsPage";
     }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<title>Results</title>
@@ -38,7 +38,7 @@
 		</div>
 	</div>
 </nav>
-<div style="padding-top: 40px">
+<div style="padding-top: 40px;">
 	<div style="text-align: center">
 		<h1>Результаты соревнования</h1>
 	</div>
@@ -51,19 +51,13 @@
 				<h2>Ваши результаты</h2>
 			</div>
 			<div class="container" style="padding-top: 40px; width: 300px">
-				<div>
+				<div th:each="correctResult : ${correctResults}">
 					<div class="row">
-						<div class="col-sm-9" style="text-align: center">Основные принципы ООП</div>
+						<div class="col-sm-9" th:utext="${correctResult.getQuestion()}" style="text-align: center">Основные принципы ООП</div>
 					</div>
-					<div>
+					<div th:each="option : ${currentContestantResults}">
 						<div class="row" style="background-color: #2df622">
-							<div class="col-sm-9">Полиморфизм</div>
-						</div>
-						<div class="row" style="background-color: #2df622">
-							<div class="col-sm-9">Инкапсуляция</div>
-						</div>
-						<div class="row" style="background-color: #2df622">
-							<div class="col-sm-9">Наследование</div>
+							<div class="col-sm-9" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
 						</div>
 					</div>
 					<div class="row" style="">
@@ -85,78 +79,65 @@
 				</div>
 			</div>
 		</div>
-		<div style="position: fixed; left: 35%">
+		<div style="padding-left: 10%; float: left">
 			<div style="text-align: center; padding-top: 40px">
 				<h2>Правильные ответы</h2>
 			</div>
 			<div class="container" style="padding-top: 40px; width: 300px">
-				<div>
+				<div th:each="correctResult : ${correctResults}">
 					<div class="row" style="text-align: center">
-						<div class="col-sm-9">Основные принципы ООП</div>
+						<div class="col-sm-12" th:utext="${correctResult.getQuestion()}">Основные принципы ООП</div>
 					</div>
-					<div>
-						<div class="row">
-							<div class="col-sm-9">Полиморфизм</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-9">Инкапсуляция</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-9">Наследование</div>
-						</div>
+					<div th:if="${correctResult.getTaskOption().isEmpty()}">
+						<h1>Empty</h1>
 					</div>
-				</div>
-				<div>
-					<div class="row" style="text-align: center">
-						<div class="col-sm-9">Что не относится к ООП?</div>
-					</div>
-					<div>
-						<div class="row">
-							<div class="col-sm-9">Сегрегация</div>
+					<div th:each="option : ${correctResult.getTaskOption()}">
+						<div th:if="${option.getCorrect() == true}" class="row">
+							<div class="col-sm-12" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div style="float: right">
-			<div style="text-align: center; padding-top: 40px">
-				<h2>Результаты соперника</h2>
-			</div>
-			<div class="container" style="padding-top: 40px; width: 300px">
-				<div>
-					<div class="row" style="text-align: center">
-						<div class="col-sm-9" >Основные принципы ООП</div>
-					</div>
-					<div>
-						<div class="row" style="background-color: red">
-							<div class="col-sm-9" >Полиморфизм</div>
-						</div>
-						<div class="row" style="background-color: red">
-							<div class="col-sm-9">Инкапсуляция</div>
-						</div>
-						<div class="row" style="background-color: red">
-							<div class="col-sm-9">Наследование</div>
-						</div>
-						<div class="row"  style="background-color: red">
-							<div class="col-sm-9">Сегрегация</div>
-						</div>
-					</div>
-					<div class="row" style="">
-						<div class="col-sm-9" style="">Итог: -10 prestige</div>
-					</div>
+	</div>
+	<div style="float: right">
+		<div style="text-align: center; padding-top: 40px">
+			<h2>Результаты соперника</h2>
+		</div>
+		<div class="container" style="padding-top: 40px; width: 300px">
+			<div>
+				<div class="row" style="text-align: center">
+					<div class="col-sm-9">Основные принципы ООП</div>
 				</div>
 				<div>
-					<div class="row" style="text-align: center">
-						<div class="col-sm-9">Что не относится к ООП?</div>
+					<div class="row" style="background-color: red">
+						<div class="col-sm-9">Полиморфизм</div>
 					</div>
-					<div>
-						<div class="row"  style="background-color: red">
-							<div class="col-sm-9">Наследование</div>
-						</div>
+					<div class="row" style="background-color: red">
+						<div class="col-sm-9">Инкапсуляция</div>
 					</div>
-					<div class="row" style="">
-						<div class="col-sm-9" style="">Итог: -10 prestige</div>
+					<div class="row" style="background-color: red">
+						<div class="col-sm-9">Наследование</div>
 					</div>
+					<div class="row" style="background-color: red">
+						<div class="col-sm-9">Сегрегация</div>
+					</div>
+				</div>
+				<div class="row" style="">
+					<div class="col-sm-9" style="">Итог: -10 prestige</div>
+				</div>
+			</div>
+			<div>
+				<div class="row" style="text-align: center">
+					<div class="col-sm-9">Что не относится к ООП?</div>
+				</div>
+				<div>
+					<div class="row" style="background-color: red">
+						<div class="col-sm-9">Наследование</div>
+					</div>
+				</div>
+				<div class="row" style="">
+					<div class="col-sm-9" style="">Итог: -10 prestige</div>
 				</div>
 			</div>
 		</div>

@@ -65,4 +65,14 @@ public class TaskOption {
     public int hashCode() {
         return Objects.hash(id, task, option, isCorrect);
     }
+
+    @Override
+    public String toString() {
+        return "TaskOption{" +
+            "id=" + id +
+            ", task=" + task.getId() +
+            ", option=" + option +
+            ", isCorrect=" + isCorrect +
+            '}';
+    }
 }

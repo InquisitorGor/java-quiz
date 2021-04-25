@@ -56,4 +56,12 @@ public class Option {
     public int hashCode() {
         return Objects.hash(id, option, taskOptions);
     }
+
+    @Override
+    public String toString() {
+        return "Option{" +
+            "id=" + id +
+            ", option='" + option + '\'' +
+            '}';
+    }
 }

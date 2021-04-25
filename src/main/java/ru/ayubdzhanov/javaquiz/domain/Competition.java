@@ -2,6 +2,7 @@ package ru.ayubdzhanov.javaquiz.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class Competition {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
         name = "competition_task",
         joinColumns = @JoinColumn(name = "competition_id"),
