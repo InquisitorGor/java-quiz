@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -89,13 +90,14 @@ public class CompetitionService {
         currentContestant.setCompetition(newCompetition);
         List<ContestantInfo> allAccessibleContestants = contestantInfoRepository.findAllAccessibleContestants(userDataContainer.getId(), categoryId);
         if (!allAccessibleContestants.isEmpty()) {
-            ContestantInfo possibleContestant = allAccessibleContestants.stream().findFirst().get();
+            Random r = new Random();
+            ContestantInfo possibleContestant = allAccessibleContestants.get(r.nextInt(allAccessibleContestants.size()));
             ContestantInfo opponent = new ContestantInfo();
             opponent.setCompetition(newCompetition);
             opponent.setUserData(possibleContestant.getUserData());
             newCompetition.getContestants().add(opponent);
         }
-        List<Task> tasks = taskRepository.findAllByCategoryId(categoryId, PageRequest.of(0, 5));
+        List<Task> tasks = getRandomTasks(taskRepository.findAllByCategoryId(categoryId, PageRequest.of(0, 200))); //better to cache
         wrapTasks(tasks);
         newCompetition.setTasks(tasks);
         newCompetition.setStartedAt(LocalDateTime.now());
@@ -103,6 +105,19 @@ public class CompetitionService {
         newCompetition.setCategory(categoryRepository.getOne(categoryId));
         competitionRepository.save(newCompetition);
         return newCompetition;
+    }
+
+    private List<Task> getRandomTasks(List<Task> tasks) {
+        Random r = new Random();
+        List<Task> filteredTasks = new LinkedList<>();
+        for (int i = 0; i < 5; i++) {
+            int randomIndex = r.nextInt(tasks.size());
+            if (filteredTasks.contains(tasks.get(randomIndex))) {
+                continue;
+            }
+            filteredTasks.add(tasks.get(randomIndex));
+        }
+        return filteredTasks;
     }
 
     public void finishCompetition(MultiValueMap<String, String> allParams) {
@@ -236,8 +251,8 @@ public class CompetitionService {
         currentContestantTasks.forEach(task -> {
             resultHelperList.add(new ResultHelper(task, contestantResults.stream().filter(taskOption -> taskOption.getTask().equals(task)).collect(Collectors.toList())));
         });
-        resultHelperList.forEach(result->{
-            if (result.getTaskOptions().stream().anyMatch(taskOption -> !taskOption.getCorrect())){
+        resultHelperList.forEach(result -> {
+            if (result.getTaskOptions().stream().anyMatch(taskOption -> !taskOption.getCorrect())) {
                 result.setCorrect(Boolean.FALSE);
             } else {
                 result.setCorrect(Boolean.TRUE);
@@ -245,7 +260,8 @@ public class CompetitionService {
         });
         return resultHelperList;
     }
-    class ResultHelper{
+
+    class ResultHelper {
         private Task task;
         private List<TaskOption> taskOptions;
         private Boolean isCorrect;

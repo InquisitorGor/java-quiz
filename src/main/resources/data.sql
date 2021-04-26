@@ -49,11 +49,19 @@ VALUES ('Что такое ООП?', 'Объектно-ориентирован�
 INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
 VALUES (1, 'Михаил', 100, 140, 5, '01.01.2021', 145, 2);
 INSERT INTO user_credential (id, login, password, role)
-VALUES (1, 'gg', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
+VALUES (1, 'm', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
 INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
 VALUES (2, 'Антон', 100, 140, 5, '01.01.2021', 145, 6);
 INSERT INTO user_credential (id, login, password, role)
-VALUES (2, 'ggg', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
+VALUES (2, 'a', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
+INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES (3, 'Влад', 100, 140, 5, '01.01.2021', 145, 2);
+INSERT INTO user_credential (id, login, password, role)
+VALUES (3, 'v', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
+INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES (4, 'Паша', 100, 140, 5, '01.01.2021', 145, 6);
+INSERT INTO user_credential (id, login, password, role)
+VALUES (4, 'p', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
 INSERT INTO competition_info (image_link, description, category_id)
 VALUES ('/images/mini/java_mini.png', 'Соревнование по Java Core</br>' ||
                                       'В данном соревновании будут рассмотрены следующие моменты:<br>' ||
@@ -68,12 +76,17 @@ VALUES ('/images/mini/java_mini.png', 'Соревнование по Java Core</
                                             '<ul><li>Основы синтаксиса</li><li>Парадигмы</li><li>Условия</li></ul>',
         4);
 INSERT INTO task (question, prestige, category_id)
-VALUES ('Основные принципы ООП', 10, 1),
+VALUES ('Основные принципы ООП', 20, 1),
        ('Что не относится к парадигмам ООП', 10, 1),
-       ('АОП расширяет ООП?', 10, 1),
-       ('Инкапсуляция это', 10, 1),
-       ('Полиморфизм это', 10, 1),
-       ('Наследование это', 10, 1);
+       ('АОП расширяет ООП?', 5, 1),
+       ('Инкапсуляция это', 15, 1),
+       ('Полиморфизм это', 15, 1),
+       ('Наследование это', 15, 1),
+       ('Паттерны нужны?', 5, 1),
+       ('Java и JS одно и тоже?', 15, 1),
+       ('В JDK входит JVM?', 15, 1),
+       ('В JDK входит JRE?', 15, 1),
+       ('2+2=4', 15, 1);
 INSERT INTO option (option)
 VALUES ('Полиморфизм'),
        ('Инкапсуляция'),
@@ -103,7 +116,17 @@ VALUES (true, 1, 1),
        (true, 9, 5),
        (false, 10, 5),
        (true, 11, 6),
-       (false, 12, 6);
+       (false, 12, 6),
+       (true, 5, 7),
+       (false, 6, 7),
+       (true, 5, 8),
+       (false, 6, 8),
+       (true, 5, 9),
+       (false, 6, 9),
+       (true, 5, 10),
+       (false, 6, 10),
+       (true, 5, 11),
+       (false, 6, 11);
 INSERT INTO competition(finished_at, started_at, category_id)
 VALUES ('2021-04-18 14:50:30.838000', '2021-04-18 14:50:02.653000', 1),
        ('2021-04-18 14:53:48.322000', '2021-04-18 14:50:53.241000', 1),
