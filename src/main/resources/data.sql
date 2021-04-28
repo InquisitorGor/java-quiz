@@ -62,6 +62,10 @@ INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date
 VALUES (4, 'Паша', 100, 140, 5, '01.01.2021', 145, 6);
 INSERT INTO user_credential (id, login, password, role)
 VALUES (4, 'p', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
+INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES (5, 'admin', 100, 140, 5, '01.01.2021', 145, 6);
+INSERT INTO user_credential (id, login, password, role)
+VALUES (5, 'admin', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'ADMIN');
 INSERT INTO competition_info (image_link, description, category_id)
 VALUES ('/images/mini/java_mini.png', 'Соревнование по Java Core</br>' ||
                                       'В данном соревновании будут рассмотрены следующие моменты:<br>' ||

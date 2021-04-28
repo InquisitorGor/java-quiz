@@ -34,13 +34,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/","/registration/**","/login","/images/**", "/webjars/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .and().headers().frameOptions().disable()//for
-                .and().csrf().disable();                 //h2 database console
+            .antMatchers("/", "/registration/**", "/login", "/images/**", "/webjars/**").permitAll()
+            .antMatchers("/competition/**", "/user_page", "/theory").hasRole("USER")
+            .antMatchers("/admin").hasRole("ADMIN")
+            .and().formLogin().loginPage("/login")
+            .and().headers().frameOptions().disable()//for
+            .and().csrf().disable();                 //h2 database console
 
     }
 

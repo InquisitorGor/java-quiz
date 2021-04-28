@@ -19,6 +19,7 @@ public class MainController {
             model.addAttribute("isAuthenticated", true);
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("user", " " + userDetails.getUsername());
+            model.addAttribute("role", userDetails.getAuthorities().stream().findFirst().get().toString());
         }
         return "mainPage";
     }

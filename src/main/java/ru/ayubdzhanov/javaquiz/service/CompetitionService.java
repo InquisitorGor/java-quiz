@@ -110,7 +110,7 @@ public class CompetitionService {
     private List<Task> getRandomTasks(List<Task> tasks) {
         Random r = new Random();
         List<Task> filteredTasks = new LinkedList<>();
-        for (int i = 0; i < 5; i++) {
+        while (filteredTasks.size() < 5) {
             int randomIndex = r.nextInt(tasks.size());
             if (filteredTasks.contains(tasks.get(randomIndex))) {
                 continue;
@@ -150,10 +150,14 @@ public class CompetitionService {
                 opponent.setPrestige(getNegativePrestige(opponent, competition));
                 opponent.getUserData().setDefeats(opponent.getUserData().getDefeats() + 1);
                 currentContestant.getUserData().setVictories(currentContestant.getUserData().getVictories() + 1);
+                currentContestant.getUserData().setPrestige(currentContestant.getUserData().getPrestige() + currentContestant.getPrestige());
+                opponent.getUserData().setPrestige(opponent.getUserData().getPrestige() + opponent.getPrestige());
             } else if (currentContestant.getScore() < opponent.getScore()) {
                 currentContestant.setPrestige(getNegativePrestige(currentContestant, competition));
                 currentContestant.getUserData().setDefeats(currentContestant.getUserData().getDefeats() + 1);
                 opponent.getUserData().setVictories(opponent.getUserData().getVictories() + 1);
+                opponent.getUserData().setPrestige(opponent.getUserData().getPrestige() + opponent.getPrestige());
+                currentContestant.getUserData().setPrestige(currentContestant.getUserData().getPrestige() + currentContestant.getPrestige());
             } else {
                 opponent.getUserData().setDraws(opponent.getUserData().getDraws());
                 opponent.setPrestige(0);
