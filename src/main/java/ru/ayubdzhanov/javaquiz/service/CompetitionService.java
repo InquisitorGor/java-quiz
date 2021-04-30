@@ -1,11 +1,10 @@
 package ru.ayubdzhanov.javaquiz.service;
 
-import org.hibernate.Hibernate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.SerializationUtils;
 import ru.ayubdzhanov.javaquiz.dao.CategoryRepository;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionInfoRepository;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionRepository;
@@ -17,9 +16,7 @@ import ru.ayubdzhanov.javaquiz.domain.CompetitionInfo;
 import ru.ayubdzhanov.javaquiz.domain.ContestantInfo;
 import ru.ayubdzhanov.javaquiz.domain.Task;
 import ru.ayubdzhanov.javaquiz.domain.TaskOption;
-import ru.ayubdzhanov.javaquiz.domain.UserData;
 
-import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -245,14 +242,10 @@ public class CompetitionService {
         } else {
             contestant = getOpponent(competition);
         }
-        List<Task> currentContestantTasks = contestant.getContestantResults()
-            .stream()
-            .map(TaskOption::getTask)
-            .distinct()
-            .collect(Collectors.toList());
+        List<Task> competitionTasks = competition.getTasks();
         List<TaskOption> contestantResults = contestant.getContestantResults();
         List<ResultHelper> resultHelperList = new LinkedList<>();
-        currentContestantTasks.forEach(task -> {
+        competitionTasks.forEach(task -> {
             resultHelperList.add(new ResultHelper(task, contestantResults.stream().filter(taskOption -> taskOption.getTask().equals(task)).collect(Collectors.toList())));
         });
         resultHelperList.forEach(result -> {
@@ -260,6 +253,16 @@ public class CompetitionService {
                 result.setCorrect(Boolean.FALSE);
             } else {
                 result.setCorrect(Boolean.TRUE);
+            }
+            ContestantInfo opponent = competition.getContestants().stream()
+                .filter(c -> !c.getId().equals(contestant.getId()))
+                .findFirst().get();
+            if (contestant.getScore() > opponent.getScore()) {
+                result.setStatus("WINNER");
+            } else if (contestant.getScore() < opponent.getScore()) {
+                result.setStatus("LOSER");
+            } else {
+                result.setStatus("NONE");
             }
         });
         return resultHelperList;
@@ -269,6 +272,7 @@ public class CompetitionService {
         private Task task;
         private List<TaskOption> taskOptions;
         private Boolean isCorrect;
+        private String status;
 
         public ResultHelper(Task task, List<TaskOption> taskOptions) {
             this.task = task;
@@ -297,6 +301,14 @@ public class CompetitionService {
 
         public void setCorrect(Boolean correct) {
             isCorrect = correct;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
         }
     }
 }
