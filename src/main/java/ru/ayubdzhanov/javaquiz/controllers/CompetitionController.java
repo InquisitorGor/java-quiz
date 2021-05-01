@@ -50,7 +50,7 @@ public class CompetitionController {
         model.addAttribute("opponentResults", competitionService.getContestantResults(competition, Boolean.FALSE));
         model.addAttribute("currentContestant", competitionService.getCurrentContestant(competition));
         model.addAttribute("opponent", competitionService.getOpponent(competition));
-        model.addAttribute("imageLink", competition.getImageLink());
+        model.addAttribute("imageLink", competition.getViewUtil().getImageLink());
         return "competitionResultsPage";
     }
 

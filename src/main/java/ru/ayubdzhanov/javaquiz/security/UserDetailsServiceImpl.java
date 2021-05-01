@@ -17,12 +17,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserCredentialRepository userCredentialRepository;
     private final UserDataContainer userDataContainer;
-    private final UserDataRepository userDataRepository;
 
-    public UserDetailsServiceImpl(UserCredentialRepository userCredentialRepository, UserDataContainer userDataContainer, UserDataRepository userDataRepository) {
+    public UserDetailsServiceImpl(UserCredentialRepository userCredentialRepository, UserDataContainer userDataContainer) {
         this.userCredentialRepository = userCredentialRepository;
         this.userDataContainer = userDataContainer;
-        this.userDataRepository = userDataRepository;
     }
 
     @Override

@@ -38,10 +38,10 @@
 		<input type="hidden" name="competitionId" th:value="${competition.getId()}">
 		<input type="hidden" name="currentContestant" th:value="${currentContestantId}">
 		<ul class="nav nav-tabs">
-			<li th:each="task : ${competition.getTasks()}"><a data-toggle="tab" th:utext="${task.getMenuCounter()}" th:href="${'#' + task.getMenu()}" href="#menu1"></a></li>
+			<li th:each="task : ${competition.getTasks()}"><a data-toggle="tab" th:utext="${task.getViewUtil().getMenuCounter()}" th:href="${'#' + task.getViewUtil().getMenu()}" href="#menu1"></a></li>
 		</ul>
 		<div class="tab-content">
-			<div th:each="task : ${competition.getTasks()}" th:id="${task.getMenu()}" id="menu1" class="tab-pane fade">
+			<div th:each="task : ${competition.getTasks()}" th:id="${task.getViewUtil().getMenu()}" id="menu1" class="tab-pane fade">
 				<h3 th:utext="${task.getQuestion()}">Что такое класс?</h3>
 				<div th:each="option : ${task.getTaskOption()}" class="checkbox">
 					<label><input type="checkbox" th:name="${task.getId()}" th:utext="${option.getOption().getOption()}" th:value="${option.getOption().getId()}"></label>

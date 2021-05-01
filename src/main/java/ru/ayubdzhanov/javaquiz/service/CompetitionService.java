@@ -1,6 +1,8 @@
 package ru.ayubdzhanov.javaquiz.service;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import ru.ayubdzhanov.javaquiz.domain.CompetitionInfo;
 import ru.ayubdzhanov.javaquiz.domain.ContestantInfo;
 import ru.ayubdzhanov.javaquiz.domain.Task;
 import ru.ayubdzhanov.javaquiz.domain.TaskOption;
+import ru.ayubdzhanov.javaquiz.util.ViewUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -52,6 +55,10 @@ public class CompetitionService {
 
     public Competition getExistedCompetition(Long existedCompetitionId) {
         Competition existedCompetition = competitionRepository.getOne(existedCompetitionId);
+        existedCompetition.setViewUtil(ViewUtils
+            .builder()
+            .imageLink(competitionsList.stream().filter(c -> c.getCategory().getId().equals(existedCompetition.getCategory().getId())).findFirst().get().getImageLink())
+            .build());
         wrapTasks(existedCompetition.getTasks());
         return existedCompetition;
     }
@@ -132,8 +139,8 @@ public class CompetitionService {
                     .filter(taskOption -> allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + ""))
                     .collect(Collectors.toList()));
             if (task.getTaskOption().stream().allMatch(taskOption ->
-                (taskOption.getCorrect() && allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "")) ||
-                    (!taskOption.getCorrect() && !allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "")))) {
+                (taskOption.getIsCorrect() && allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "")) ||
+                    (!taskOption.getIsCorrect() && !allParams.get(task.getId() + "").contains(taskOption.getOption().getId() + "")))) {
                 score.incrementAndGet();
                 prestige.addAndGet(task.getPrestige());
             }
@@ -171,8 +178,8 @@ public class CompetitionService {
         List<Task> tasks = competition.getTasks();
         tasks.forEach(task -> {
             if (task.getTaskOption().stream().allMatch(taskOption ->
-                (taskOption.getCorrect() && contestantResults.stream().anyMatch(tOption -> tOption.equals(taskOption))) ||
-                    (!taskOption.getCorrect() && contestantResults.stream().noneMatch(tOption -> tOption.equals(taskOption))))) {
+                (taskOption.getIsCorrect() && contestantResults.stream().anyMatch(tOption -> tOption.equals(taskOption))) ||
+                    (!taskOption.getIsCorrect() && contestantResults.stream().noneMatch(tOption -> tOption.equals(taskOption))))) {
                 prestige.addAndGet(task.getPrestige());
             }
         });
@@ -204,29 +211,42 @@ public class CompetitionService {
     }
 
     private void wrapTasks(List<Task> tasks) {
-        tasks.forEach(task -> {
-            task.setMenu("menu" + task.getId());
-        });
         for (int i = 0; i < tasks.size(); i++) {
-            tasks.get(i).setMenuCounter(i + 1);
+            tasks.get(i).setViewUtil(ViewUtils
+                .builder()
+                .menu("menu" + tasks.get(i).getId())
+                .menuCounter(i + 1)
+                .build());
         }
     }
 
     private List<Competition> wrapCompetitions(List<Competition> competitions) {
         competitions.forEach(competition -> {
-            competition.setImageLink(competitionsList.stream().filter(c -> c.getCategory().getId().equals(competition.getCategory().getId())).findFirst().get().getImageLink());
-            competition.setUserData(userDataRepository.getOne(competition.getContestants().stream().filter(con -> !con.getUserData().getId().equals(userDataContainer.getId())).findFirst().get().getUserData().getId()));
             ContestantInfo currentPlayer = competition.getContestants().stream().filter(com -> com.getUserData().getId().equals(userDataContainer.getId())).findFirst().get();
             ContestantInfo opponent = competition.getContestants().stream().filter(com -> !com.getUserData().getId().equals(userDataContainer.getId())).findFirst().get();
             competition.setContestants(Arrays.asList(currentPlayer, opponent));
-            if (currentPlayer.getScore() == null || opponent.getScore() == null) return;
-            if (currentPlayer.getScore() > opponent.getScore()) {
-                competition.setStyle("border-width: 2px; border-color: #2df622; border-radius: 15px;");
-            } else if (currentPlayer.getScore() < opponent.getScore()) {
-                competition.setStyle("border-width: 2px; border-color: red; border-radius: 15px;");
-            } else {
-                competition.setStyle("border-width: 2px; border-color: grey; border-radius: 15px;");
+            String style;
+            if (currentPlayer.getScore() == null || opponent.getScore() == null) {
+                competition.setViewUtil(ViewUtils
+                    .builder()
+                    .imageLink(competitionsList.stream().filter(c -> c.getCategory().getId().equals(competition.getCategory().getId())).findFirst().get().getImageLink())
+                    .userData(userDataRepository.getOne(competition.getContestants().stream().filter(con -> !con.getUserData().getId().equals(userDataContainer.getId())).findFirst().get().getUserData().getId()))
+                    .build());
+                return;
             }
+            if (currentPlayer.getScore() > opponent.getScore()) {
+                style = "border-width: 2px; border-color: #2df622; border-radius: 15px;";
+            } else if (currentPlayer.getScore() < opponent.getScore()) {
+                style = "border-width: 2px; border-color: red; border-radius: 15px;";
+            } else {
+                style = "border-width: 2px; border-color: grey; border-radius: 15px;";
+            }
+            competition.setViewUtil(ViewUtils
+                .builder()
+                .imageLink(competitionsList.stream().filter(c -> c.getCategory().getId().equals(competition.getCategory().getId())).findFirst().get().getImageLink())
+                .userData(userDataRepository.getOne(competition.getContestants().stream().filter(con -> !con.getUserData().getId().equals(userDataContainer.getId())).findFirst().get().getUserData().getId()))
+                .style(style)
+                .build());
         });
         return competitions;
     }
@@ -249,10 +269,10 @@ public class CompetitionService {
             resultHelperList.add(new ResultHelper(task, contestantResults.stream().filter(taskOption -> taskOption.getTask().equals(task)).collect(Collectors.toList())));
         });
         resultHelperList.forEach(result -> {
-            if (result.getTaskOptions().stream().anyMatch(taskOption -> !taskOption.getCorrect())) {
-                result.setCorrect(Boolean.FALSE);
+            if (result.getTaskOptions().stream().anyMatch(taskOption -> !taskOption.getIsCorrect())) {
+                result.setIsCorrect(Boolean.FALSE);
             } else {
-                result.setCorrect(Boolean.TRUE);
+                result.setIsCorrect(Boolean.TRUE);
             }
             ContestantInfo opponent = competition.getContestants().stream()
                 .filter(c -> !c.getId().equals(contestant.getId()))
@@ -268,6 +288,8 @@ public class CompetitionService {
         return resultHelperList;
     }
 
+    @Getter
+    @Setter
     class ResultHelper {
         private Task task;
         private List<TaskOption> taskOptions;
@@ -277,38 +299,6 @@ public class CompetitionService {
         public ResultHelper(Task task, List<TaskOption> taskOptions) {
             this.task = task;
             this.taskOptions = taskOptions;
-        }
-
-        public Task getTask() {
-            return task;
-        }
-
-        public void setTask(Task task) {
-            this.task = task;
-        }
-
-        public List<TaskOption> getTaskOptions() {
-            return taskOptions;
-        }
-
-        public void setTaskOptions(List<TaskOption> taskOptions) {
-            this.taskOptions = taskOptions;
-        }
-
-        public Boolean getCorrect() {
-            return isCorrect;
-        }
-
-        public void setCorrect(Boolean correct) {
-            isCorrect = correct;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
         }
     }
 }

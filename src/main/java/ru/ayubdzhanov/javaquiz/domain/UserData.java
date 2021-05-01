@@ -1,5 +1,8 @@
 package ru.ayubdzhanov.javaquiz.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +14,8 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import java.time.LocalDate;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 public class UserData {
 
@@ -39,89 +44,14 @@ public class UserData {
     @OneToMany(mappedBy = "userData")
     private List<ContestantInfo> contestantInfos;
 
-    public UserData() {
-    }
-
-    public UserData(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public UserCredential getUserCredential() {
-        return userCredential;
-    }
-
-    public void setUserCredential(UserCredential userCredential) {
-        this.userCredential = userCredential;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getPrestige() {
-        return prestige;
-    }
-
-    public void setPrestige(Integer prestige) {
-        this.prestige = prestige;
-    }
-
-    public Integer getVictories() {
-        return victories;
-    }
-
     public void setVictories(Integer victories) {
         this.amountOfBattles++;
         this.victories = victories;
     }
 
-    public Integer getDefeats() {
-        return defeats;
-    }
-
     public void setDefeats(Integer defeats) {
         this.amountOfBattles++;
         this.defeats = defeats;
-    }
-
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public Integer getAmountOfBattles() {
-        return amountOfBattles;
-    }
-
-    public void setAmountOfBattles(Integer amountOfBattles) {
-        this.amountOfBattles = amountOfBattles;
-    }
-
-    public List<ContestantInfo> getContestantInfos() {
-        return contestantInfos;
-    }
-
-    public void setContestantInfos(List<ContestantInfo> contestantInfos) {
-        this.contestantInfos = contestantInfos;
-    }
-
-    public Integer getDraws() {
-        return draws;
     }
 
     public void setDraws(Integer draws) {

@@ -60,10 +60,10 @@
 					<form method="post" th:action="'/competition/battle/' + ${challenge.getCategory().getId()}" action="/competition/battle/">
 						<input type="hidden" name="existedCompetitionId" th:value="${challenge.getId()}">
 						<div class="panel-body">
-							<img th:src="${challenge.getImageLink()}" src="/images/mini/oop_mini.png" alt="Cinque Terre"
+							<img th:src="${challenge.getViewUtil().getImageLink()}" src="/images/mini/oop_mini.png" alt="Cinque Terre"
 							     style="width:50px;height:50px; float: left;">
 							<div style="float: left; padding-left: 15px; line-height: 80%; padding-top: 7px">
-								<p th:utext="${challenge.getUserData().getName()}">Федор</p>
+								<p th:utext="${challenge.getViewUtil().getUserData().getName()}">Федор</p>
 								<p th:utext="${challenge.getStartedAt()}">03/02/2012</p>
 							</div>
 							<input type="submit" class="btn btn-danger" style="float: right;background-color: red;padding-bottom: 10px; padding-top: 10px; " value="Начать"/>
@@ -79,7 +79,7 @@
 			<div>
 				<div th:each="competition : ${waitingCompetitions}" class="panel panel-danger" style=" border-width: 2px; border-color: grey; border-radius: 15px;">
 						<div class="panel-body">
-							<img th:src="${competition.getImageLink()}" src="/images/mini/oop_mini.png" alt="Cinque Terre"
+							<img th:src="${competition.getViewUtil().getImageLink()}" src="/images/mini/oop_mini.png" alt="Cinque Terre"
 							     style="width:50px;height:50px; float: left;">
 							<div th:each="contestant : ${competition.getContestants()}" style="float: left; padding-left: 15px; padding-top: 15px">
 								<p th:if="${contestant.getScore() == null}" th:utext="${contestant.getUserData().getName() + ' (' + contestant.getUserData().getPrestige() + ' prestige)'}">Федор</p>
@@ -94,9 +94,9 @@
 			</div>
 			<div style="">
 				<a th:if="${oldBattles.isEmpty() == false}" th:each="oldBattle : ${oldBattles}" th:href="'/competition/result/' + ${oldBattle.getId()}" href="/main">
-					<div class="panel panel-danger" th:style="${oldBattle.getStyle()}" style="border-width: 2px; border-color: #2df622; border-radius: 15px;">
+					<div class="panel panel-danger" th:style="${oldBattle.getViewUtil().getStyle()}" style="border-width: 2px; border-color: #2df622; border-radius: 15px;">
 						<div class="panel-body">
-							<img th:src="${oldBattle.getImageLink()}" src="/images/mini/java_mini.png" alt="Cinque Terre"
+							<img th:src="${oldBattle.getViewUtil().getImageLink()}" src="/images/mini/java_mini.png" alt="Cinque Terre"
 							     style="width:50px;height:50px; float: left;">
 							<div th:each="contestant : ${oldBattle.getContestants()}">
 								<div  style="float: left;text-align: center; padding-left: 17px; line-height: 80%; padding-top: 7px;">

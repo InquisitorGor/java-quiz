@@ -1,5 +1,8 @@
 package ru.ayubdzhanov.javaquiz.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +15,8 @@ import javax.persistence.ManyToOne;
 import java.util.LinkedList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 public class ContestantInfo {
     @Id
@@ -36,52 +41,9 @@ public class ContestantInfo {
 
     private Integer prestige;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Competition getCompetition() {
-        return competition;
-    }
-
-    public void setCompetition(Competition competition) {
-        this.competition = competition;
-    }
-
-    public UserData getUserData() {
-        return userData;
-    }
-
-    public void setUserData(UserData userData) {
-        this.userData = userData;
-    }
-
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
-
     public List<TaskOption> getContestantResults() {
         if (contestantResults == null) contestantResults = new LinkedList<>();
         return contestantResults;
     }
 
-    public void setContestantResults(List<TaskOption> contestantResults) {
-        this.contestantResults = contestantResults;
-    }
-
-    public Integer getPrestige() {
-        return prestige;
-    }
-
-    public void setPrestige(Integer prestige) {
-        this.prestige = prestige;
-    }
 }

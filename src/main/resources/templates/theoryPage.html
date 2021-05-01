@@ -34,10 +34,10 @@
 <div class="container" style="padding-top: 40px">
 	<h2>Теория</h2>
 	<ul class="nav nav-tabs">
-		<li th:each="category : ${categories}"><a th:utext="${category.getCategory()}" data-toggle="tab" th:href="${'#' + category.getMenu()}">Основы ООП</a></li>
+		<li th:each="category : ${categories}"><a th:utext="${category.getCategory()}" data-toggle="tab" th:href="${'#' + category.getViewUtil().getMenu()}">Основы ООП</a></li>
 	</ul>
 	<div class="tab-content">
-		<div th:each="category : ${categories}" th:id="${category.getMenu()}" class="tab-pane fade">
+		<div th:each="category : ${categories}" th:id="${category.getViewUtil().getMenu()}" class="tab-pane fade">
 			<hr style="border-width: 5px"/>
 			<div th:each="theory : ${category.getTheories()}">
 				<h3 th:utext="${theory.getTitle()}">Что такое ООП?</h3>

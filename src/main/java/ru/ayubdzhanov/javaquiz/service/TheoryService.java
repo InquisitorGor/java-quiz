@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.ayubdzhanov.javaquiz.dao.CategoryRepository;
 import ru.ayubdzhanov.javaquiz.domain.Category;
 import ru.ayubdzhanov.javaquiz.domain.Theory;
+import ru.ayubdzhanov.javaquiz.util.ViewUtils;
 
 import java.util.List;
 
@@ -28,7 +29,10 @@ public class TheoryService {
     }
 
     private void wrapCategories(List<Category> categories){
-        categories.forEach(category -> category.setMenu("menu" + category.getId()));
+        categories.forEach(category -> category.setViewUtil(ViewUtils
+            .builder()
+            .menu("menu" + category.getId())
+            .build()));
     }
 
 }

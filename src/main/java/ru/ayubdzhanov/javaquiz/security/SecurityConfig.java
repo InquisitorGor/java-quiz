@@ -38,8 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/competition/**", "/user_page", "/theory").hasRole("USER")
             .antMatchers("/admin").hasRole("ADMIN")
             .and().formLogin().loginPage("/login")
-            .and().headers().frameOptions().disable()//for
-            .and().csrf().disable();                 //h2 database console
+            .and().headers().frameOptions().disable()
+            .and().csrf().disable();
 
     }
 
