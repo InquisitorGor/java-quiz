@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.ayubdzhanov.javaquiz.domain.Competition;
 import ru.ayubdzhanov.javaquiz.service.CompetitionService;
-import ru.ayubdzhanov.javaquiz.service.UserDataContainer;
 
 
 @Controller
@@ -20,15 +19,13 @@ public class CompetitionController {
 
     @Autowired
     private CompetitionService competitionService;
-    @Autowired
-    private UserDataContainer userDataContainer;
 
     @RequestMapping("/battle/{category_id}")
     public String showBattlePage(Model model, @PathVariable("category_id") Long categoryId, @RequestParam(required = false) Long existedCompetitionId) {
         Competition competition = competitionService.getCompetition(categoryId, existedCompetitionId);
         model.addAttribute("competition", competition);
         model.addAttribute("opponent", competitionService.getOpponent(competition));
-        model.addAttribute("currentContestantId", userDataContainer.getId());
+        model.addAttribute("currentContestantId", competitionService.getCurrentContestantId());
         return "battlePage";
     }
 
@@ -38,7 +35,7 @@ public class CompetitionController {
         model.addAttribute("challenges", competitionService.getChallenges());
         model.addAttribute("waitingCompetitions", competitionService.getWaitingCompetitions());
         model.addAttribute("oldBattles", competitionService.getContestantBattleHistory());
-        model.addAttribute("currentContestantId", userDataContainer.getId());
+        model.addAttribute("currentContestantId", competitionService.getCurrentContestantId());
         return "competitionListPage";
     }
 

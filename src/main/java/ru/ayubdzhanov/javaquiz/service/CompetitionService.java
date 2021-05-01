@@ -55,12 +55,8 @@ public class CompetitionService {
 
     public Competition getExistedCompetition(Long existedCompetitionId) {
         Competition existedCompetition = competitionRepository.getOne(existedCompetitionId);
-        existedCompetition.setViewUtil(ViewUtils
-            .builder()
-            .imageLink(competitionsList.stream().filter(c -> c.getCategory().getId().equals(existedCompetition.getCategory().getId())).findFirst().get().getImageLink())
-            .build());
         wrapTasks(existedCompetition.getTasks());
-        return existedCompetition;
+        return wrapCompetition(existedCompetition);
     }
 
     public List<Competition> getChallenges() {
@@ -151,17 +147,9 @@ public class CompetitionService {
             competition.setFinishedAt(LocalDateTime.now());
             ContestantInfo opponent = competition.getContestants().stream().filter(contestant -> !contestant.getId().equals(currentContestant.getId())).findFirst().get();
             if (currentContestant.getScore() > opponent.getScore()) {
-                opponent.setPrestige(getNegativePrestige(opponent, competition));
-                opponent.getUserData().setDefeats(opponent.getUserData().getDefeats() + 1);
-                currentContestant.getUserData().setVictories(currentContestant.getUserData().getVictories() + 1);
-                currentContestant.getUserData().setPrestige(currentContestant.getUserData().getPrestige() + currentContestant.getPrestige());
-                opponent.getUserData().setPrestige(opponent.getUserData().getPrestige() + opponent.getPrestige());
+                setCompetitionResults(competition, currentContestant, opponent);
             } else if (currentContestant.getScore() < opponent.getScore()) {
-                currentContestant.setPrestige(getNegativePrestige(currentContestant, competition));
-                currentContestant.getUserData().setDefeats(currentContestant.getUserData().getDefeats() + 1);
-                opponent.getUserData().setVictories(opponent.getUserData().getVictories() + 1);
-                opponent.getUserData().setPrestige(opponent.getUserData().getPrestige() + opponent.getPrestige());
-                currentContestant.getUserData().setPrestige(currentContestant.getUserData().getPrestige() + currentContestant.getPrestige());
+                setCompetitionResults(competition, opponent, currentContestant);
             } else {
                 opponent.getUserData().setDraws(opponent.getUserData().getDraws());
                 opponent.setPrestige(0);
@@ -170,6 +158,14 @@ public class CompetitionService {
             }
         }
         competitionRepository.save(competition);
+    }
+
+    private void setCompetitionResults(Competition competition, ContestantInfo winner, ContestantInfo loser) {
+        loser.setPrestige(getNegativePrestige(loser, competition));
+        loser.getUserData().setDefeats(loser.getUserData().getDefeats() + 1);
+        winner.getUserData().setVictories(winner.getUserData().getVictories() + 1);
+        winner.getUserData().setPrestige(winner.getUserData().getPrestige() + winner.getPrestige());
+        loser.getUserData().setPrestige(loser.getUserData().getPrestige() + loser.getPrestige());
     }
 
     private Integer getNegativePrestige(ContestantInfo info, Competition competition) {
@@ -251,24 +247,32 @@ public class CompetitionService {
         return competitions;
     }
 
+    public Competition wrapCompetition(Competition competition){
+        competition.setViewUtil(ViewUtils
+            .builder()
+            .imageLink(competitionsList.stream().filter(c -> c.getCategory().getId().equals(competition.getCategory().getId())).findFirst().get().getImageLink())
+            .build());
+        return competition;
+    }
+
     public List<Task> getCompetitionsCorrectResults(Competition competition) {
         return competition.getTasks();
     }
 
-    public List<ResultHelper> getContestantResults(Competition competition, Boolean isForCurrentContestant) {
+    public List<ContestantResultWrapper> getContestantResults(Competition competition, Boolean isForCurrentContestant) {
         ContestantInfo contestant;
         if (isForCurrentContestant) {
             contestant = getCurrentContestant(competition);
         } else {
             contestant = getOpponent(competition);
         }
-        List<Task> competitionTasks = competition.getTasks();
-        List<TaskOption> contestantResults = contestant.getContestantResults();
-        List<ResultHelper> resultHelperList = new LinkedList<>();
-        competitionTasks.forEach(task -> {
-            resultHelperList.add(new ResultHelper(task, contestantResults.stream().filter(taskOption -> taskOption.getTask().equals(task)).collect(Collectors.toList())));
-        });
-        resultHelperList.forEach(result -> {
+        return getContestantResultWrapper(competition, contestant, competition.getTasks(), contestant.getContestantResults());
+    }
+
+    private List<ContestantResultWrapper> getContestantResultWrapper(Competition competition, ContestantInfo contestant, List<Task> competitionTasks, List<TaskOption> contestantResults) {
+        List<ContestantResultWrapper> contestantResultWrapperList = new LinkedList<>();
+        competitionTasks.forEach(task -> contestantResultWrapperList.add(new ContestantResultWrapper(task, contestantResults.stream().filter(taskOption -> taskOption.getTask().equals(task)).collect(Collectors.toList()))));
+        contestantResultWrapperList.forEach(result -> {
             if (result.getTaskOptions().stream().anyMatch(taskOption -> !taskOption.getIsCorrect())) {
                 result.setIsCorrect(Boolean.FALSE);
             } else {
@@ -285,18 +289,22 @@ public class CompetitionService {
                 result.setStatus("NONE");
             }
         });
-        return resultHelperList;
+        return contestantResultWrapperList;
+    }
+
+    public Long getCurrentContestantId(){
+        return userDataContainer.getId();
     }
 
     @Getter
     @Setter
-    class ResultHelper {
+    static class ContestantResultWrapper {
         private Task task;
         private List<TaskOption> taskOptions;
         private Boolean isCorrect;
         private String status;
 
-        public ResultHelper(Task task, List<TaskOption> taskOptions) {
+        public ContestantResultWrapper(Task task, List<TaskOption> taskOptions) {
             this.task = task;
             this.taskOptions = taskOptions;
         }
