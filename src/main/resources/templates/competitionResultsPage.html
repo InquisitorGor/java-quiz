@@ -55,7 +55,7 @@
 					<div class="row">
 						<div class="col-sm-12" th:utext="${result.getTask().getQuestion()}" style="text-align: center">Основные принципы ООП</div>
 					</div>
-					<div th:each="option : ${result.getTaskOptions()}">
+					<div th:if="${!result.getTaskOptions().isEmpty()}" th:each="option : ${result.getTaskOptions()}">
 						<div th:if="${option.getIsCorrect()}" class="row" style="background-color: #2df622">
 							<div class="col-sm-12" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
 						</div>
@@ -63,19 +63,28 @@
 							<div class="col-sm-12" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
 						</div>
 					</div>
-					<div class="row" style="text-align: center">
-						<div th:if="${result.getIsCorrect()}" class="col-sm-12" th:utext="'+' + ${result.getTask().getPrestige()} + ' prestige' " style="">Итог: +10 prestige</div>
+					<div th:if="${result.getTaskOptions().isEmpty()}" class="row" style="background-color: grey">
+						<div class="col-sm-12">Ответ отсутствует</div>
 					</div>
-					<div class="row" style="text-align: center">
-						<div th:if="${!result.getIsCorrect()}" class="col-sm-12" th:utext="'-' + ${result.getTask().getPrestige()} + ' prestige' " style="">Итог: +10 prestige</div>
+					<div th:if="${result.getStatus() == 'LOSER'}" class="row" style="text-align: center">
+						<div th:if="${result.getIsCorrect() && !result.getTaskOptions().isEmpty()}" class="col-sm-12" th:utext="'+' + ${result.getTask().getPrestige()} + ' очков престижа' " style="">Итог: +10 prestige</div>
+						<div th:if="${!result.getIsCorrect() || result.getTaskOptions().isEmpty()}" class="col-sm-12" th:utext="'-' + ${result.getTask().getPrestige()} + ' очков престижа' " style="">Итог: -10 prestige</div>
+					</div>
+					<div th:if="${result.getStatus() == 'WINNER'}" class="row" style="text-align: center">
+						<div th:if="${result.getIsCorrect() && !result.getTaskOptions().isEmpty()}" th:utext="'+' + ${result.getTask().getPrestige()} + ' очков престижа' " style="">Итог: +10 prestige</div>
+						<div th:if="${!result.getIsCorrect() || result.getTaskOptions().isEmpty()}" class="col-sm-12" th:utext="'0 очков престижа' " style="">Итог: -10 prestige</div>
+					</div>
+					<div th:if="${result.getStatus() == 'NONE'}" class="row" style="text-align: center">
+						<div th:if="${result.getIsCorrect()}" class="col-sm-12" th:utext="'+0 очков престижа' " style="">Итог: +10 prestige</div>
+						<div th:if="${!result.getIsCorrect()}" class="col-sm-12" th:utext="'+0 очков престижа' " style="">Итог: -10 prestige</div>
 					</div>
 					<hr/>
 				</div>
-				<div class="row" style="text-align: center">
-					<div class="col-sm-12">Заработанный престиж</div>
-					<div class="col-sm-12" style="background-color: grey" th:if="${opponent.getScore() == currentContestant.getScore()}" th:utext="${0 + ' prestige'}"></div>
-					<div class="col-sm-12" style="background-color: #2df622" th:if="${opponent.getPrestige() < currentContestant.getPrestige()}" th:utext="${'+' + currentContestant.getPrestige() + ' prestige'}"></div>
-					<div class="col-sm-12" style="background-color: red" th:if="${opponent.getPrestige() > currentContestant.getPrestige()}" th:utext="${'-' + currentContestant.getPrestige() + ' prestige'}"></div>
+				<div>
+					<h3 style="text-align: center">Ваши заработанные очки</h3>
+					<h3 style="text-align: center; background-color: grey" th:if="${opponent.getScore() == currentContestant.getScore()}" th:utext="${0 + ' очков престижа'}"></h3>
+					<h3 style="text-align: center; background-color: #2df622" th:if="${opponent.getPrestige() < currentContestant.getPrestige()}" th:utext="${'+' + currentContestant.getPrestige() + ' очков престижа'}"></h3>
+					<h3 style="text-align: center; background-color: red" th:if="${opponent.getPrestige() > currentContestant.getPrestige()}" th:utext="${currentContestant.getPrestige() + ' очков престижа'}"></h3>
 				</div>
 			</div>
 		</div>
@@ -118,19 +127,28 @@
 						<div class="col-sm-12" th:utext="${option.getOption().getOption()}">Полиморфизм</div>
 					</div>
 				</div>
-				<div class="row" style="text-align: center">
-					<div th:if="${result.getIsCorrect()}" class="col-sm-12" th:utext="'+' + ${result.getTask().getPrestige()} + ' prestige' " style="">Итог: +10 prestige</div>
+				<div th:if="${result.getTaskOptions().isEmpty()}" class="row" style="background-color: grey">
+					<div class="col-sm-12">Ответ отсутствует</div>
 				</div>
-				<div class="row" style="text-align: center">
-					<div th:if="${!result.getIsCorrect()}" class="col-sm-12" th:utext="'-' + ${result.getTask().getPrestige()} + ' prestige' " style="">Итог: +10 prestige</div>
+				<div th:if="${result.getStatus() == 'LOSER'}" class="row" style="text-align: center">
+					<div th:if="${result.getIsCorrect() && !result.getTaskOptions().isEmpty()}" class="col-sm-12" th:utext="'+' + ${result.getTask().getPrestige()} + ' очков престижа' " style="">Итог: +10 prestige</div>
+					<div th:if="${!result.getIsCorrect() || result.getTaskOptions().isEmpty()}" class="col-sm-12" th:utext="'-' + ${result.getTask().getPrestige()} + ' очков престижа' " style="">Итог: -10 prestige</div>
+				</div>
+				<div th:if="${result.getStatus() == 'WINNER'}" class="row" style="text-align: center">
+					<div th:if="${result.getIsCorrect() && !result.getTaskOptions().isEmpty()}" th:utext="'+' + ${result.getTask().getPrestige()} + ' очков престижа' " style="">Итог: +10 prestige</div>
+					<div th:if="${!result.getIsCorrect() || result.getTaskOptions().isEmpty()}" class="col-sm-12" th:utext="'+0 очков престижа' " style="">Итог: -10 prestige</div>
+				</div>
+				<div th:if="${result.getStatus() == 'NONE'}" class="row" style="text-align: center">
+					<div th:if="${result.getIsCorrect()}" class="col-sm-12" th:utext="'+0 очков престижа' " style="">Итог: +10 prestige</div>
+					<div th:if="${!result.getIsCorrect()}" class="col-sm-12" th:utext="'+0 очков престижа' " style="">Итог: -10 prestige</div>
 				</div>
 				<hr/>
 			</div>
-			<div class="row" style="text-align: center">
-				<div class="col-sm-12">Заработанный престиж</div>
-				<div class="col-sm-12" style="background-color: grey" th:if="${opponent.getScore() == currentContestant.getScore()}" th:utext="${0 + ' prestige'}"></div>
-				<div class="col-sm-12" style="background-color: #2df622" th:if="${opponent.getPrestige() > currentContestant.getPrestige()}" th:utext="${'+' + opponent.getPrestige() + ' prestige'}"></div>
-				<div class="col-sm-12" style="background-color: red" th:if="${opponent.getPrestige() < currentContestant.getPrestige()}" th:utext="${'-' + opponent.getPrestige() + ' prestige'}"></div>
+			<div>
+				<h3 style="text-align: center">Заработанные очки соперника</h3>
+				<h3 style="text-align: center; background-color: grey" th:if="${opponent.getScore() == currentContestant.getScore()}" th:utext="${0 + ' очков престижа'}"></h3>
+				<h3 style="text-align: center; background-color: #2df622" th:if="${opponent.getPrestige() > currentContestant.getPrestige()}" th:utext="${'+' + opponent.getPrestige() + ' очков престижа'}"></h3>
+				<h3 style="text-align: center; background-color: red" th:if="${opponent.getPrestige() < currentContestant.getPrestige()}" th:utext="${opponent.getPrestige() + ' очков престижа'}"></h3>
 			</div>
 		</div>
 	</div>

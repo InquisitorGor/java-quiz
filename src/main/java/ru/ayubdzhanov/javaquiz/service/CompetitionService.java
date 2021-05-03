@@ -80,7 +80,7 @@ public class CompetitionService {
     }
 
     public List<Competition> getContestantBattleHistory() {
-        return wrapCompetitions(competitionRepository.findAllCompletedCompetitions(userDataContainer.getId(), PageRequest.of(0, 10)));
+        return wrapCompetitions(competitionRepository.findAllCompletedCompetitionsByUserId(userDataContainer.getId(), PageRequest.of(0, 10)));
     }
 
     private Competition getNewCompetition(Long categoryId) {
@@ -294,6 +294,10 @@ public class CompetitionService {
 
     public Long getCurrentContestantId(){
         return userDataContainer.getId();
+    }
+
+    public List<Competition> getPastCompetitions(Long categoryId) {
+        return competitionRepository.findAllCompletedCompetitions(categoryId, PageRequest.of(0, 10));
     }
 
     @Getter

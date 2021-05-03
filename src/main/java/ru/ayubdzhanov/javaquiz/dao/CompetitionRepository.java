@@ -22,6 +22,12 @@ public interface CompetitionRepository extends JpaRepository<Competition, Long> 
         "WHERE c.finishedAt IS NOT NULL " +
         "AND con.userData.id = ?1 " +
         "ORDER BY c.finishedAt DESC ")
-    List<Competition> findAllCompletedCompetitions(Long currentUserId, Pageable pageable);
+    List<Competition> findAllCompletedCompetitionsByUserId(Long currentUserId, Pageable pageable);
+
+    @Query("SELECT c FROM Competition c " +
+        "WHERE c.finishedAt IS NOT NULL " +
+        "AND c.category.id = ?1 " +
+        "ORDER BY c.finishedAt DESC ")
+    List<Competition> findAllCompletedCompetitions(Long categoryId, Pageable pageable);
 
 }

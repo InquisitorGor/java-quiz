@@ -54,6 +54,7 @@ public class CompetitionController {
     @GetMapping("/{category_id}")
     public String showCompetitionPage(Model model, @PathVariable("category_id") Long categoryId) {
         model.addAttribute("competitionInfo", competitionService.getCompetitionInfo(categoryId));
+        model.addAttribute("pastCompetitions", competitionService.getPastCompetitions(categoryId));
         return "competitionPage";
     }
 

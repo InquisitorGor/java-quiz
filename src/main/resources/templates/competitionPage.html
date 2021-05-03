@@ -44,14 +44,16 @@
             <a th:href="'battle/' + ${competitionInfo.getCategory().getId()}" href="/battle" type="button" class="btn btn-primary">Начать битву</a>
         </div>
     </div>
-    <div th:utext="${competitionInfo.getDescription()}" style="float: left; padding-top: 15px; padding-left: 20px; width: 500px">
+    <div th:utext="${competitionInfo.getDescription()}" style="float: left; padding-top: 15px; padding-left: 20px; width: 400px">
     </div>
     <div style="float: right">
         <h1>Прошедшие соревнования:</h1>
         <ul class="list-group">
-            <li class="list-group-item">Roma vs Jon (5:4)</li>
-            <li class="list-group-item">Joma vs Andrew (2:4)</li>
-            <li class="list-group-item">Kira vs Trevor (3:3)</li>
+            <li th:each="competition : ${pastCompetitions}" class="list-group-item" th:utext="${
+            competition.getContestants().get(0).getUserData().getName() + ' vs ' +
+            competition.getContestants().get(1).getUserData().getName() + ' (' +
+            competition.getContestants().get(0).getScore() + ':' +
+            competition.getContestants().get(1).getScore() + ')'}">Roma vs Jon (5:4)</li>
         </ul>
     </div>
 </div>
