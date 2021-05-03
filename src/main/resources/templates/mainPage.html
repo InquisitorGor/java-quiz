@@ -63,7 +63,8 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li th:if="${!isAuthenticated}"><a href="/registration"><span class="glyphicon glyphicon-user"></span> Зарегистрироваться</a></li>
                     <li th:if="${!isAuthenticated}"><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
-                    <li th:if="${isAuthenticated && role == 'ROLE_ADMIN'}"><a href="/admin"><span class="glyphicon glyphicon-star"></span> Админ панель</a></li>
+                    <li th:if="${isAuthenticated && role == 'ROLE_ADMIN'}"><a href="/admin/theory"><span class="glyphicon glyphicon-star"></span> Админ панель (теория)</a></li>
+                    <li th:if="${isAuthenticated && role == 'ROLE_ADMIN'}"><a href="/admin/competition"><span class="glyphicon glyphicon-star"></span> Админ панель (соревнования)</a></li>
                     <li th:if="${isAuthenticated && role != 'ROLE_ADMIN'}"><a href="/competition/list"><span class="glyphicon glyphicon-knight"></span> Состязания</a></li>
                     <li th:if="${isAuthenticated && role != 'ROLE_ADMIN'}"><a href="/theory"><span class="glyphicon glyphicon-book"></span> Теория</a></li>
                     <li th:if="${isAuthenticated && role != 'ROLE_ADMIN'}"><a href="/user_page"><span th:text="${user}" class="glyphicon glyphicon-user" ></span></a></li>
