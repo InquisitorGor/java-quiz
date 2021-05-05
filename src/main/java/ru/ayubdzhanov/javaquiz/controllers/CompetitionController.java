@@ -59,7 +59,7 @@ public class CompetitionController {
     }
 
     @PostMapping("/battle/finish")
-    public String showBattleResultPage(@RequestParam MultiValueMap<String,String> allParams){
+    public String finishBattle(@RequestParam MultiValueMap<String,String> allParams){
         competitionService.finishCompetition(allParams);
         return "redirect:/competition/list";
     }

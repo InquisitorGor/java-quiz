@@ -17,3 +17,9 @@ logging:
           descriptor:
             sql: off
         SQL: off
+file:
+  theory-images:
+    full-path: src/main/resources/static/images/theory/
+    web-path: images/theory/
+html-validator:
+  url: https://validator.nu/?out=json

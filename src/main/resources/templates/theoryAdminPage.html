@@ -32,17 +32,23 @@
 <div class="container" style="padding-top: 60px">
 	<h1>Теория</h1>
 	<h3>Поиск по:</h3>
-	<div class="form-group">
-		<label for="theory_cat">Категория:</label>
-		<select class="form-control" id="theory_cat">
-			<option th:each="category : ${categories}" th:utext="${category.getCategory()}">1</option>
-		</select>
-	</div>
-	<div class="form-group">
-		<label for="theory_title">Ключевое слово:</label>
-		<input type="text" class="form-control" id="theory_title">
-	</div>
-	<input type="submit" class="btnSubmit" value="Применить"/>
+	<form name="filterForm" method="post" action="/admin/theory">
+		<div class="form-group">
+			<label for="theory_cat">Категория:</label>
+			<select name="category" class="form-control" id="theory_cat">
+				<option th:each="category : ${categories}" th:utext="${category.getCategory()}">1</option>
+				<option>None</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="theory_title">Ключевое слово:</label>
+			<input name="keyword" type="text" class="form-control" id="theory_title">
+		</div>
+		<div>
+			<input type="submit" class="btnSubmit" value="Применить"/>
+			<a href="/admin/theory/0" class="btn" role="button" style="float: right">Добавить новое</a>
+		</div>
+	</form>
 	<h3>Список теории:</h3>
 	<ul class="list-group">
 		<a th:each="theory : ${theories}" th:href="${'/admin/theory/' + theory.getId()}" href="/">

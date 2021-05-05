@@ -4,11 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 @Getter
@@ -20,12 +21,16 @@ public class Attachment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
-    byte[] content;
+    private String path;
 
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
     @ManyToOne
     @JoinColumn(name = "theory_id")
     private Theory theory;
+
+    public enum Type {
+        VIDEO, PICTURE
+    }
 }

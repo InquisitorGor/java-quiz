@@ -41,7 +41,7 @@ public class CompetitionService {
     @Autowired
     private UserDataRepository userDataRepository;
     @Autowired
-    private UserDataContainer userDataContainer;
+    private UserDataContainer userDataContainer; //TODO enlarge container
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired

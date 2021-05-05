@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Админка</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">Java Quiz</a>
+		</div>
+		<div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/admin/competition"><span class="glyphicon glyphicon-star"></span> Админ панель (соревнования)</a></li>
+					<li><a href="/admin/theory"><span class="glyphicon glyphicon-star"></span> Админ панель (теория)</a></li>
+					<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</nav>
+<div class="container" style="padding-top: 60px">
+	<form name="saveForm" method="post" action="/admin/theory/update" enctype="multipart/form-data">
+		<div class="form-group">
+			<label for="theory_cat">Категория:</label>
+			<select name="category" class="form-control" id="theory_cat">
+				<option th:each="category : ${categories}" th:if="${category.getId() == theory.getCategory().getId()}" th:selected="true" th:utext="${category.getCategory()}">1</option>
+				<option th:each="category : ${categories}" th:if="${category.getId() != theory.getCategory().getId()}" th:selected="false" th:utext="${category.getCategory()}">1</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="title">Заголовок:</label>
+			<textarea th:utext="${theory.getTitle()}" name="title" class="form-control" rows="1" id="title"></textarea>
+		</div>
+		<input type="hidden" name="theoryId" th:value="${theory.getId()}">
+		<div class="form-group">
+			<label for="content">Содержание:</label>
+			<textarea th:utext="${theory.getDescription()}" name="content" class="form-control" rows="5" id="content"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="firstImage">Вложение (до 3 картинок)</label>
+			<p>Картинки вставлять в текст в виде "(картинка 1)", "(картинка 2)" и "(картинка 3)"</p>
+			<input name="firstImage" type="file" class="form-control-file" id="firstImage">
+			<input name="secondImage" type="file" class="form-control-file" id="secondImage">
+			<input name="thirdImage" type="file" class="form-control-file" id="thirdImage">
+		</div>
+		<!--		<div class="embed-responsive embed-responsive-16by9">-->
+		<!--			<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>-->
+		<!--		</div>-->
+		<div th:if="${!theory.getAttachment().isEmpty()}">
+			<label>Существующие картинки:</label>
+			<div th:each="picture : ${theory.getAttachment()}">
+				<p style="padding-top: 10px">Картинка 1</p>
+				<div class="checkbox">
+					<label><input name="deleteFirstImage" type="checkbox" value="">Удалить первую картинку</label>
+				</div>
+				<div>
+					<img th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail" alt="Cinque Terre">
+				</div>
+			</div>
+			<!--			<p style="padding-top: 10px">Картинка 2</p>-->
+			<!--			<div class="checkbox">-->
+			<!--				<label><input name="deleteSecondImage" type="checkbox" value="">Удалить вторую картинку</label>-->
+			<!--			</div>-->
+			<!--			<div>-->
+			<!--				<img src="/images/main/nerd1.jpg" class="img-thumbnail" alt="Cinque Terre">-->
+			<!--			</div>-->
+			<!--			<p style="padding-top: 10px">Картинка 3</p>-->
+			<!--			<div class="checkbox">-->
+			<!--				<label><input name="deleteThirdImage" type="checkbox" value="">Удалить третью картинку</label>-->
+			<!--			</div>-->
+			<!--			<div>-->
+			<!--				<img src="/images/main/nerd3.jpg" class="img-thumbnail" alt="Cinque Terre">-->
+			<!--			</div>-->
+		</div>
+		<div class="form-group" style="padding-top: 20px">
+			<div th:if="${linkAttach != null}">
+				<label for="linkAttach">Вложение (ссылка на видео):</label>
+				<textarea th:utext="${linkAttach.getType().toString()}" name="linkAttach" class="form-control" rows="1" id="linkAttach"></textarea>
+			</div>
+			<div th:if="${linkAttach == null}">
+				<label for="linkAttach1">Вложение (ссылка на видео):</label>
+				<textarea name="linkAttach" class="form-control" rows="1" id="linkAttach1"></textarea>
+			</div>
+		</div>
+		<div class="container" style="">
+			<input type="submit" class="btnSubmit" value="Сохранить"/>
+			<a th:href="'/admin/theory/delete/' + ${theory.getId()}" href="/admin/theory/0" class="btn" role="button" style="float: right">Удалить запись</a>
+		</div>
+	</form>
+</div>
+</body>
+</html>
