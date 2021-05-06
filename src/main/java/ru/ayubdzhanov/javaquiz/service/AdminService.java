@@ -11,13 +11,17 @@ import ru.ayubdzhanov.javaquiz.domain.Attachment;
 import ru.ayubdzhanov.javaquiz.domain.Attachment.Type;
 import ru.ayubdzhanov.javaquiz.domain.Category;
 import ru.ayubdzhanov.javaquiz.domain.Theory;
+import ru.ayubdzhanov.javaquiz.exception.HtmlValidationException;
+import ru.ayubdzhanov.javaquiz.util.HtmlUtils;
 
+import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -55,7 +59,7 @@ public class AdminService {
         return theoryRepository.findById(theoryId).orElse(getEmptyTheory(theoryId));
     }
 
-    public Theory getEmptyTheory(Long theoryId){
+    public Theory getEmptyTheory(Long theoryId) {
         Theory emptyTheory = new Theory();
         emptyTheory.setId(theoryId);
         emptyTheory.setDescription(Strings.EMPTY);
@@ -68,7 +72,6 @@ public class AdminService {
     public void updateTheory(String title, String content, String category,
                              MultipartFile firstImage, MultipartFile secondImage,
                              MultipartFile thirdImage, String linkAttach, String id) throws Exception {
-        List<MultipartFile> multipartFiles = verifyContent(Arrays.asList(firstImage, secondImage, thirdImage));
         Long theoryId = Long.parseLong(id);
         Theory theory;
         if (theoryId == 0) {
@@ -76,29 +79,25 @@ public class AdminService {
         } else {
             theory = theoryRepository.findById(theoryId).orElseThrow(() -> new Exception("theory des not exist"));
         }
-        saveTheory(title, content, category, multipartFiles, linkAttach, theory);
+        saveTheory(title, content, category, firstImage, secondImage, thirdImage, linkAttach, theory);
         theoryRepository.save(theory);
     }
-    //TODO throw exception if pattern didnt match
-    private List<MultipartFile> verifyContent(List<MultipartFile> multipartFiles) {
-        Pattern pattern = Pattern.compile(".*(\\.jpg|\\.png)");
-        return multipartFiles.stream().filter(Objects::nonNull)
-            .filter(file -> pattern.matcher(Objects.requireNonNull(file.getOriginalFilename()))
-                .matches()).collect(Collectors.toList());
-    }
 
-    private void saveTheory(String title, String content, String category, List<MultipartFile> multipartFiles, String linkAttach, Theory theory) throws IOException {
+    private void saveTheory(String title, String content, String category, MultipartFile firstImage, MultipartFile secondImage,
+                            MultipartFile thirdImage, String linkAttach, Theory theory) throws IOException {
         theory.setTitle(title);
-        theory.setDescription(content);
         theory.setCategory(getCategories().stream().filter(cat -> cat.getCategory().equals(category)).findFirst().get());
-        if (!multipartFiles.isEmpty()) {
-            multipartFiles.forEach(file -> {
-                Attachment attachment = new Attachment();
-                attachment.setType(Type.PICTURE);
-                attachment.setPath(fileComponent.uploadFileAndGetLink(file));
-                attachment.setTheory(theory);
-                theory.getAttachment().add(attachment);
-            });
+        if (!firstImage.isEmpty()) {
+            Attachment attachment = addAttachment(theory, firstImage, "картинка1");
+            content = HtmlUtils.parseLinks(content, attachment.getPath(), "%картинка 1%");
+        }
+        if (!secondImage.isEmpty()) {
+            Attachment attachment = addAttachment(theory, secondImage, "картинка2");
+            content = HtmlUtils.parseLinks(content, attachment.getPath(), "%картинка 2%");
+        }
+        if (!thirdImage.isEmpty()) {
+            Attachment attachment = addAttachment(theory, thirdImage, "картинка3");
+            content = HtmlUtils.parseLinks(content, attachment.getPath(), "%картинка 3%");
         }
         if (!linkAttach.isEmpty()) {
             Attachment attachment = new Attachment();
@@ -107,6 +106,16 @@ public class AdminService {
             attachment.setTheory(theory);
             theory.getAttachment().add(attachment);
         }
+        theory.setDescription(content);
+    }
+
+    private Attachment addAttachment(Theory theory, MultipartFile file, String pictureName) {
+        Attachment attachment = new Attachment();
+        attachment.setType(Type.PICTURE);
+        attachment.setPath(fileComponent.uploadFileAndGetLink(file, pictureName));
+        attachment.setTheory(theory);
+        theory.getAttachment().add(attachment);
+        return attachment;
     }
 
     public void deleteTheory(String theoryId) {

@@ -14,4 +14,8 @@ public class HtmlUtils {
             "</html>";
         return before + html + after;
     }
+
+    public static String parseLinks(String content, String path, String toReplace){
+        return content.replaceFirst(toReplace, "<br><img align=\"center\" src=\"" + path + "\" class=\"img-rounded\" alt=\"Cinque Terre\">");
+    }
 }

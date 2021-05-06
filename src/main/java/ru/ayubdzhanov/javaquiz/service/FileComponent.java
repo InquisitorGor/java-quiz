@@ -19,8 +19,8 @@ public class FileComponent {
     @Value("${file.theory-images.web-path}")
     private String theoryImagesWebPath;
 
-    public String uploadFileAndGetLink(MultipartFile multipartFile) {
-        String newFileName = UUID.randomUUID() + multipartFile.getOriginalFilename();
+    public String uploadFileAndGetLink(MultipartFile multipartFile, String pictureName) {
+        String newFileName = UUID.randomUUID() + pictureName + multipartFile.getOriginalFilename();
         Path filePath = Paths.get(theoryImagesFullPath + newFileName);
         try {
             Files.write(filePath, multipartFile.getBytes());
@@ -28,5 +28,13 @@ public class FileComponent {
             e.printStackTrace();
         }
         return theoryImagesWebPath + newFileName;
+    }
+
+    public void deleteFile(String path){
+        try {
+            Files.delete(Paths.get(theoryImagesFullPath + path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

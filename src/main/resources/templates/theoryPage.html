@@ -41,7 +41,7 @@
 			<hr style="border-width: 5px"/>
 			<div th:each="theory : ${category.getTheories()}">
 				<h3 th:utext="${theory.getTitle()}">Что такое ООП?</h3>
-				<p th:utext="${theory.getDescription()}">Объектно-ориентированное программирование (ООП) — методология программирования</p>
+				<div th:utext="${theory.getDescription()}"></div>
 				<hr style="border-width: 5px"/>
 			</div>
 		</div>

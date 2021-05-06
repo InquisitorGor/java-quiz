@@ -31,7 +31,7 @@
 	</div>
 </nav>
 <div class="container" style="padding-top: 60px">
-	<form name="saveForm" method="post" action="/admin/theory/update" enctype="multipart/form-data">
+	<form name="saveForm" method="post" action="/admin/theory/update" enctype="multipart/form-data" onsubmit="return(validateContent());">
 		<div class="form-group">
 			<label for="theory_cat">Категория:</label>
 			<select name="category" class="form-control" id="theory_cat">
@@ -43,16 +43,23 @@
 			<label for="title">Заголовок:</label>
 			<textarea th:utext="${theory.getTitle()}" name="title" class="form-control" rows="1" id="title"></textarea>
 		</div>
-		<input type="hidden" name="theoryId" th:value="${theory.getId()}">
+		<input type="hidden" name="theoryId" id="hiddenTheoryId" th:value="${theory.getId()}">
+		<div class="form-group" id="error">
+			<label for="errorContent">Ошибки:</label>
+			<textarea readonly class="form-control" rows="5" id="errorContent"></textarea>
+		</div>
 		<div class="form-group">
 			<label for="content">Содержание:</label>
 			<textarea th:utext="${theory.getDescription()}" name="content" class="form-control" rows="5" id="content"></textarea>
 		</div>
 		<div class="form-group">
-			<label for="firstImage">Вложение (до 3 картинок)</label>
-			<p>Картинки вставлять в текст в виде "(картинка 1)", "(картинка 2)" и "(картинка 3)"</p>
+			<label>Вложение (до 3 картинок)</label>
+			<p>Картинки вставлять в текст в виде "%картинка 1%", "%картинка 2%" и "%картинка 3%"</p>
+			<label for="firstImage">Первая картинка</label>
 			<input name="firstImage" type="file" class="form-control-file" id="firstImage">
+			<label for="secondImage">Вторая картинка</label>
 			<input name="secondImage" type="file" class="form-control-file" id="secondImage">
+			<label for="thirdImage">Третья картинка</label>
 			<input name="thirdImage" type="file" class="form-control-file" id="thirdImage">
 		</div>
 		<!--		<div class="embed-responsive embed-responsive-16by9">-->
@@ -60,38 +67,26 @@
 		<!--		</div>-->
 		<div th:if="${!theory.getAttachment().isEmpty()}">
 			<label>Существующие картинки:</label>
-			<div th:each="picture : ${theory.getAttachment()}">
+			<div th:each="picture : ${theory.getAttachment()}" th:if="${picture.getType().toString() != 'VIDEO'}" th:id="${picture.getId() + 'picture'}">
 				<p style="padding-top: 10px">Картинка 1</p>
-				<div class="checkbox">
-					<label><input name="deleteFirstImage" type="checkbox" value="">Удалить первую картинку</label>
+				<div>
+					<button type="button" class="btn btn-default" th:value="${picture.getId()}" th:onclick="'deleteFile(\'' + ${picture.getId()} + '\');'">Удалить первую картинку</button>
 				</div>
 				<div>
 					<img th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail" alt="Cinque Terre">
 				</div>
 			</div>
-			<!--			<p style="padding-top: 10px">Картинка 2</p>-->
-			<!--			<div class="checkbox">-->
-			<!--				<label><input name="deleteSecondImage" type="checkbox" value="">Удалить вторую картинку</label>-->
-			<!--			</div>-->
-			<!--			<div>-->
-			<!--				<img src="/images/main/nerd1.jpg" class="img-thumbnail" alt="Cinque Terre">-->
-			<!--			</div>-->
-			<!--			<p style="padding-top: 10px">Картинка 3</p>-->
-			<!--			<div class="checkbox">-->
-			<!--				<label><input name="deleteThirdImage" type="checkbox" value="">Удалить третью картинку</label>-->
-			<!--			</div>-->
-			<!--			<div>-->
-			<!--				<img src="/images/main/nerd3.jpg" class="img-thumbnail" alt="Cinque Terre">-->
-			<!--			</div>-->
 		</div>
 		<div class="form-group" style="padding-top: 20px">
 			<div th:if="${linkAttach != null}">
 				<label for="linkAttach">Вложение (ссылка на видео):</label>
-				<textarea th:utext="${linkAttach.getType().toString()}" name="linkAttach" class="form-control" rows="1" id="linkAttach"></textarea>
+				<p>Ссылку на видео вставлять в текст в виде "%видео%"</p>
+				<textarea th:utext="${linkAttach.getPath()}" name="linkAttach" class="form-control" rows="1" id="linkAttach"></textarea>
 			</div>
 			<div th:if="${linkAttach == null}">
-				<label for="linkAttach1">Вложение (ссылка на видео):</label>
-				<textarea name="linkAttach" class="form-control" rows="1" id="linkAttach1"></textarea>
+				<label for="linkAttach">Вложение (ссылка на видео):</label>
+				<p>Ссылку на видео вставлять в текст в виде "%видео%"</p>
+				<textarea name="linkAttach" class="form-control" rows="1" id="linkAttach"></textarea>
 			</div>
 		</div>
 		<div class="container" style="">
@@ -100,5 +95,83 @@
 		</div>
 	</form>
 </div>
+<script>
+	function validateContent() {
+		let re = new RegExp('.*(\\.jpg|\\.png)');
+		var status = null;
+		var additionalInfo = "";
+		var xmlhttp = new XMLHttpRequest();
+		if (document.getElementById("firstImage").value != "") {
+			if (!re.test(document.getElementById("firstImage").value)) {
+				alert("Тип файла для первого изображения невалидный!");
+				return false;
+			}
+			additionalInfo += "firstImageExist=true&";
+		}
+		if (document.getElementById("secondImage").value != "") {
+			if (!re.test(document.getElementById("secondImage").value)) {
+				alert("Тип файла для второго изображения невалидный!");
+				return false;
+			}
+			additionalInfo += "secondImageExist=true&";
+		}
+		if (document.getElementById("thirdImage").value != "") {
+			if (!re.test(document.getElementById("thirdImage").value)) {
+				alert("Тип файла для третьего изображения невалидный!");
+				return false;
+			}
+			additionalInfo += "thirdImageExist=true&";
+		}
+		if (document.getElementById("linkAttach").value != "") {
+			additionalInfo += "linkAttachExist=true&";
+		}
+		if (document.getElementById("hiddenTheoryId").value !== "0") {
+			additionalInfo += "theoryId=" + document.getElementById("hiddenTheoryId").value + "&";
+		}
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+				if (xmlhttp.status == 200) {
+					if (xmlhttp.responseText === "ok") {
+						status = true;
+					} else {
+						alert('Возникла ошибка. Смотри на панель "Ошибки"');
+						document.getElementById("errorContent").innerHTML = xmlhttp.responseText;
+						status = false;
+					}
+				} else if (xmlhttp.status === 400) {
+					alert('Заполните поля');
+					status = false;
+				} else {
+					alert('something else other than 200 was returned');
+					status = false;
+				}
+			}
+		};
+		xmlhttp.open("POST", "/validation/validate?" + additionalInfo, false);
+		xmlhttp.send(document.getElementById("content").value);
+		while (xmlhttp.readyState != XMLHttpRequest.DONE || status == null) {
+		}
+		return status !== false;
+	}
+	function deleteFile(id) {
+		var xmlHttpRequest = new XMLHttpRequest();
+		xmlHttpRequest.onreadystatechange = function () {
+			if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
+				if (xmlHttpRequest.status == 200) {
+					if (xmlHttpRequest.responseText === "ok") {
+						var picture = document.getElementById(id + 'picture');
+						picture.remove();
+					}
+				} else if (xmlHttpRequest.status === 400) {
+					alert('400 returned');
+				} else {
+					alert('something else other than 200 was returned');
+				}
+			}
+		};
+		xmlHttpRequest.open("POST", "/attachment/delete/" + id, false);
+		xmlHttpRequest.send();
+	}
+</script>
 </body>
 </html>

@@ -2,6 +2,7 @@ package ru.ayubdzhanov.javaquiz.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.ayubdzhanov.javaquiz.util.ViewUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Getter
 @Setter
@@ -29,6 +31,9 @@ public class Attachment {
     @ManyToOne
     @JoinColumn(name = "theory_id")
     private Theory theory;
+
+    @Transient
+    private ViewUtils viewUtils;
 
     public enum Type {
         VIDEO, PICTURE

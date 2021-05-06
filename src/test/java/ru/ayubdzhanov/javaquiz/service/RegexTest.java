@@ -28,4 +28,16 @@ public class RegexTest {
         assertEquals(2, collect.size());
         assertFalse(collect.stream().anyMatch(file -> file.equals("rere.txt")));
     }
+
+    @Test
+    void checkKeywords() {
+        List<String> files = Arrays.asList("gdgdfgvdfgvd%картинка 1%234 vdfg", "gdgdfgvdfgvd%кар%234 vdfg", "gvdfgvd%картин", null);
+        Pattern pattern = Pattern.compile(".*(%картинка 1%).*");
+        List<String> collect = files.stream()
+            .filter(Objects::nonNull)
+            .filter(file -> pattern.matcher(file)
+                .matches()).collect(Collectors.toList());
+        assertEquals(1, collect.size());
+        assertFalse(collect.stream().anyMatch(file -> file.equals("gdgdfgvdfgvd%картинка1%234 vdfg")));
+    }
 }
