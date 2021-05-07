@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ayubdzhanov.javaquiz.domain.Theory;
-import ru.ayubdzhanov.javaquiz.exception.HtmlValidationException;
 import ru.ayubdzhanov.javaquiz.service.AdminService;
 
 @Controller
@@ -32,7 +31,7 @@ public class AdminController {
         Theory theory = adminService.getTheory(theoryId);
         model.addAttribute("theory", theory);
         model.addAttribute("categories", adminService.getCategories());
-        model.addAttribute("linkAttach", adminService.getLinkAttach(theory.getAttachment()));
+        model.addAttribute("linkAttach", adminService.getLinkAttach(theory.getAttachments()));
         return "theoryEditingPage";
     }
 

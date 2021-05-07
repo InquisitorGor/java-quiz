@@ -2,7 +2,7 @@ package ru.ayubdzhanov.javaquiz.util;
 
 public class HtmlUtils {
 
-    public static String processHtml(String html){
+    public static String wrapHtmlAttributes(String html){
         String before = "<!DOCTYPE html>\n" +
             "<html lang=\"en\">\n" +
             "<head>\n" +

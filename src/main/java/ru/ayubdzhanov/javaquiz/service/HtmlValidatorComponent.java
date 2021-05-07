@@ -7,7 +7,6 @@ import ru.ayubdzhanov.javaquiz.domain.Attachment.Type;
 import ru.ayubdzhanov.javaquiz.domain.Theory;
 import ru.ayubdzhanov.javaquiz.exception.HtmlValidationException;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,7 +19,7 @@ public class HtmlValidatorComponent {
 
     public void checkHtml(String content, Boolean firstImageExist, Boolean secondImageExist,
                           Boolean thirdImageExist, Boolean linkAttachExist, String theoryId) throws HtmlValidationException {
-        htmlValidatorAdapter.checkHtml(content);
+        htmlValidatorAdapter.validateHtml(content);
         if ((firstImageExist && !keywordExist(content, "%картинка 1%") ||
             !firstImageExist && keywordExist(content, "%картинка 1%")) ||
             (secondImageExist && !keywordExist(content, "%картинка 2%") ||
@@ -35,7 +34,7 @@ public class HtmlValidatorComponent {
         }
         if (theoryId.equals("0")) return;
         Theory theory = theoryRepository.findById(Long.parseLong(theoryId)).orElseThrow(() -> new HtmlValidationException("validation failed", "there is no entity"));
-        theory.getAttachment().stream()
+        theory.getAttachments().stream()
             .filter(attachment -> attachment.getType() == Type.PICTURE)
             .forEach(attachment -> {
                 if (firstImageExist) {

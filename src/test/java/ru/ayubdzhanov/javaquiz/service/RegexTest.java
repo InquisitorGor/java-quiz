@@ -40,4 +40,10 @@ public class RegexTest {
         assertEquals(1, collect.size());
         assertFalse(collect.stream().anyMatch(file -> file.equals("gdgdfgvdfgvd%картинка1%234 vdfg")));
     }
+
+    @Test
+    void testReplaceFirst(){
+        String test= "text1234text";
+        System.out.println(test.replaceFirst("hi", "hi"));
+    }
 }

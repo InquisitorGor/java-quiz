@@ -11,19 +11,11 @@ import ru.ayubdzhanov.javaquiz.domain.Attachment;
 import ru.ayubdzhanov.javaquiz.domain.Attachment.Type;
 import ru.ayubdzhanov.javaquiz.domain.Category;
 import ru.ayubdzhanov.javaquiz.domain.Theory;
-import ru.ayubdzhanov.javaquiz.exception.HtmlValidationException;
-import ru.ayubdzhanov.javaquiz.util.HtmlUtils;
 
-import javax.xml.bind.ValidationException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -64,7 +56,7 @@ public class AdminService {
         emptyTheory.setId(theoryId);
         emptyTheory.setDescription(Strings.EMPTY);
         emptyTheory.setTitle(Strings.EMPTY);
-        emptyTheory.setAttachment(Collections.emptyList());
+        emptyTheory.setAttachments(Collections.emptyList());
         emptyTheory.setCategory(getCategories().stream().findFirst().get());
         return emptyTheory;
     }
@@ -89,22 +81,19 @@ public class AdminService {
         theory.setCategory(getCategories().stream().filter(cat -> cat.getCategory().equals(category)).findFirst().get());
         if (!firstImage.isEmpty()) {
             Attachment attachment = addAttachment(theory, firstImage, "картинка1");
-            content = HtmlUtils.parseLinks(content, attachment.getPath(), "%картинка 1%");
         }
         if (!secondImage.isEmpty()) {
             Attachment attachment = addAttachment(theory, secondImage, "картинка2");
-            content = HtmlUtils.parseLinks(content, attachment.getPath(), "%картинка 2%");
         }
         if (!thirdImage.isEmpty()) {
             Attachment attachment = addAttachment(theory, thirdImage, "картинка3");
-            content = HtmlUtils.parseLinks(content, attachment.getPath(), "%картинка 3%");
         }
         if (!linkAttach.isEmpty()) {
             Attachment attachment = new Attachment();
             attachment.setType(Type.VIDEO);
             attachment.setPath(linkAttach);
             attachment.setTheory(theory);
-            theory.getAttachment().add(attachment);
+            theory.getAttachments().add(attachment);
         }
         theory.setDescription(content);
     }
@@ -114,7 +103,7 @@ public class AdminService {
         attachment.setType(Type.PICTURE);
         attachment.setPath(fileComponent.uploadFileAndGetLink(file, pictureName));
         attachment.setTheory(theory);
-        theory.getAttachment().add(attachment);
+        theory.getAttachments().add(attachment);
         return attachment;
     }
 

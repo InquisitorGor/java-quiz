@@ -41,7 +41,7 @@
 			<hr style="border-width: 5px"/>
 			<div th:each="theory : ${category.getTheories()}">
 				<h3 th:utext="${theory.getTitle()}">Что такое ООП?</h3>
-				<div th:utext="${theory.getDescription()}"></div>
+				<div th:utext="${theory.getParsedDescription()}"></div>
 				<hr style="border-width: 5px"/>
 			</div>
 		</div>

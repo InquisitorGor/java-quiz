@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,14 +30,17 @@ public class Theory {
     @Type(type = "org.hibernate.type.TextType")
     private String description;
 
+    @Transient
+    private String parsedDescription;
+
     @ManyToOne
     private Category category;
 
     @OneToMany(mappedBy = "theory", cascade = CascadeType.ALL)
-    private List<Attachment> attachment;
+    private List<Attachment> attachments;
 
-    public List<Attachment> getAttachment() {
-        if (attachment == null) attachment = new LinkedList<>();
-        return attachment;
+    public List<Attachment> getAttachments() {
+        if (attachments == null) attachments = new LinkedList<>();
+        return attachments;
     }
 }

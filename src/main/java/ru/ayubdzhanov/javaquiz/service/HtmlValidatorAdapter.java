@@ -1,7 +1,5 @@
 package ru.ayubdzhanov.javaquiz.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,13 +24,13 @@ public class HtmlValidatorAdapter {
     @Value("${html-validator.url}")
     private String url;
 
-    public void checkHtml(String content){
+    public void validateHtml(String content){
         if (content.isEmpty()) {
             throw new HtmlValidationException("validation failed", "empty content");
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_HTML);
-        HttpEntity<String> request = new HttpEntity<>(HtmlUtils.processHtml(content), headers);
+        HttpEntity<String> request = new HttpEntity<>(HtmlUtils.wrapHtmlAttributes(content), headers);
         ValidatorResponse result = restTemplate.postForObject(url, request, ValidatorResponse.class);
         if (!result.getMessages().isEmpty()) {
             String errors = result.getMessages().stream()
