@@ -18,16 +18,18 @@ public class TheoryService {
     private List<Category> categories;
 
     public List<Category> getCategories(Boolean forceUpdate) {
-        if (categories == null || forceUpdate == Boolean.TRUE) {
-            categories = categoryRepository.findAll();
-            categories.forEach(category -> wrapTheories(category.getTheories()));
-            wrapCategories(categories);
-        }
+        categories = categoryRepository.findAll();
+        wrapCategories(categories);
+        categories.forEach(category -> wrapTheories(category.getTheories()));
         return categories;
     }
 
     public void wrapTheories(List<Theory> theories){
         theories.forEach(theory -> {
+            if (theory.getAttachments().isEmpty()) {
+                theory.setParsedDescription(theory.getDescription());
+                return;
+            }
             theory.getAttachments().forEach(attachment -> {
                 String parsedDescription = HtmlUtils.parseLinks(theory.getDescription(), attachment.getPath(), "%картинка 2%");
                 parsedDescription = HtmlUtils.parseLinks(parsedDescription, attachment.getPath(), "%картинка 1%");

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Админка</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">Java Quiz</a>
+		</div>
+		<div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/admin/competition"><span class="glyphicon glyphicon-star"></span> Админ панель (соревнования)</a></li>
+					<li><a href="/admin/theory"><span class="glyphicon glyphicon-star"></span> Админ панель (теория)</a></li>
+					<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</nav>
+<div class="container" style="padding-top: 60px">
+	<form name="saveForm" method="post" action="/admin/task/update" onsubmit="return(validateTaskContent());">
+		<div class="form-group">
+			<label for="comp_cat">Категория:</label>
+			<select name="category" class="form-control" id="comp_cat">
+				<option th:each="category : ${categories}" th:if="${category.getId() == task.getCategory().getId()}" th:selected="true" th:utext="${category.getCategory()}">1</option>
+				<option th:each="category : ${categories}" th:if="${category.getId() != task.getCategory().getId()}" th:selected="false" th:utext="${category.getCategory()}">1</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="title">Вопрос:</label>
+			<textarea th:utext="${task.getQuestion()}" name="title" class="form-control" rows="1" id="title"></textarea>
+		</div>
+		<input type="hidden" name="taskId" id="hiddenTaskId" th:value="${task.getId()}">
+		<div class="form-group" id="error">
+			<label for="errorContent">Ошибки:</label>
+			<textarea readonly class="form-control" rows="5" id="errorContent"></textarea>
+		</div>
+		<div>
+			<label for="title" style="padding-bottom: 20px">Варианты ответов:</label>
+			<div class="container" th:each="option : ${options}">
+				<div class="form-group" style="float: left">
+					<label for="title" th:utext="${option.getTitleName()}">Первый вопрос:</label>
+					<textarea th:if="${option.getTaskOption() != null}" th:name="${option.getTextAreaId()}" th:id="${option.getTextAreaId()}" th:utext="${option.getTaskOption().getOption().getOption()}" name="firstOption" class="form-control" rows="1" id="firstOption" style="width: 500px"></textarea>
+					<textarea th:if="${option.getTaskOption() == null}" th:name="${option.getTextAreaId()}" th:id="${option.getTextAreaId()}" name="firstOption" class="form-control" rows="1" id="firstOption" style="width: 500px"></textarea>
+				</div>
+				<div class="checkbox" style="float: left; padding-left: 5%; padding-top: 20px">
+					<div th:if="${option.getTaskOption() != null}">
+						<label th:if="${option.getTaskOption().getIsCorrect()}"><input th:name="${option.getCheckBoxId()}" th:id="${option.getCheckBoxId()}" checked name="isFirstCorrect" type="checkbox" value="" id="isFirstCorrect">Верный</label>
+						<label th:if="${!option.getTaskOption().getIsCorrect()}"><input  th:name="${option.getCheckBoxId()}" th:id="${option.getCheckBoxId()}" name="isFirstCorrect" type="checkbox" value="" id="isFirstCorrect">Верный</label>
+					</div>
+					<div th:if="${option.getTaskOption() == null}">
+						<label><input th:name="${option.getCheckBoxId()}" th:id="${option.getCheckBoxId()}" name="isFirstCorrect" type="checkbox" value="" id="isFirstCorrect">Верный</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container" style="">
+			<input type="submit" class="btnSubmit" value="Сохранить"/>
+			<a th:href="'/admin/task/delete/' + ${task.getId()}" class="btn" role="button" style="float: right">Удалить запись</a>
+		</div>
+	</form>
+</div>
+</body>
+
+</html>

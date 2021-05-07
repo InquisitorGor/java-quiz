@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.ayubdzhanov.javaquiz.util.ViewUtils;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,7 +30,7 @@ public class Task implements Serializable {
     @ManyToOne
     private Category category;
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<TaskOption> taskOption;
 
     @Transient
