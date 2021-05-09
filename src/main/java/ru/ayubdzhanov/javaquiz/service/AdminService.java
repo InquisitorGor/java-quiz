@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.ayubdzhanov.javaquiz.dao.AttachmentRepository;
 import ru.ayubdzhanov.javaquiz.dao.CategoryRepository;
 import ru.ayubdzhanov.javaquiz.dao.OptionRepository;
 import ru.ayubdzhanov.javaquiz.dao.TaskOptionRepository;
 import ru.ayubdzhanov.javaquiz.dao.TaskRepository;
 import ru.ayubdzhanov.javaquiz.dao.TheoryRepository;
 import ru.ayubdzhanov.javaquiz.domain.Attachment;
+import ru.ayubdzhanov.javaquiz.domain.Attachment.Size;
 import ru.ayubdzhanov.javaquiz.domain.Attachment.Type;
 import ru.ayubdzhanov.javaquiz.domain.Category;
 import ru.ayubdzhanov.javaquiz.domain.Option;
@@ -26,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -39,6 +42,8 @@ public class AdminService {
     private OptionRepository optionRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private AttachmentRepository attachmentRepository;
     @Autowired
     private FileComponent fileComponent;
 
@@ -75,8 +80,8 @@ public class AdminService {
         return emptyTheory;
     }
 
-    public void updateTheory(String title, String content, String category,
-                             MultipartFile firstImage, MultipartFile secondImage,
+    public void updateTheory(String title, String content, String category, String firstPictureCaption, String secondPictureCaption, String thirdPictureCaption,
+                             String firstImageSize, String secondImageSize, String thirdImageSize, MultipartFile firstImage, MultipartFile secondImage,
                              MultipartFile thirdImage, String linkAttach, String id) throws Exception {
         Long theoryId = Long.parseLong(id);
         Theory theory;
@@ -85,38 +90,47 @@ public class AdminService {
         } else {
             theory = theoryRepository.findById(theoryId).orElseThrow(() -> new Exception("theory des not exist"));
         }
-        saveTheory(title, content, category, firstImage, secondImage, thirdImage, linkAttach, theory);
+        saveTheory(title, content, category,firstPictureCaption, secondPictureCaption, thirdPictureCaption,  firstImageSize, secondImageSize, thirdImageSize, firstImage, secondImage, thirdImage, linkAttach, theory);
         theoryRepository.save(theory);
     }
 
-    private void saveTheory(String title, String content, String category, MultipartFile firstImage, MultipartFile secondImage,
+    private void saveTheory(String title, String content, String category, String firstPictureCaption, String secondPictureCaption, String thirdPictureCaption, String firstImageSize, String secondImageSize, String thirdImageSize, MultipartFile firstImage, MultipartFile secondImage,
                             MultipartFile thirdImage, String linkAttach, Theory theory) {
         theory.setTitle(title);
         theory.setCategory(getCategories().stream().filter(cat -> cat.getCategory().equals(category)).findFirst().get());
         if (!firstImage.isEmpty()) {
-            addAttachment(theory, firstImage, "картинка1");
+            addAttachment(theory, firstImage, "картинка1", Size.valueOf(firstImageSize), firstPictureCaption);
         }
         if (!secondImage.isEmpty()) {
-            addAttachment(theory, secondImage, "картинка2");
+            addAttachment(theory, secondImage, "картинка2", Size.valueOf(secondImageSize), secondPictureCaption);
         }
         if (!thirdImage.isEmpty()) {
-            addAttachment(theory, thirdImage, "картинка3");
+            addAttachment(theory, thirdImage, "картинка3", Size.valueOf(thirdImageSize), thirdPictureCaption);
         }
         if (!linkAttach.isEmpty()) {
+            if (theory.getId() != null) {
+                theory.getAttachments().removeAll(theory.getAttachments().stream().peek(attachment -> {
+                    if (attachment.getType() == Type.VIDEO) attachment.setTheory(null);
+                }).filter(attachment -> attachment.getType() == Type.VIDEO)
+                    .collect(Collectors.toList()));
+            }
             Attachment attachment = new Attachment();
             attachment.setType(Type.VIDEO);
             attachment.setPath(linkAttach);
             attachment.setTheory(theory);
+            attachmentRepository.save(attachment);
             theory.getAttachments().add(attachment);
         }
         theory.setDescription(content);
     }
 
-    private void addAttachment(Theory theory, MultipartFile file, String pictureName) {
+    private void addAttachment(Theory theory, MultipartFile file, String pictureName, Size size, String pictureCaption) {
         Attachment attachment = new Attachment();
-        attachment.setType(Type.PICTURE);
+        attachment.setType(Type.IMAGE);
         attachment.setPath(fileComponent.uploadFileAndGetLink(file, pictureName));
         attachment.setTheory(theory);
+        attachment.setSize(size);
+        attachment.setCaption(pictureCaption);
         theory.getAttachments().add(attachment);
     }
 
@@ -152,12 +166,12 @@ public class AdminService {
 
     public List<TaskOptionsWrapper> getOptions(Task task) {
         List<TaskOption> taskOptions = task.getTaskOption();
-        String [] titleNames = {"Первый вариант ответа", "Второй вариант ответа", "Третий вариант ответа", "Четвертый вариант ответа", "Пятый вариант ответа"};
-        String [] textAreaIds = {"firstOption", "secondOption", "thirdOption", "fourthOption", "fifthOption"};
-        String [] checkBoxIds = {"isFirstCorrect", "isSecondCorrect", "isThirdCorrect", "isFourthCorrect", "isFifthCorrect"};
+        String[] titleNames = {"Первый вариант ответа", "Второй вариант ответа", "Третий вариант ответа", "Четвертый вариант ответа", "Пятый вариант ответа"};
+        String[] textAreaIds = {"firstOption", "secondOption", "thirdOption", "fourthOption", "fifthOption"};
+        String[] checkBoxIds = {"isFirstCorrect", "isSecondCorrect", "isThirdCorrect", "isFourthCorrect", "isFifthCorrect"};
         List<TaskOptionsWrapper> taskOptionsWrapper = new LinkedList<>();
         for (int i = 0; i < 5; i++) {
-            if(taskOptions.size() > i) {
+            if (taskOptions.size() > i) {
                 taskOptionsWrapper.add(new TaskOptionsWrapper(taskOptions.get(i), titleNames[i], textAreaIds[i], checkBoxIds[i]));
             } else {
                 taskOptionsWrapper.add(new TaskOptionsWrapper(null, titleNames[i], textAreaIds[i], checkBoxIds[i]));
@@ -210,7 +224,7 @@ public class AdminService {
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class TaskOptionsWrapper{
+    public static class TaskOptionsWrapper {
         TaskOption taskOption;
         String titleName;
         String textAreaId;

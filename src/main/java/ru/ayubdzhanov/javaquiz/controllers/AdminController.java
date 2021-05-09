@@ -44,15 +44,24 @@ public class AdminController {
                              @RequestParam String content,
                              @RequestParam String category,
                              @RequestParam String theoryId,
+                             @RequestParam String firstImageSize,
+                             @RequestParam String secondImageSize,
+                             @RequestParam String thirdImageSize,
+                             @RequestParam String firstPictureCaption,
+                             @RequestParam String secondPictureCaption,
+                             @RequestParam String thirdPictureCaption,
                              @RequestParam(required = false) MultipartFile firstImage,
                              @RequestParam(required = false) MultipartFile secondImage,
                              @RequestParam(required = false) MultipartFile thirdImage,
                              @RequestParam(required = false) String linkAttach) {
-        try {
-            adminService.updateTheory(title, content, category, firstImage, secondImage, thirdImage, linkAttach, theoryId);
-        } catch (Exception ignored) {
 
+        try {
+            adminService.updateTheory(title, content, category, firstPictureCaption,secondPictureCaption,thirdPictureCaption
+                , firstImageSize, secondImageSize, thirdImageSize, firstImage, secondImage, thirdImage, linkAttach, theoryId);
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
+
         return "redirect:/admin/theory";
     }
 
@@ -83,7 +92,7 @@ public class AdminController {
     }
 
     @RequestMapping("/task/update")
-    public String saveTask(@RequestParam Map<String,String> allParams) {
+    public String saveTask(@RequestParam Map<String, String> allParams) {
         adminService.saveTask(allParams);
         return "redirect:/admin/competition";
     }

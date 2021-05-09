@@ -32,10 +32,19 @@ public class Attachment {
     @JoinColumn(name = "theory_id")
     private Theory theory;
 
+    @Enumerated(EnumType.STRING)
+    private Size size;
+
+    private String caption;
+
     @Transient
     private ViewUtils viewUtils;
 
     public enum Type {
-        VIDEO, PICTURE
+        VIDEO, IMAGE
+    }
+
+    public enum Size {
+        SMALL, AVERAGE, BIG
     }
 }

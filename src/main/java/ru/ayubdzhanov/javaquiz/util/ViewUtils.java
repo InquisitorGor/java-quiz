@@ -14,4 +14,5 @@ public class ViewUtils {
     private String style;
     private UserData userData;
     private String imageLink;
+    private String imageSize;
 }

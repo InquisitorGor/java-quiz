@@ -20,6 +20,7 @@ public class HtmlValidatorComponent {
     @Autowired
     private TheoryRepository theoryRepository;
 
+    //TODO video processing
     public void checkHtml(String content, Boolean firstImageExist, Boolean secondImageExist,
                           Boolean thirdImageExist, Boolean linkAttachExist, String theoryId) throws HtmlValidationException {
         htmlValidatorAdapter.validateHtml(content);
@@ -38,7 +39,7 @@ public class HtmlValidatorComponent {
         if (theoryId.equals("0")) return;
         Theory theory = theoryRepository.findById(Long.parseLong(theoryId)).orElseThrow(() -> new HtmlValidationException("validation failed", "there is no entity"));
         theory.getAttachments().stream()
-            .filter(attachment -> attachment.getType() == Type.PICTURE)
+            .filter(attachment -> attachment.getType() == Type.IMAGE)
             .forEach(attachment -> {
                 if (firstImageExist) {
                     Pattern pattern = Pattern.compile(".*(картинка1).*");
@@ -68,7 +69,7 @@ public class HtmlValidatorComponent {
         if (theoryId.equals("0")) return true;
         Theory theory = theoryRepository.findById(Long.parseLong(theoryId)).orElseThrow(() -> new HtmlValidationException("validation failed", "there is no entity"));
         List<Attachment> collect = theory.getAttachments().stream()
-            .filter(attachment -> attachment.getType() == Type.PICTURE)
+            .filter(attachment -> attachment.getType() == Type.IMAGE)
             .filter(attachment -> {
                 if (keyword.equals("%картинка 1%")) {
                     Pattern pattern = Pattern.compile(".*(картинка1).*");

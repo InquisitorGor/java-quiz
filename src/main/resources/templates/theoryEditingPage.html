@@ -55,16 +55,61 @@
 		<div class="form-group">
 			<label>Вложение (до 3 картинок)</label>
 			<p>Картинки вставлять в текст в виде "%картинка 1%", "%картинка 2%" и "%картинка 3%"</p>
-			<label for="firstImage">Первая картинка</label>
-			<input name="firstImage" type="file" class="form-control-file" id="firstImage">
-			<label for="secondImage">Вторая картинка</label>
-			<input name="secondImage" type="file" class="form-control-file" id="secondImage">
-			<label for="thirdImage">Третья картинка</label>
-			<input name="thirdImage" type="file" class="form-control-file" id="thirdImage">
+			<div>
+				<div>
+					<label for="firstImage">Первая картинка</label>
+					<input name="firstImage" type="file" class="form-control-file" id="firstImage">
+				</div>
+				<div>
+					<label>Размер: </label>
+					<label class="radio-inline">
+						<input type="radio" name="firstImageSize" checked value="SMALL">Маленький
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="firstImageSize" value="AVERAGE">Средний
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="firstImageSize" value="BIG">Большой
+					</label>
+				</div>
+				<div class="form-group">
+					<label for="firstPictureCaption">Подпись к рисунку 1:</label>
+					<textarea name="firstPictureCaption" class="form-control" rows="1" id="firstPictureCaption"></textarea>
+				</div>
+				<div>
+					<div>
+						<label for="secondImage">Вторая картинка</label>
+						<input name="secondImage" type="file" class="form-control-file" id="secondImage">
+					</div>
+					<div>
+						<label>Размер: </label>
+						<label class="radio-inline"><input type="radio" name="secondImageSize" checked value="SMALL">Маленький</label>
+						<label class="radio-inline"><input type="radio" name="secondImageSize" value="AVERAGE">Средний</label>
+						<label class="radio-inline"><input type="radio" name="secondImageSize" value="BIG">Большой</label>
+					</div>
+					<div class="form-group">
+						<label for="secondPictureCaption">Подпись к рисунку 2:</label>
+						<textarea name="secondPictureCaption" class="form-control" rows="1" id="secondPictureCaption"></textarea>
+					</div>
+				</div>
+				<div>
+					<div>
+						<label for="thirdImage">Третья картинка</label>
+						<input name="thirdImage" type="file" class="form-control-file" id="thirdImage">
+					</div>
+					<div>
+						<label>Размер: </label>
+						<label class="radio-inline"><input type="radio" name="thirdImageSize" checked value="SMALL">Маленький</label>
+						<label class="radio-inline"><input type="radio" name="thirdImageSize" value="AVERAGE">Средний</label>
+						<label class="radio-inline"><input type="radio" name="thirdImageSize" value="BIG">Большой</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="thirdPictureCaption">Подпись к рисунку 3:</label>
+					<textarea name="thirdPictureCaption" class="form-control" rows="1" id="thirdPictureCaption"></textarea>
+				</div>
+			</div>
 		</div>
-		<!--		<div class="embed-responsive embed-responsive-16by9">-->
-		<!--			<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>-->
-		<!--		</div>-->
 		<div th:if="${!theory.getAttachments().isEmpty()}">
 			<label>Существующие картинки:</label>
 			<div th:each="picture : ${theory.getAttachments()}" th:if="${picture.getType().toString() != 'VIDEO'}" th:id="${picture.getId() + 'picture'}">
@@ -73,7 +118,15 @@
 					<button type="button" class="btn btn-default" th:value="${picture.getId()}" th:onclick="'deleteFile(\'' + ${picture.getId()} + '\');'">Удалить первую картинку</button>
 				</div>
 				<div>
-					<img th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail" alt="Cinque Terre">
+					<figure>
+						<img style="width:550px;height:350px;" th:if="${picture.getSize().toString() == 'SMALL'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
+						     alt="Cinque Terre">
+						<img style="width:1000px;height:700px;" th:if="${picture.getSize().toString() == 'AVERAGE'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
+						     alt="Cinque Terre">
+						<img style="width:1400px;height:1000px;" th:if="${picture.getSize().toString() == 'BIG'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
+						     alt="Cinque Terre">
+						<figcaption th:utext="${picture.getCaption()}" class="figure-caption text-center">A caption for the above image.</figcaption>
+					</figure>
 				</div>
 			</div>
 		</div>
@@ -106,6 +159,10 @@
 				alert("Тип файла для первого изображения невалидный!");
 				return false;
 			}
+			if (document.getElementById("firstPictureCaption").value == "") {
+				alert("Подпись к первому рисунку отсутствует");
+				return false;
+			}
 			additionalInfo += "firstImageExist=true&";
 		}
 		if (document.getElementById("secondImage").value != "") {
@@ -113,11 +170,19 @@
 				alert("Тип файла для второго изображения невалидный!");
 				return false;
 			}
+			if (document.getElementById("secondPictureCaption").value == "") {
+				alert("Подпись ко второму рисунку отсутствует");
+				return false;
+			}
 			additionalInfo += "secondImageExist=true&";
 		}
 		if (document.getElementById("thirdImage").value != "") {
 			if (!re.test(document.getElementById("thirdImage").value)) {
 				alert("Тип файла для третьего изображения невалидный!");
+				return false;
+			}
+			if (document.getElementById("thirdPictureCaption").value == "") {
+				alert("Подпись к третьему рисунку отсутствует");
 				return false;
 			}
 			additionalInfo += "thirdImageExist=true&";
@@ -153,6 +218,7 @@
 		}
 		return status !== false;
 	}
+
 	function deleteFile(id) {
 		var xmlHttpRequest = new XMLHttpRequest();
 		xmlHttpRequest.onreadystatechange = function () {

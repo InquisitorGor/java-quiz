@@ -36,7 +36,7 @@ public class Theory {
     @ManyToOne
     private Category category;
 
-    @OneToMany(mappedBy = "theory", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "theory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attachment> attachments;
 
     public List<Attachment> getAttachments() {
