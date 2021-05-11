@@ -66,6 +66,10 @@ INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date
 VALUES (5, 'admin', 100, 140, 5, '01.01.2021', 145, 6);
 INSERT INTO user_credential (id, login, password, role)
 VALUES (5, 'admin', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'ADMIN');
+INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES (6, 'author', 100, 140, 5, '01.01.2021', 145, 6);
+INSERT INTO user_credential (id, login, password, role)
+VALUES (6, 'author', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'AUTHOR');
 INSERT INTO competition_info (image_link, description, category_id)
 VALUES ('/images/mini/java_mini.png', 'Соревнование по Java Core</br>' ||
                                       'В данном соревновании будут рассмотрены следующие моменты:<br>' ||
@@ -79,18 +83,18 @@ VALUES ('/images/mini/java_mini.png', 'Соревнование по Java Core</
                                             'В данном соревновании будут рассмотрены следующие моменты:<br>' ||
                                             '<ul><li>Основы синтаксиса</li><li>Парадигмы</li><li>Условия</li></ul>',
         4);
-INSERT INTO task (question, prestige, category_id)
-VALUES ('Основные принципы ООП', 20, 1),
-       ('Что не относится к парадигмам ООП', 10, 1),
-       ('АОП расширяет ООП?', 5, 1),
-       ('Инкапсуляция это', 15, 1),
-       ('Полиморфизм это', 15, 1),
-       ('Наследование это', 15, 1),
-       ('Паттерны нужны?', 5, 1),
-       ('Java и JS одно и тоже?', 15, 1),
-       ('В JDK входит JVM?', 15, 1),
-       ('В JDK входит JRE?', 15, 1),
-       ('2+2=4', 15, 1);
+INSERT INTO task (question, prestige, is_approved, category_id)
+VALUES ('Основные принципы ООП', 20,true, 1),
+       ('Что не относится к парадигмам ООП', 10,true, 1),
+       ('АОП расширяет ООП?', 5,true, 1),
+       ('Инкапсуляция это', 15,true, 1),
+       ('Полиморфизм это', 15,true, 1),
+       ('Наследование это', 15,true, 1),
+       ('Паттерны нужны?', 5,true, 1),
+       ('Java и JS одно и тоже?', 15,true, 1),
+       ('В JDK входит JVM?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('2+2=4', 15,true, 1);
 INSERT INTO option (option)
 VALUES ('Полиморфизм'),
        ('Инкапсуляция'),
@@ -142,50 +146,50 @@ VALUES (1, 1, 1, 20),
        (0, 3, 2, -9),
        (0, 2, 1, -8),
        (2, 3, 1, 40);
-INSERT INTO contestant_result(contestant_info_id, task_option_id)
-VALUES (1, 5),
-       (1, 6),
-       (1, 7),
-       (1, 8),
-       (3, 1),
-       (3, 2),
-       (3, 3),
-       (3, 4),
-       (3, 11),
-       (3, 12),
-       (4, 1),
-       (4, 2),
-       (4, 3),
-       (4, 4),
-       (5, 1),
-       (5, 2),
-       (5, 3),
-       (5, 4),
-       (6, 1),
-       (6, 2),
-       (6, 3),
-       (6, 4),
-       (6, 11),
-       (6, 12),
-       (6, 13),
-       (6, 14);
-INSERT INTO competition_task(competition_id, task_id)
-VALUES
-       (1, 1),
-       (1, 2),
-       (1, 3),
-       (1, 4),
-       (1, 5),
-       (2, 1),
-       (2, 2),
-       (2, 3),
-       (2, 4),
-       (2, 5),
-       (3, 1),
-       (3, 2),
-       (3, 3),
-       (3, 4),
-       (3, 5);
+-- INSERT INTO contestant_result(contestant_info_id, task_option_id)
+-- VALUES (1, 5),
+--        (1, 6),
+--        (1, 7),
+--        (1, 8),
+--        (3, 1),
+--        (3, 2),
+--        (3, 3),
+--        (3, 4),
+--        (3, 11),
+--        (3, 12),
+--        (4, 1),
+--        (4, 2),
+--        (4, 3),
+--        (4, 4),
+--        (5, 1),
+--        (5, 2),
+--        (5, 3),
+--        (5, 4),
+--        (6, 1),
+--        (6, 2),
+--        (6, 3),
+--        (6, 4),
+--        (6, 11),
+--        (6, 12),
+--        (6, 13),
+--        (6, 14);
+-- INSERT INTO competition_task(competition_id, task_id)
+-- VALUES
+--        (1, 1),
+--        (1, 2),
+--        (1, 3),
+--        (1, 4),
+--        (1, 5),
+--        (2, 1),
+--        (2, 2),
+--        (2, 3),
+--        (2, 4),
+--        (2, 5),
+--        (3, 1),
+--        (3, 2),
+--        (3, 3),
+--        (3, 4),
+--        (3, 5);
 
 
 

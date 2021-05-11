@@ -38,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/competition/**", "/user_page").hasRole("USER")
             .antMatchers("/theory").hasAnyRole("USER", "ADMIN")
             .antMatchers("/admin/**").hasRole("ADMIN")
+            .antMatchers("/author/**").hasRole("AUTHOR")
             .and().formLogin().loginPage("/login")
             .and().headers().frameOptions().disable()
             .and().csrf().disable();

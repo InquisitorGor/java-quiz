@@ -23,6 +23,10 @@ public class FileComponent {
         String newFileName = UUID.randomUUID() + pictureName + multipartFile.getOriginalFilename();
         Path filePath = Paths.get(theoryImagesFullPath + newFileName);
         try {
+            Path directoryPath = Paths.get(theoryImagesFullPath);
+            if (Files.notExists(directoryPath)) {
+                Files.createDirectory(directoryPath);
+            }
             Files.write(filePath, multipartFile.getBytes());
         } catch (IOException e) {
             e.printStackTrace();

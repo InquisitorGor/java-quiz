@@ -97,7 +97,7 @@ public class CompetitionService {
             opponent.setUserData(possibleContestant.getUserData());
             newCompetition.getContestants().add(opponent);
         }
-        List<Task> tasks = getRandomTasks(taskRepository.findAllByCategoryId(categoryId, PageRequest.of(0, 200))); //better to cache
+        List<Task> tasks = getRandomTasks(taskRepository.findAllByCategoryIdAndIsApproved(categoryId, Boolean.TRUE, PageRequest.of(0, 200))); //better to cache
         wrapTasks(tasks);
         newCompetition.setTasks(tasks);
         newCompetition.setStartedAt(LocalDateTime.now());

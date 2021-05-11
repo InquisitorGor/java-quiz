@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 @Getter
@@ -27,6 +28,11 @@ public class Task implements Serializable {
 
     private Integer prestige;
 
+    private Boolean isApproved;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<TaskReview> reviews;
+
     @ManyToOne
     private Category category;
 
@@ -36,4 +42,8 @@ public class Task implements Serializable {
     @Transient
     private ViewUtils viewUtil;
 
+    public List<TaskReview> getReviews() {
+        if (reviews == null) reviews = new LinkedList<>();
+        return reviews;
+    }
 }

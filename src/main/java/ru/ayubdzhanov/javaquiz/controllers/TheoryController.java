@@ -17,8 +17,7 @@ public class TheoryController {
 
     @GetMapping("/theory")
     public String showTheoryPage(Model model) {
-        List<Category> all = theoryService.getCategories();
-        model.addAttribute("categories", all);
+        model.addAttribute("categories", theoryService.getCategories());
         return "theoryPage";
     }
 }

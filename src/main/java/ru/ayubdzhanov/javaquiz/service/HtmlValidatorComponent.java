@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.ayubdzhanov.javaquiz.dao.TheoryRepository;
 import ru.ayubdzhanov.javaquiz.domain.Attachment;
+import ru.ayubdzhanov.javaquiz.domain.Attachment.Size;
 import ru.ayubdzhanov.javaquiz.domain.Attachment.Type;
 import ru.ayubdzhanov.javaquiz.domain.Theory;
 import ru.ayubdzhanov.javaquiz.exception.HtmlValidationException;
+import ru.ayubdzhanov.javaquiz.util.HtmlUtils;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -36,7 +38,15 @@ public class HtmlValidatorComponent {
             throw new HtmlValidationException("validation failed", "Problem with attachment. There are two cases that trigger this problem:\r\n " +
                 "attach is present, but keyword is absent\r\n attach is absent, but keyword is present");
         }
+        checkParsedHtml(content, firstImageExist, secondImageExist, thirdImageExist, linkAttachExist);
+        if (firstImageExist)
         if (theoryId.equals("0")) return;
+        if (!firstImageExist && !keywordExist(content, "%картинка 1%") && isAttachPresent("%картинка 1%", theoryId) ||
+            !secondImageExist && !keywordExist(content, "%картинка 2%") && isAttachPresent("%картинка 2%", theoryId) ||
+            !thirdImageExist && !keywordExist(content, "%картинка 3%") && isAttachPresent("%картинка 3%", theoryId)
+        ) {
+            throw new HtmlValidationException("validation failed", "You forgot to insert a keyword");
+        }
         Theory theory = theoryRepository.findById(Long.parseLong(theoryId)).orElseThrow(() -> new HtmlValidationException("validation failed", "there is no entity"));
         theory.getAttachments().stream()
             .filter(attachment -> attachment.getType() == Type.IMAGE)
@@ -57,6 +67,28 @@ public class HtmlValidatorComponent {
                         throw new HtmlValidationException("validation failed", "picture 3 exists. delete before updating");
                 }
             });
+
+    }
+
+    private void checkParsedHtml(String content, Boolean firstImageExist, Boolean secondImageExist, Boolean thirdImageExist, Boolean linkAttachExist) {
+        StringBuilder parsedHtmlCode = new StringBuilder();
+        if (firstImageExist) {
+            parsedHtmlCode.append(HtmlUtils.parseImageLinks(content, "1234", "%картинка 1%", Size.SMALL, "picture"));
+        }
+        if (secondImageExist) {
+            parsedHtmlCode.append(HtmlUtils.parseImageLinks(content, "1234", "%картинка 2%", Size.SMALL, "picture"));
+        }
+        if (thirdImageExist) {
+            parsedHtmlCode.append(HtmlUtils.parseImageLinks(content, "1234", "%картинка 3%", Size.SMALL, "picture"));
+        }
+        if (linkAttachExist) {
+            parsedHtmlCode.append(HtmlUtils.parseVideoLink(content, "1234", "%видео%"));
+        }
+        try {
+            if (!parsedHtmlCode.toString().isEmpty()) htmlValidatorAdapter.validateHtml(parsedHtmlCode.toString());
+        } catch (HtmlValidationException ex) {
+            throw new HtmlValidationException("validation failed", "Keyword was embedded to html code");
+        }
     }
 
     private boolean keywordExist(String content, String keyword) {

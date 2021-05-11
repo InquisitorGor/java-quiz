@@ -26,7 +26,7 @@ public class HtmlUtils {
         if (size == Size.SMALL) imageAttributeStyle = SMALL_IMAGE_SIZE;
         else if (size == Size.AVERAGE) imageAttributeStyle = AVERAGE_IMAGE_SIZE;
         else imageAttributeStyle = BIG_IMAGE_SIZE;
-        return content.replaceFirst(toReplace, "<br><figure class=\"figure\"><img " + imageAttributeStyle + " align=\"center\" src=\"" + path + "\" class=\"img-rounded\" alt=\"Cinque Terre\"> <figcaption class=\"figure-caption text-center\">"+ caption +"</figcaption></figure>");
+        return content.replaceFirst(toReplace, "<br><figure class=\"figure\"><img " + imageAttributeStyle + " src=\"" + path + "\" class=\"img-rounded\" alt=\"Cinque Terre\"> <figcaption class=\"figure-caption text-center\">"+ caption +"</figcaption></figure>");
     }
 
     public static String parseVideoLink(String content, String url, String toReplace) {

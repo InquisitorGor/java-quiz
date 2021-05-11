@@ -43,23 +43,39 @@
 			<label for="title">Вопрос:</label>
 			<textarea th:utext="${task.getQuestion()}" name="title" class="form-control" rows="1" id="title"></textarea>
 		</div>
+		<div class="form-group">
+			<label for="sel1">Количество очков престижа:</label>
+			<select name="prestige" class="form-control" id="sel1">
+				<option>5</option>
+				<option>10</option>
+				<option>15</option>
+				<option>20</option>
+				<option>25</option>
+				<option>30</option>
+				<option>35</option>
+			</select>
+		</div>
 		<input type="hidden" name="taskId" id="hiddenTaskId" th:value="${task.getId()}">
-		<div class="form-group" id="error">
+		<div th:if="${is_author == null}" class="form-group" id="error">
 			<label for="errorContent">Ошибки:</label>
-			<textarea readonly class="form-control" rows="5" id="errorContent"></textarea>
+			<textarea th:utext="${comments}" readonly class="form-control" rows="5" id="errorContent"></textarea>
 		</div>
 		<div>
 			<label for="title" style="padding-bottom: 20px">Варианты ответов:</label>
 			<div class="container" th:each="option : ${options}">
 				<div class="form-group" style="float: left">
 					<label for="title" th:utext="${option.getTitleName()}">Первый вопрос:</label>
-					<textarea th:if="${option.getTaskOption() != null}" th:name="${option.getTextAreaId()}" th:id="${option.getTextAreaId()}" th:utext="${option.getTaskOption().getOption().getOption()}" name="firstOption" class="form-control" rows="1" id="firstOption" style="width: 500px"></textarea>
-					<textarea th:if="${option.getTaskOption() == null}" th:name="${option.getTextAreaId()}" th:id="${option.getTextAreaId()}" name="firstOption" class="form-control" rows="1" id="firstOption" style="width: 500px"></textarea>
+					<textarea th:if="${option.getTaskOption() != null}" th:name="${option.getTextAreaId()}" th:id="${option.getTextAreaId()}" th:utext="${option.getTaskOption().getOption().getOption()}"
+					          name="firstOption" class="form-control" rows="1" id="firstOption" style="width: 500px"></textarea>
+					<textarea th:if="${option.getTaskOption() == null}" th:name="${option.getTextAreaId()}" th:id="${option.getTextAreaId()}" name="firstOption" class="form-control" rows="1" id="firstOption"
+					          style="width: 500px"></textarea>
 				</div>
 				<div class="checkbox" style="float: left; padding-left: 5%; padding-top: 20px">
 					<div th:if="${option.getTaskOption() != null}">
-						<label th:if="${option.getTaskOption().getIsCorrect()}"><input th:name="${option.getCheckBoxId()}" th:id="${option.getCheckBoxId()}" checked name="isFirstCorrect" type="checkbox" value="" id="isFirstCorrect">Верный</label>
-						<label th:if="${!option.getTaskOption().getIsCorrect()}"><input  th:name="${option.getCheckBoxId()}" th:id="${option.getCheckBoxId()}" name="isFirstCorrect" type="checkbox" value="" id="isFirstCorrect">Верный</label>
+						<label th:if="${option.getTaskOption().getIsCorrect()}"><input th:name="${option.getCheckBoxId()}" th:id="${option.getCheckBoxId()}" checked name="isFirstCorrect" type="checkbox" value=""
+						                                                               id="isFirstCorrect">Верный</label>
+						<label th:if="${!option.getTaskOption().getIsCorrect()}"><input th:name="${option.getCheckBoxId()}" th:id="${option.getCheckBoxId()}" name="isFirstCorrect" type="checkbox" value=""
+						                                                                id="isFirstCorrect">Верный</label>
 					</div>
 					<div th:if="${option.getTaskOption() == null}">
 						<label><input th:name="${option.getCheckBoxId()}" th:id="${option.getCheckBoxId()}" name="isFirstCorrect" type="checkbox" value="" id="isFirstCorrect">Верный</label>
@@ -67,11 +83,31 @@
 				</div>
 			</div>
 		</div>
-		<div class="container" style="">
-			<input type="submit" class="btnSubmit" value="Сохранить"/>
-			<a th:href="'/admin/task/delete/' + ${task.getId()}" class="btn" role="button" style="float: right">Удалить запись</a>
+		<div th:if="${is_author == null}">
+			<div th:if="${task.getId() == 0}" class="container" style="">
+				<input type="submit" class="btnSubmit" value="Сохранить"/>
+			</div>
+			<div>
+				<a th:if="${task.getId() != 0 && task.getIsApproved() == true}" th:href="'/admin/task/delete/' + ${task.getId()}" class="btn btn-danger" role="button" style="float: right">Удалить запись</a>
+				<input th:if="${task.getId() != 0}" type="submit" class="btnSubmit" value="Исправить"/>
+			</div>
 		</div>
 	</form>
+	<div th:if="${is_author != null}">
+		<form method="post" action="/author/task/review">
+			<div class="form-group">
+				<label for="commentsSection">Ошибки:</label>
+				<textarea name="comment" class="form-control" rows="5" id="commentsSection"></textarea>
+			</div>
+			<input type="hidden" name="taskId" id="taskId" th:value="${task.getId()}">
+			<div class="checkbox">
+				<label><input name="isIncorrect" type="checkbox" value="true">Вопрос неправильный</label>
+			</div>
+			<div>
+				<input type="submit" class="btnSubmit" value="Оценить"/>
+			</div>
+		</form>
+	</div>
 </div>
 </body>
 

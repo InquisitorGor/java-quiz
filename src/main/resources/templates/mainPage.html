@@ -60,15 +60,24 @@
         </div>
         <div>
             <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav navbar-right">
-                    <li th:if="${!isAuthenticated}"><a href="/registration"><span class="glyphicon glyphicon-user"></span> Зарегистрироваться</a></li>
-                    <li th:if="${!isAuthenticated}"><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
-                    <li th:if="${isAuthenticated && role == 'ROLE_ADMIN'}"><a href="/admin/theory"><span class="glyphicon glyphicon-star"></span> Админ панель (теория)</a></li>
-                    <li th:if="${isAuthenticated && role == 'ROLE_ADMIN'}"><a href="/admin/competition"><span class="glyphicon glyphicon-star"></span> Админ панель (соревнования)</a></li>
-                    <li th:if="${isAuthenticated && role != 'ROLE_ADMIN'}"><a href="/competition/list"><span class="glyphicon glyphicon-knight"></span> Состязания</a></li>
-                    <li th:if="${isAuthenticated}"><a href="/theory"><span class="glyphicon glyphicon-book"></span> Теория</a></li>
-                    <li th:if="${isAuthenticated && role != 'ROLE_ADMIN'}"><a href="/user_page"><span th:text="${user}" class="glyphicon glyphicon-user" ></span></a></li>
-                    <li th:if="${isAuthenticated}"><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+                <ul th:if="${!isAuthenticated}" class="nav navbar-nav navbar-right">
+                    <li><a href="/registration"><span class="glyphicon glyphicon-user"></span> Зарегистрироваться</a></li>
+                    <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
+                </ul>
+                <ul th:if="${isAuthenticated && role == 'ROLE_ADMIN'}" class="nav navbar-nav navbar-right">
+                    <li><a href="/admin/theory"><span class="glyphicon glyphicon-star"></span> Админ панель (теория)</a></li>
+                    <li><a href="/admin/competition"><span class="glyphicon glyphicon-star"></span> Админ панель (соревнования)</a></li>
+                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+                </ul>
+                <ul th:if="${isAuthenticated && role == 'ROLE_USER'}" class="nav navbar-nav navbar-right">
+                    <li><a href="/competition/list"><span class="glyphicon glyphicon-knight"></span> Состязания</a></li>
+                    <li><a href="/theory"><span class="glyphicon glyphicon-book"></span> Теория</a></li>
+                    <li><a href="/user_page"><span th:text="${user}" class="glyphicon glyphicon-user" ></span></a></li>
+                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+                </ul>
+                <ul th:if="${isAuthenticated && role == 'ROLE_AUTHOR'}" class="nav navbar-nav navbar-right">
+                    <li><a href="/author/tasks"><span class="glyphicon glyphicon-star"></span> Ревизия</a></li>
+                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
                 </ul>
             </div>
         </div>

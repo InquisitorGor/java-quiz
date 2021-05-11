@@ -73,8 +73,8 @@
 					</label>
 				</div>
 				<div class="form-group">
-					<label for="firstPictureCaption">Подпись к рисунку 1:</label>
-					<textarea name="firstPictureCaption" class="form-control" rows="1" id="firstPictureCaption"></textarea>
+					<label for="firstImageCaption">Подпись к рисунку 1:</label>
+					<textarea name="firstImageCaption" class="form-control" rows="1" id="firstImageCaption"></textarea>
 				</div>
 				<div>
 					<div>
@@ -88,8 +88,8 @@
 						<label class="radio-inline"><input type="radio" name="secondImageSize" value="BIG">Большой</label>
 					</div>
 					<div class="form-group">
-						<label for="secondPictureCaption">Подпись к рисунку 2:</label>
-						<textarea name="secondPictureCaption" class="form-control" rows="1" id="secondPictureCaption"></textarea>
+						<label for="secondImageCaption">Подпись к рисунку 2:</label>
+						<textarea name="secondImageCaption" class="form-control" rows="1" id="secondImageCaption"></textarea>
 					</div>
 				</div>
 				<div>
@@ -105,8 +105,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="thirdPictureCaption">Подпись к рисунку 3:</label>
-					<textarea name="thirdPictureCaption" class="form-control" rows="1" id="thirdPictureCaption"></textarea>
+					<label for="thirdImageCaption">Подпись к рисунку 3:</label>
+					<textarea name="thirdImageCaption" class="form-control" rows="1" id="thirdImageCaption"></textarea>
 				</div>
 			</div>
 		</div>
@@ -119,11 +119,12 @@
 				</div>
 				<div>
 					<figure>
-						<img style="width:550px;height:350px;" th:if="${picture.getSize().toString() == 'SMALL'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
+						<img style="width:550px;height:350px;margin-left: auto;margin-right: auto; display: block;" th:if="${picture.getSize().toString() == 'SMALL'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
 						     alt="Cinque Terre">
-						<img style="width:1000px;height:700px;" th:if="${picture.getSize().toString() == 'AVERAGE'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
 						     alt="Cinque Terre">
-						<img style="width:1400px;height:1000px;" th:if="${picture.getSize().toString() == 'BIG'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
+						<img style="width:1000px;height:700px;margin-left: auto;margin-right: auto; display: block;" th:if="${picture.getSize().toString() == 'AVERAGE'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
+						     alt="Cinque Terre">
+						<img style="width:1400px;height:1000px;margin-left: auto;margin-right: auto; display: block;" th:if="${picture.getSize().toString() == 'BIG'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
 						     alt="Cinque Terre">
 						<figcaption th:utext="${picture.getCaption()}" class="figure-caption text-center">A caption for the above image.</figcaption>
 					</figure>
@@ -131,15 +132,15 @@
 			</div>
 		</div>
 		<div class="form-group" style="padding-top: 20px">
-			<div th:if="${linkAttach != null}">
-				<label for="linkAttach">Вложение (ссылка на видео):</label>
+			<div th:if="${videoLinkAttach != null}">
+				<label for="videoLinkAttach">Вложение (ссылка на видео):</label>
 				<p>Ссылку на видео вставлять в текст в виде "%видео%"</p>
-				<textarea th:utext="${linkAttach.getPath()}" name="linkAttach" class="form-control" rows="1" id="linkAttach"></textarea>
+				<textarea th:utext="${videoLinkAttach.getPath()}" name="videoLinkAttach" class="form-control" rows="1" id="videoLinkAttach"></textarea>
 			</div>
-			<div th:if="${linkAttach == null}">
-				<label for="linkAttach">Вложение (ссылка на видео):</label>
+			<div th:if="${videoLinkAttach == null}">
+				<label for="videoLinkAttach">Вложение (ссылка на видео):</label>
 				<p>Ссылку на видео вставлять в текст в виде "%видео%"</p>
-				<textarea name="linkAttach" class="form-control" rows="1" id="linkAttach"></textarea>
+				<textarea name="videoLinkAttach" class="form-control" rows="1" id="videoLinkAttach"></textarea>
 			</div>
 		</div>
 		<div class="container" style="">
@@ -159,7 +160,7 @@
 				alert("Тип файла для первого изображения невалидный!");
 				return false;
 			}
-			if (document.getElementById("firstPictureCaption").value == "") {
+			if (document.getElementById("firstImageCaption").value == "") {
 				alert("Подпись к первому рисунку отсутствует");
 				return false;
 			}
@@ -170,7 +171,7 @@
 				alert("Тип файла для второго изображения невалидный!");
 				return false;
 			}
-			if (document.getElementById("secondPictureCaption").value == "") {
+			if (document.getElementById("secondImageCaption").value == "") {
 				alert("Подпись ко второму рисунку отсутствует");
 				return false;
 			}
@@ -181,14 +182,14 @@
 				alert("Тип файла для третьего изображения невалидный!");
 				return false;
 			}
-			if (document.getElementById("thirdPictureCaption").value == "") {
+			if (document.getElementById("thirdImageCaption").value == "") {
 				alert("Подпись к третьему рисунку отсутствует");
 				return false;
 			}
 			additionalInfo += "thirdImageExist=true&";
 		}
-		if (document.getElementById("linkAttach").value != "") {
-			additionalInfo += "linkAttachExist=true&";
+		if (document.getElementById("videoLinkAttach").value != "") {
+			additionalInfo += "videoLinkAttachExist=true&";
 		}
 		if (document.getElementById("hiddenTheoryId").value !== "0") {
 			additionalInfo += "theoryId=" + document.getElementById("hiddenTheoryId").value + "&";

@@ -19,22 +19,5 @@ class AdminServiceTest {
     @Autowired
     AdminService adminService;
 
-    @Test
-    void getTheories() {
-        adminService.getTheories("такое").forEach(theory -> {
-            System.out.println(theory.getTitle());
-        });
-    }
-    @Test
-    void getTheories1() {
-        adminService.getTheories("JVM").forEach(theory -> {
-            System.out.println(theory.getTitle());
-        });
-    }
-    @Test
-    void getTheories2() {
-        adminService.getTheories("данн").forEach(theory -> {
-            System.out.println(theory.getTitle());
-        });
-    }
+
 }

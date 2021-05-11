@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -25,7 +27,8 @@ public class UserCredential {
 
     private String password;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Roles role;
 
     @OneToOne
     @MapsId
@@ -35,10 +38,14 @@ public class UserCredential {
     public UserCredential() {
     }
 
-    public UserCredential(String login, String password, String role, UserData userData) {
+    public UserCredential(String login, String password, Roles role, UserData userData) {
         this.login = login;
         this.password = password;
         this.role = role;
         this.userData = userData;
+    }
+
+    public enum Roles {
+        USER, ADMIN, AUTHOR
     }
 }

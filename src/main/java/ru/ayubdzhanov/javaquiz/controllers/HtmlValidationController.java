@@ -22,10 +22,10 @@ public class HtmlValidationController {
                                                @RequestParam(required = false, defaultValue = "false") Boolean firstImageExist,
                                                @RequestParam(required = false, defaultValue = "false") Boolean secondImageExist,
                                                @RequestParam(required = false, defaultValue = "false") Boolean thirdImageExist,
-                                               @RequestParam(required = false, defaultValue = "false") Boolean linkAttachExist,
+                                               @RequestParam(required = false, defaultValue = "false") Boolean videoLinkAttachExist,
                                                @RequestParam(required = false, defaultValue = "0") String theoryId) {
         try {
-            htmlValidatorComponent.checkHtml(content, firstImageExist, secondImageExist, thirdImageExist, linkAttachExist, theoryId);
+            htmlValidatorComponent.checkHtml(content, firstImageExist, secondImageExist, thirdImageExist, videoLinkAttachExist, theoryId);
             return ResponseEntity.ok("ok");
         } catch (HtmlValidationException ex) {
             return ResponseEntity.ok(ex.getErrors());

@@ -41,7 +41,7 @@
 			</select>
 		</div>
 		<div class="form-group">
-			<label for="competition_title">Ключевое словов:</label>
+			<label for="competition_title">Ключевое слово:</label>
 			<input name="keyword" type="text" class="form-control" id="competition_title">
 		</div>
 		<div>
@@ -49,13 +49,33 @@
 			<a href="/admin/competition/0" class="btn" role="button" style="float: right">Добавить новое</a>
 		</div>
 	</form>
-	<h3>Список вопросов:</h3>
-	<ul class="list-group">
-		<a th:each="task : ${tasks}" th:href="${'/admin/competition/' + task.getId()}" href="/">
-			<li class="list-group-item" th:utext="${task.getQuestion()}">Что такое ООП</li>
-		</a>
-	</ul>
-	<input type="submit" class="btnSubmit" value="Еще"/>
+	<div>
+		<h3>Список подтвержденных вопросов:</h3>
+		<ul class="list-group">
+			<a th:each="task : ${approvedTasks}" th:href="${'/admin/competition/' + task.getId()}" href="/">
+				<li class="list-group-item" th:utext="${task.getQuestion()}">Что такое ООП</li>
+			</a>
+		</ul>
+		<input type="submit" class="btnSubmit" value="Еще"/>
+	</div>
+	<div th:if="${!unconfirmedTasks.isEmpty()}">
+		<h3>Список неодобренных вопросов:</h3>
+		<ul class="list-group">
+			<a th:each="task : ${unconfirmedTasks}" th:href="${'/admin/competition/' + task.getId()}" href="/">
+				<li class="list-group-item" th:utext="${task.getQuestion()}">Что такое ООП</li>
+			</a>
+		</ul>
+		<input type="submit" class="btnSubmit" value="Еще"/>
+	</div>
+	<div th:if="${!incorrectTasks.isEmpty()}">
+		<h3>Список неправильных вопросов:</h3>
+		<ul class="list-group">
+			<a th:each="task : ${incorrectTasks}" th:href="${'/admin/competition/' + task.getId()}" href="/">
+				<li class="list-group-item" th:utext="${task.getQuestion()}">Что такое ООП</li>
+			</a>
+		</ul>
+		<input type="submit" class="btnSubmit" value="Еще"/>
+	</div>
 </div>
 </body>
 </html>
