@@ -18,12 +18,12 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         "WHERE t.question LIKE %?1% " +
         "AND t.category.category = ?2 " +
         "AND t.isApproved = ?3")
-    List<Task> findAllByTitleAndCategoryAndIsApproved(String regex, String category, Boolean isApproved);
+    List<Task> findAllByTitleAndCategoryAndIsApproved(String regex, String category, Boolean isApproved, Pageable pageable);
 
     @Query("SELECT t FROM Task t " +
         "WHERE t.question LIKE %?1% " +
         "AND t.isApproved = ?2")
-    List<Task> findAllByQuestionAndIsApproved(String regex, Boolean isApproved);
+    List<Task> findAllByQuestionAndIsApproved(String regex, Boolean isApproved, Pageable pageable);
 
     List<Task> findAllByCategoryCategoryAndIsApproved(String category, Boolean isApproved, Pageable pageable);
 }

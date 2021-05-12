@@ -9,12 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ayubdzhanov.javaquiz.domain.Task;
 import ru.ayubdzhanov.javaquiz.domain.Theory;
 import ru.ayubdzhanov.javaquiz.service.AdminService;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -23,13 +25,23 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @RequestMapping("/theory")
+    @RequestMapping(value = "/theory")
     public String getTheoryAdminPanel(Model model,
                                       @RequestParam(required = false) String category,
                                       @RequestParam(required = false) String keyword) {
         model.addAttribute("categories", adminService.getCategories());
-        model.addAttribute("theories", adminService.getTheories(category, keyword));
+        model.addAttribute("theories", adminService.getTheories(category, keyword, "0"));
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("selectedKeyword", keyword);
         return "theoryAdminPage";
+    }
+
+    @RequestMapping(value = "/theory", params = "olderThan")
+    @ResponseBody
+    public List<Theory> getTheories(@RequestParam(required = false) String category,
+                                    @RequestParam(required = false) String keyword,
+                                    @RequestParam String olderThan) {
+        return adminService.getTheories(category, keyword, olderThan);
     }
 
     @RequestMapping("/theory/{theoryId}")
@@ -44,13 +56,11 @@ public class AdminController {
 
     @RequestMapping("/theory/update")
     public String saveTheory(UpdatedTheory updatedTheory) {
-
         try {
             adminService.updateTheory(updatedTheory);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-
         return "redirect:/admin/theory";
     }
 
@@ -66,10 +76,20 @@ public class AdminController {
                                            @RequestParam(required = false) String category,
                                            @RequestParam(required = false) String keyword) {
         model.addAttribute("categories", adminService.getCategories());
-        model.addAttribute("approvedTasks", adminService.getTasks(category, keyword, Boolean.TRUE));
+        model.addAttribute("approvedTasks", adminService.getTasks(category, keyword, Boolean.TRUE, "0"));
         model.addAttribute("unconfirmedTasks", adminService.getUnconfirmedTasks(category, keyword));
         model.addAttribute("incorrectTasks", adminService.getIncorrectTasks(category, keyword));
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("selectedKeyword", keyword);
         return "competitionAdminPage";
+    }
+
+    @RequestMapping(value = "/competition", params = "olderThan")
+    @ResponseBody
+    public List<Task> getTasks(@RequestParam(required = false) String category,
+                               @RequestParam(required = false) String keyword,
+                               @RequestParam String olderThan) {
+        return adminService.getTasks(category, keyword, Boolean.TRUE, olderThan);
     }
 
     @RequestMapping("/competition/{taskId}")

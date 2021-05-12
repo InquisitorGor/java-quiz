@@ -21,6 +21,8 @@ public class AuthorController {
                                 @RequestParam(required = false) String keyword){
         model.addAttribute("categories", authorComponent.getCategories());
         model.addAttribute("tasks", authorComponent.getUnconfirmedTasks(category, keyword));
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("selectedKeyword", keyword);
         return "authorPage";
     }
     @RequestMapping("/task/{taskId}")

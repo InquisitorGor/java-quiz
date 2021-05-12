@@ -26,7 +26,7 @@ public class AuthorComponent {
     }
 
     public List<Task> getUnconfirmedTasks(String category, String keyword) {
-        List<Task> unconfirmedTasks = taskService.getTasks(category, keyword, Boolean.FALSE);
+        List<Task> unconfirmedTasks = taskService.getTasks(category, keyword, Boolean.FALSE, 0);
         return unconfirmedTasks.stream()
             .filter(task -> task.getReviews().stream()
                 .anyMatch(review -> review.getReviewedAt() == null))

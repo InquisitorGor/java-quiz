@@ -31,17 +31,19 @@
 <div class="container" style="padding-top: 60px">
 	<h1>Теория</h1>
 	<h3>Поиск по:</h3>
-	<form name="filterForm" method="post" action="/admin/theory">
+	<form name="filterForm" method="post" action="/author/tasks">
 		<div class="form-group">
 			<label for="theory_cat">Категория:</label>
 			<select name="category" class="form-control" id="theory_cat">
-				<option th:each="category : ${categories}" th:utext="${category.getCategory()}">1</option>
+				<option th:each="category : ${categories}" th:if="${selectedCategory == null || category.getCategory() != selectedCategory}" th:utext="${category.getCategory()}">1</option>
+				<option selected th:if="${selectedCategory != null}" th:utext="${selectedCategory}">1</option>
 				<option>None</option>
 			</select>
 		</div>
 		<div class="form-group">
 			<label for="theory_title">Ключевое слово:</label>
-			<input name="keyword" type="text" class="form-control" id="theory_title">
+			<input th:if="${selectedKeyword != null}" th:value="${selectedKeyword}" name="keyword" type="text" class="form-control" id="theory_title">
+			<input th:if="${selectedKeyword == null}" name="keyword" type="text" class="form-control" id="theory_title">
 		</div>
 		<div>
 			<input type="submit" class="btnSubmit" value="Применить"/>

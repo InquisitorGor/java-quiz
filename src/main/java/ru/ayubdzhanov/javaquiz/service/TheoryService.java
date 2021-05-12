@@ -39,18 +39,18 @@ public class TheoryService {
         return categories;
     }
 
-    public List<Theory> getTheories(String category, String keyword) {
-        if ((category == null || category.equals("None")) && keyword == null) return theoryRepository.findAll(PageRequest.of(0, 20)).getContent();
-        else if (category != null && keyword == null) return theoryRepository.findAllByCategoryCategory(category);
-        else if (category == null || category.equals("None")) return theoryRepository.findAllByTitle(keyword);
-        return theoryRepository.findAllByTitleAndCategory(keyword, category);
+    public List<Theory> getTheories(String category, String keyword, Integer olderThan) {
+        if ((category == null || category.equals("None")) && keyword == null) return theoryRepository.findAll(PageRequest.of(olderThan, 20)).getContent();
+        else if (category != null && keyword == null) return theoryRepository.findAllByCategoryCategory(category, PageRequest.of(olderThan, 20));
+        else if (category == null || category.equals("None")) return theoryRepository.findAllByTitle(keyword, PageRequest.of(olderThan, 20));
+        return theoryRepository.findAllByTitleAndCategory(keyword, category, PageRequest.of(olderThan, olderThan + 20));
     }
 
     //FIXME Correct attach logic
     // - add matchers for attach
     // - add StringBuilder
     // - add Exception handling
-    public void wrapTheories(List<Theory> theories){
+    public void wrapTheories(List<Theory> theories) {
         theories.forEach(theory -> {
             if (theory.getAttachments().isEmpty()) {
                 theory.setParsedDescription(theory.getDescription());
@@ -62,7 +62,7 @@ public class TheoryService {
                     Pattern firstImagePattern = Pattern.compile(".*(картинка1).*");
                     Pattern secondImagePattern = Pattern.compile(".*(картинка2).*");
                     Pattern thirdImagePattern = Pattern.compile(".*(картинка3).*");
-                    if (firstImagePattern.matcher(attachment.getPath()).matches()){
+                    if (firstImagePattern.matcher(attachment.getPath()).matches()) {
                         parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 1%", attachment.getSize(), attachment.getCaption()));
                     } else if (secondImagePattern.matcher(attachment.getPath()).matches()) {
                         parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 2%", attachment.getSize(), attachment.getCaption()));
@@ -155,6 +155,5 @@ public class TheoryService {
     public Attachment getVideoLinkAttach(List<Attachment> attachment) {
         return attachment.stream().filter(attach -> attach.getType() == Type.VIDEO).findFirst().orElse(null);
     }
-
 
 }

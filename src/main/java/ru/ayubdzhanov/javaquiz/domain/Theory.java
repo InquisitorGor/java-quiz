@@ -1,5 +1,6 @@
 package ru.ayubdzhanov.javaquiz.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -19,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@JsonIgnoreProperties({"description", "parsedDescription", "category", "attachments"})
 public class Theory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

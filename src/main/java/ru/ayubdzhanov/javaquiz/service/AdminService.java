@@ -35,8 +35,8 @@ public class AdminService {
         return categoryService.getCategories(Boolean.TRUE);
     }
 
-    public List<Theory> getTheories(String category, String keyword) {
-        return theoryService.getTheories(category, keyword);
+    public List<Theory> getTheories(String category, String keyword, String olderThan) {
+        return theoryService.getTheories(category, keyword, Integer.parseInt(olderThan));
     }
 
     public Theory getTheory(Long theoryId) {
@@ -55,19 +55,19 @@ public class AdminService {
         return theoryService.getVideoLinkAttach(attachment);
     }
 
-    public List<Task> getTasks(String category, String keyword, Boolean isApproved) {
-        return taskService.getTasks(category, keyword, isApproved);
+    public List<Task> getTasks(String category, String keyword, Boolean isApproved, String olderThan) {
+        return taskService.getTasks(category, keyword, isApproved, Integer.parseInt(olderThan));
     }
 
     public List<Task> getUnconfirmedTasks(String category, String keyword) {
-        List<Task> unconfirmedTasks = taskService.getTasks(category, keyword, Boolean.FALSE);
+        List<Task> unconfirmedTasks = taskService.getTasks(category, keyword, Boolean.FALSE, 0);
         return unconfirmedTasks.stream()
             .filter(task -> task.getReviews().stream().anyMatch(taskReview -> taskReview.getIsApproved() == null))
             .collect(Collectors.toList());
     }
 
     public List<Task> getIncorrectTasks(String category, String keyword) {
-        List<Task> unconfirmedTasks = taskService.getTasks(category, keyword, Boolean.FALSE);
+        List<Task> unconfirmedTasks = taskService.getTasks(category, keyword, Boolean.FALSE, 0);
         return unconfirmedTasks.stream()
             .filter(task -> task.getReviews().stream().allMatch(taskReview -> taskReview.getIsApproved() != null))
             .collect(Collectors.toList());

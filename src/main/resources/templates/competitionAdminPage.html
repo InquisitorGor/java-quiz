@@ -36,13 +36,15 @@
 		<div class="form-group">
 			<label for="competition_cat">Категория:</label>
 			<select name="category" class="form-control" id="competition_cat">
-				<option th:each="category : ${categories}" th:utext="${category.getCategory()}">1</option>
+				<option th:each="category : ${categories}" th:if="${selectedCategory == null || category.getCategory() != selectedCategory}" th:utext="${category.getCategory()}">1</option>
+				<option selected th:if="${selectedCategory != null}" th:utext="${selectedCategory}">1</option>
 				<option>None</option>
 			</select>
 		</div>
 		<div class="form-group">
-			<label for="competition_title">Ключевое слово:</label>
-			<input name="keyword" type="text" class="form-control" id="competition_title">
+			<label for="competition_keyword">Ключевое слово:</label>
+			<input th:if="${selectedKeyword != null}" th:value="${selectedKeyword}" name="keyword" type="text" class="form-control" id="competition_keyword">
+			<input th:if="${selectedKeyword == null}" name="keyword" type="text" class="form-control" id="competition_keyword">
 		</div>
 		<div>
 			<input type="submit" class="btnSubmit" value="Применить"/>
@@ -55,8 +57,9 @@
 			<a th:each="task : ${approvedTasks}" th:href="${'/admin/competition/' + task.getId()}" href="/">
 				<li class="list-group-item" th:utext="${task.getQuestion()}">Что такое ООП</li>
 			</a>
+			<div id="insertionDiv"></div>
 		</ul>
-		<input type="submit" class="btnSubmit" value="Еще"/>
+		<input type="submit" class="btnSubmit" value="Еще" onclick="getMoreTasks();"/>
 	</div>
 	<div th:if="${!unconfirmedTasks.isEmpty()}">
 		<h3>Список неодобренных вопросов:</h3>
@@ -65,7 +68,6 @@
 				<li class="list-group-item" th:utext="${task.getQuestion()}">Что такое ООП</li>
 			</a>
 		</ul>
-		<input type="submit" class="btnSubmit" value="Еще"/>
 	</div>
 	<div th:if="${!incorrectTasks.isEmpty()}">
 		<h3>Список неправильных вопросов:</h3>
@@ -74,8 +76,41 @@
 				<li class="list-group-item" th:utext="${task.getQuestion()}">Что такое ООП</li>
 			</a>
 		</ul>
-		<input type="submit" class="btnSubmit" value="Еще"/>
 	</div>
 </div>
+<script>
+	var taskPagination = 1;
+	function getMoreTasks() {
+		var xmlhttp = new XMLHttpRequest();
+		var additionalInfo = "";
+		if (document.getElementById("competition_cat").value !== "") {
+			additionalInfo += "category=" + document.getElementById("competition_cat").value + "&";
+		}
+		if (document.getElementById("competition_keyword").value !== "") {
+			additionalInfo += "keyword=" + document.getElementById("competition_keyword").value + "&";
+		}
+		additionalInfo += "olderThan=" + taskPagination;
+		let taskArray;
+
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.status === 200) {
+				taskArray = JSON.parse(xmlhttp.responseText);
+				taskPagination++;
+				for (let i = 0; i < taskArray.length; i++) {
+					var link = document.createElement("a");
+					link.href = "/admin/competition/" + taskArray[i].id;
+					var line = document.createElement("li");
+					line.className = "list-group-item";
+					line.textContent = taskArray[i].question;
+					link.appendChild(line);
+					document.getElementById("insertionDiv").append(link);
+				}
+			}
+		}
+		xmlhttp.open("POST", "/admin/competition?" + additionalInfo, true);
+		xmlhttp.send();
+
+	}
+</script>
 </body>
 </html>

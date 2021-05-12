@@ -36,13 +36,15 @@
 		<div class="form-group">
 			<label for="theory_cat">Категория:</label>
 			<select name="category" class="form-control" id="theory_cat">
-				<option th:each="category : ${categories}" th:utext="${category.getCategory()}">1</option>
+				<option th:each="category : ${categories}" th:if="${selectedCategory == null || category.getCategory() != selectedCategory}" th:utext="${category.getCategory()}">1</option>
+				<option selected th:if="${selectedCategory != null}" th:utext="${selectedCategory}">1</option>
 				<option>None</option>
 			</select>
 		</div>
 		<div class="form-group">
-			<label for="theory_title">Ключевое слово:</label>
-			<input name="keyword" type="text" class="form-control" id="theory_title">
+			<label for="theory_keyword">Ключевое слово:</label>
+			<input th:if="${selectedKeyword != null}" th:value="${selectedKeyword}" name="keyword" type="text" class="form-control" id="theory_keyword">
+			<input th:if="${selectedKeyword == null}" name="keyword" type="text" class="form-control" id="theory_keyword">
 		</div>
 		<div>
 			<input type="submit" class="btnSubmit" value="Применить"/>
@@ -54,8 +56,43 @@
 		<a th:each="theory : ${theories}" th:href="${'/admin/theory/' + theory.getId()}" href="/">
 			<li class="list-group-item" th:utext="${theory.getTitle()}">Что такое ООП</li>
 		</a>
+		<div id="insertionDiv"></div>
 	</ul>
-	<input type="submit" class="btnSubmit" value="Еще"/>
+	<input type="button" class="btnSubmit" value="Еще" onclick="getMoreTheories();"/>
 </div>
+<script>
+	var theoryPagination = 1;
+	function getMoreTheories() {
+		var xmlhttp = new XMLHttpRequest();
+		var additionalInfo = "";
+		if (document.getElementById("theory_cat").value !== "") {
+			additionalInfo += "category=" + document.getElementById("theory_cat").value + "&";
+		}
+		if (document.getElementById("theory_keyword").value !== "") {
+			additionalInfo += "keyword=" + document.getElementById("theory_keyword").value + "&";
+		}
+		additionalInfo += "olderThan=" + theoryPagination;
+		let theoryArray;
+
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.status === 200) {
+				theoryArray = JSON.parse(xmlhttp.responseText);
+				theoryPagination++;
+				for (let i = 0; i < theoryArray.length; i++) {
+					var link = document.createElement("a");
+					link.href = "/admin/theory/" + theoryArray[i].id;
+					var line = document.createElement("li");
+					line.className = "list-group-item";
+					line.textContent = theoryArray[i].title;
+					link.appendChild(line);
+					document.getElementById("insertionDiv").append(link);
+				}
+			}
+		}
+		xmlhttp.open("POST", "/admin/theory?" + additionalInfo, false);
+		xmlhttp.send();
+
+	}
+</script>
 </body>
 </html>

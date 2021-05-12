@@ -119,12 +119,15 @@
 				</div>
 				<div>
 					<figure>
-						<img style="width:550px;height:350px;margin-left: auto;margin-right: auto; display: block;" th:if="${picture.getSize().toString() == 'SMALL'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
+						<img style="width:550px;height:350px;margin-left: auto;margin-right: auto; display: block;" th:if="${picture.getSize().toString() == 'SMALL'}" th:src="${'/' + picture.getPath()}"
+						     src="/images/main/apache.png" class="img-thumbnail"
 						     alt="Cinque Terre">
+						alt="Cinque Terre">
+						<img style="width:1000px;height:700px;margin-left: auto;margin-right: auto; display: block;" th:if="${picture.getSize().toString() == 'AVERAGE'}" th:src="${'/' + picture.getPath()}"
+						     src="/images/main/apache.png" class="img-thumbnail"
 						     alt="Cinque Terre">
-						<img style="width:1000px;height:700px;margin-left: auto;margin-right: auto; display: block;" th:if="${picture.getSize().toString() == 'AVERAGE'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
-						     alt="Cinque Terre">
-						<img style="width:1400px;height:1000px;margin-left: auto;margin-right: auto; display: block;" th:if="${picture.getSize().toString() == 'BIG'}" th:src="${'/' + picture.getPath()}" src="/images/main/apache.png" class="img-thumbnail"
+						<img style="width:1400px;height:1000px;margin-left: auto;margin-right: auto; display: block;" th:if="${picture.getSize().toString() == 'BIG'}" th:src="${'/' + picture.getPath()}"
+						     src="/images/main/apache.png" class="img-thumbnail"
 						     alt="Cinque Terre">
 						<figcaption th:utext="${picture.getCaption()}" class="figure-caption text-center">A caption for the above image.</figcaption>
 					</figure>

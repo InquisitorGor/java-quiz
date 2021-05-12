@@ -6,46 +6,52 @@ VALUES ('ООП'),
        ('Базы данных'),
        ('SQL'),
        ('JDBC');
-INSERT INTO theory (title, description, category_id)
-VALUES ('Что такое ООП?', '<p>Объектно-ориентированное программирование (ООП) — ' ||
-                          'методология программирования, основанная на представлении программы ' ||
-                          'в виде совокупности объектов, каждый из которых является экземпляром ' ||
-                          'определенного класса, а классы образуют иерархию наследования.</p>',
-        1),
-       ('Что такое «инкапсуляция»?', '<p>Инкапсуляция – это свойство системы, ' ||
-                                     'позволяющее объединить данные и методы, работающие с ними, ' ||
-                                     'в классе и скрыть детали реализации от пользователя, ' ||
-                                     'открыв только то, что необходимо при последующем использовании.</p>',
-        1),
-       ('За что отвечает JVM?', '<p>Виртуальная машина Java (Java Virtual Machine) - это механизм, ' ||
-                                'предоставляющий среду выполнения для управления Java-кодом или ' ||
-                                'приложениями. Виртуальная машина является независимой оболочкой ' ||
-                                'исполнения кода, благодаря которой возможен её запуск на любой ОС, ' ||
-                                'без влияния ОС на выполняемую программу.</p>',
-        2),
-       ('Чем различаются JRE, JVM и JDK?', '<p>JVM, Java Virtual Machine (Виртуальная машина Java) — ' ||
-                                           'основная часть среды времени исполнения Java (JRE). ' ||
-                                           'Виртуальная машина Java исполняет байт-код Java, ' ||
-                                           'предварительно созданный из исходного текста Java-программы компилятором Java. ' ||
-                                           'JVM может также использоваться для выполнения программ, написанных на других языках программирования. ' ||
-                                           'JRE, Java Runtime Environment (Среда времени выполнения Java) - минимально-необходимая реализация виртуальной машины для исполнения Java-приложений. ' ||
-                                           'Состоит из JVM и стандартного набора библиотек классов Java.</p>',
-        3),
-       ('Что такое «коллекция»?', '<p>«Коллекция» - это структура данных, набор каких-либо объектов. ' ||
-                                  'Данными (объектами в наборе) могут быть числа, строки, ' ||
-                                  'объекты пользовательских классов и т.п.</p>',
-        4),
-       ('Что такое «база данных»?', '<p>База данных — организованный и адаптированный для обработки вычислительной системой набор информации.',
-        5),
-       ('Что такое «SQL»?', '<p>SQL, Structured query language («язык структурированных запросов») — ' ||
-                            'формальный непроцедурный язык программирования, применяемый для создания, ' ||
-                            'модификации и управления данными в произвольной реляционной базе данных, ' ||
-                            'управляемой соответствующей системой управления базами данных (СУБД).</p>',
-        6),
-       ('Что такое JDBC?', '<p>JDBC, Java DataBase Connectivity (соединение с базами данных на Java) — ' ||
-                           'промышленный стандарт взаимодействия Java-приложений с различными СУБД. ' ||
-                           'Реализован в виде пакета java.sql, входящего в состав Java SE.</p>',
-        7);
+INSERT INTO theory (description, title, category_id) VALUES ('<p>Объектно-ориентированное программирование (ООП) — методология программирования, основанная на представлении программы в виде совокупности объектов, каждый из которых является экземпляром определенного класса, а классы образуют иерархию наследования.</p>', 'Что такое ООП?', 1);
+INSERT INTO theory (description, title, category_id) VALUES ('<p>Инкапсуляция – это свойство системы, позволяющее объединить данные и методы, работающие с ними, в классе и скрыть детали реализации от пользователя, открыв только то, что необходимо при последующем использовании.</p>', 'Что такое «инкапсуляция»?', 1);
+INSERT INTO theory (description, title, category_id) VALUES ('<p>Виртуальная машина Java (Java Virtual Machine) - это механизм, предоставляющий среду выполнения для управления Java-кодом или приложениями. Виртуальная машина является независимой оболочкой исполнения кода, благодаря которой возможен её запуск на любой ОС, без влияния ОС на выполняемую программу.</p>', 'За что отвечает JVM?', 2);
+INSERT INTO theory (description, title, category_id) VALUES ('<p>JVM, Java Virtual Machine (Виртуальная машина Java) — основная часть среды времени исполнения Java (JRE). Виртуальная машина Java исполняет байт-код Java, предварительно созданный из исходного текста Java-программы компилятором Java. JVM может также использоваться для выполнения программ, написанных на других языках программирования. JRE, Java Runtime Environment (Среда времени выполнения Java) - минимально-необходимая реализация виртуальной машины для исполнения Java-приложений. Состоит из JVM и стандартного набора библиотек классов Java.</p>', 'Чем различаются JRE, JVM и JDK?', 3);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( '<p>«Коллекция» - это структура данных, набор каких-либо объектов. Данными (объектами в наборе) могут быть числа, строки, объекты пользовательских классов и т.п.</p>', 'Что такое «коллекция»?', 4);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( '<p>База данных — организованный и адаптированный для обработки вычислительной системой набор информации.', 'Что такое «база данных»?', 5);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( '<p>SQL, Structured query language («язык структурированных запросов») — формальный непроцедурный язык программирования, применяемый для создания, модификации и управления данными в произвольной реляционной базе данных, управляемой соответствующей системой управления базами данных (СУБД).</p>', 'Что такое «SQL»?', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( '<p>JDBC, Java DataBase Connectivity (соединение с базами данных на Java) — промышленный стандарт взаимодействия Java-приложений с различными СУБД. Реализован в виде пакета java.sql, входящего в состав Java SE.</p>', 'Что такое JDBC?', 7);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'на на на на', 'и носило меня', 1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'г4о', 1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'г4о', 'го', 1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'г5о', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го5', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'г34о', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'г6', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'г7о', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( '5го', 'гhyо', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'г654о', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'гgdgо', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'г6о', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'г4о', 'го', 6);
 INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
 VALUES (1, 'Михаил', 100, 140, 5, '01.01.2021', 145, 2);
 INSERT INTO user_credential (id, login, password, role)
@@ -93,6 +99,66 @@ VALUES ('Основные принципы ООП', 20,true, 1),
        ('Паттерны нужны?', 5,true, 1),
        ('Java и JS одно и тоже?', 15,true, 1),
        ('В JDK входит JVM?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
+       ('В JDK входит JRE?', 15,true, 1),
        ('В JDK входит JRE?', 15,true, 1),
        ('2+2=4', 15,true, 1);
 INSERT INTO option (option)

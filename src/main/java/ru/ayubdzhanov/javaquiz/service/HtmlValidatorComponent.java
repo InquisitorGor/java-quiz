@@ -22,7 +22,7 @@ public class HtmlValidatorComponent {
     @Autowired
     private TheoryRepository theoryRepository;
 
-    //TODO video processing
+    //FIXME ошибка при theoryId = 0
     public void checkHtml(String content, Boolean firstImageExist, Boolean secondImageExist,
                           Boolean thirdImageExist, Boolean linkAttachExist, String theoryId) throws HtmlValidationException {
         htmlValidatorAdapter.validateHtml(content);
@@ -39,7 +39,6 @@ public class HtmlValidatorComponent {
                 "attach is present, but keyword is absent\r\n attach is absent, but keyword is present");
         }
         checkParsedHtml(content, firstImageExist, secondImageExist, thirdImageExist, linkAttachExist);
-        if (firstImageExist)
         if (theoryId.equals("0")) return;
         if (!firstImageExist && !keywordExist(content, "%картинка 1%") && isAttachPresent("%картинка 1%", theoryId) ||
             !secondImageExist && !keywordExist(content, "%картинка 2%") && isAttachPresent("%картинка 2%", theoryId) ||
@@ -98,7 +97,7 @@ public class HtmlValidatorComponent {
     }
 
     private boolean isAttachPresent(String keyword, String theoryId) {
-        if (theoryId.equals("0")) return true;
+        if (theoryId.equals("0")) return false;
         Theory theory = theoryRepository.findById(Long.parseLong(theoryId)).orElseThrow(() -> new HtmlValidationException("validation failed", "there is no entity"));
         List<Attachment> collect = theory.getAttachments().stream()
             .filter(attachment -> attachment.getType() == Type.IMAGE)

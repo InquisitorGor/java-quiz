@@ -34,11 +34,11 @@ public class TaskService {
     private TaskOptionRepository taskOptionRepository;
 
     //TODO Utilise Criteria API rather then conditions
-    public List<Task> getTasks(String category, String keyword, Boolean isApproved) {
-        if ((category == null || category.equals("None")) && keyword == null) return taskRepository.findAllByIsApproved(isApproved, PageRequest.of(0, 20));
-        else if (category != null && keyword == null) return taskRepository.findAllByCategoryCategoryAndIsApproved(category, isApproved, PageRequest.of(0, 20));
-        else if (category == null || category.equals("None")) return taskRepository.findAllByQuestionAndIsApproved(keyword, isApproved);
-        return taskRepository.findAllByTitleAndCategoryAndIsApproved(keyword, category, isApproved);
+    public List<Task> getTasks(String category, String keyword, Boolean isApproved, Integer olderThan) {
+        if ((category == null || category.equals("None")) && keyword == null) return taskRepository.findAllByIsApproved(isApproved, PageRequest.of(olderThan, 20));
+        else if (category != null && keyword == null) return taskRepository.findAllByCategoryCategoryAndIsApproved(category, isApproved, PageRequest.of(olderThan, 20));
+        else if (category == null || category.equals("None")) return taskRepository.findAllByQuestionAndIsApproved(keyword, isApproved, PageRequest.of(olderThan, 20));
+        return taskRepository.findAllByTitleAndCategoryAndIsApproved(keyword, category, isApproved, PageRequest.of(olderThan, 20));
     }
 
     public Task getTask(Long taskId) {

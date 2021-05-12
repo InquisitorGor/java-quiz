@@ -22,8 +22,8 @@
 		<div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="/admin/competition"><span class="glyphicon glyphicon-star"></span> Админ панель (соревнования)</a></li>
-					<li><a href="/admin/theory"><span class="glyphicon glyphicon-star"></span> Админ панель (теория)</a></li>
+					<li th:if="${is_author != null}"><a href="/admin/competition"><span class="glyphicon glyphicon-star"></span> Админ панель (соревнования)</a></li>
+					<li th:if="${is_author != null}"><a href="/admin/theory"><span class="glyphicon glyphicon-star"></span> Админ панель (теория)</a></li>
 					<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
 				</ul>
 			</div>

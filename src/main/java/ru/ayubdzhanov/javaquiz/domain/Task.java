@@ -1,5 +1,6 @@
 package ru.ayubdzhanov.javaquiz.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import ru.ayubdzhanov.javaquiz.util.ViewUtils;
@@ -19,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@JsonIgnoreProperties({"prestige", "isApproved", "reviews", "category", "taskOption", "viewUtil"})
 public class Task implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

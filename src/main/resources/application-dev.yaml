@@ -24,3 +24,9 @@ file:
     web-path: images/theory/
 html-validator:
   url: https://validator.nu/?out=json
+#security:
+#  basic:
+#   enabled: false
+#management:
+#  security:
+#    enabled: false
