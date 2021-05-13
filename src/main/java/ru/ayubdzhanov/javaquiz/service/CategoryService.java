@@ -21,6 +21,7 @@ public class CategoryService {
         return categories;
     }
 
+    @Deprecated
     private void wrapCategories(List<Category> categories){
         categories.forEach(category -> category.setViewUtil(ViewUtils
             .builder()

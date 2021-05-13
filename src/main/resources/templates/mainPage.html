@@ -71,7 +71,7 @@
                 </ul>
                 <ul th:if="${isAuthenticated && role == 'ROLE_USER'}" class="nav navbar-nav navbar-right">
                     <li><a href="/competition/list"><span class="glyphicon glyphicon-knight"></span> Состязания</a></li>
-                    <li><a href="/theory"><span class="glyphicon glyphicon-book"></span> Теория</a></li>
+                    <li><a href="/theory/categories"><span class="glyphicon glyphicon-book"></span> Теория</a></li>
                     <li><a href="/user_page"><span th:text="${user}" class="glyphicon glyphicon-user" ></span></a></li>
                     <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
                 </ul>

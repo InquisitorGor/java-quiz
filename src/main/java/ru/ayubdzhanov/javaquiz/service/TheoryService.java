@@ -35,8 +35,12 @@ public class TheoryService {
 
     public List<Category> getCategories() {
         List<Category> categories = categoryService.getCategories(Boolean.FALSE);
-        categories.forEach(category -> wrapTheories(category.getTheories()));
+//        categories.forEach(category -> wrapTheories(category.getTheories()));
         return categories;
+    }
+
+    public Category getCategory(String category) {
+        return getCategories().stream().filter(cat -> cat.getCategory().equals(category)).findFirst().get();
     }
 
     public List<Theory> getTheories(String category, String keyword, Integer olderThan) {
@@ -50,41 +54,73 @@ public class TheoryService {
     // - add matchers for attach
     // - add StringBuilder
     // - add Exception handling
-    public void wrapTheories(List<Theory> theories) {
-        theories.forEach(theory -> {
-            if (theory.getAttachments().isEmpty()) {
-                theory.setParsedDescription(theory.getDescription());
-                return;
-            }
-            AtomicReference<String> parsedDescription = new AtomicReference<>(theory.getDescription());
-            theory.getAttachments().forEach(attachment -> {
-                if (attachment.getType() == Type.IMAGE) {
-                    Pattern firstImagePattern = Pattern.compile(".*(картинка1).*");
-                    Pattern secondImagePattern = Pattern.compile(".*(картинка2).*");
-                    Pattern thirdImagePattern = Pattern.compile(".*(картинка3).*");
-                    if (firstImagePattern.matcher(attachment.getPath()).matches()) {
-                        parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 1%", attachment.getSize(), attachment.getCaption()));
-                    } else if (secondImagePattern.matcher(attachment.getPath()).matches()) {
-                        parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 2%", attachment.getSize(), attachment.getCaption()));
-                    } else if (thirdImagePattern.matcher(attachment.getPath()).matches()) {
-                        parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 3%", attachment.getSize(), attachment.getCaption()));
-                    }
-                } else if (attachment.getType() == Type.VIDEO) {
-                    parsedDescription.set(HtmlUtils.parseVideoLink(parsedDescription.get(), attachment.getPath(), "%видео%"));
-                } else {
-                    try {
-                        throw new Exception("Unknown attachment type");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+//    public void wrapTheories(List<Theory> theories) {
+//        theories.forEach(theory -> {
+//            if (theory.getAttachments().isEmpty()) {
+//                theory.setParsedDescription(theory.getDescription());
+//                return;
+//            }
+//            AtomicReference<String> parsedDescription = new AtomicReference<>(theory.getDescription());
+//            theory.getAttachments().forEach(attachment -> {
+//                if (attachment.getType() == Type.IMAGE) {
+//                    Pattern firstImagePattern = Pattern.compile(".*(картинка1).*");
+//                    Pattern secondImagePattern = Pattern.compile(".*(картинка2).*");
+//                    Pattern thirdImagePattern = Pattern.compile(".*(картинка3).*");
+//                    if (firstImagePattern.matcher(attachment.getPath()).matches()) {
+//                        parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 1%", attachment.getSize(), attachment.getCaption()));
+//                    } else if (secondImagePattern.matcher(attachment.getPath()).matches()) {
+//                        parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 2%", attachment.getSize(), attachment.getCaption()));
+//                    } else if (thirdImagePattern.matcher(attachment.getPath()).matches()) {
+//                        parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 3%", attachment.getSize(), attachment.getCaption()));
+//                    }
+//                } else if (attachment.getType() == Type.VIDEO) {
+//                    parsedDescription.set(HtmlUtils.parseVideoLink(parsedDescription.get(), attachment.getPath(), "%видео%"));
+//                } else {
+//                    try {
+//                        throw new Exception("Unknown attachment type");
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
+//            theory.setParsedDescription(parsedDescription.get());
+//        });
+//    }
+
+    public Theory wrapTheory(Theory theory) {
+        if (theory.getAttachments().isEmpty()) {
+            theory.setParsedDescription(theory.getDescription());
+            return theory;
+        }
+        AtomicReference<String> parsedDescription = new AtomicReference<>(theory.getDescription());
+        theory.getAttachments().forEach(attachment -> {
+            if (attachment.getType() == Type.IMAGE) {
+                Pattern firstImagePattern = Pattern.compile(".*(картинка1).*");
+                Pattern secondImagePattern = Pattern.compile(".*(картинка2).*");
+                Pattern thirdImagePattern = Pattern.compile(".*(картинка3).*");
+                if (firstImagePattern.matcher(attachment.getPath()).matches()) {
+                    parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 1%", attachment.getSize(), attachment.getCaption()));
+                } else if (secondImagePattern.matcher(attachment.getPath()).matches()) {
+                    parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 2%", attachment.getSize(), attachment.getCaption()));
+                } else if (thirdImagePattern.matcher(attachment.getPath()).matches()) {
+                    parsedDescription.set(HtmlUtils.parseImageLinks(parsedDescription.get(), attachment.getPath(), "%картинка 3%", attachment.getSize(), attachment.getCaption()));
                 }
-            });
-            theory.setParsedDescription(parsedDescription.get());
+            } else if (attachment.getType() == Type.VIDEO) {
+                parsedDescription.set(HtmlUtils.parseVideoLink(parsedDescription.get(), attachment.getPath(), "%видео%"));
+            } else {
+                try {
+                    throw new Exception("Unknown attachment type");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         });
+        theory.setParsedDescription(parsedDescription.get());
+        return theory;
     }
 
     public Theory getTheory(Long theoryId) {
-        return theoryRepository.findById(theoryId).orElse(getEmptyTheory(theoryId));
+        return wrapTheory(theoryRepository.findById(theoryId).orElse(getEmptyTheory(theoryId)));
     }
 
     public Theory getEmptyTheory(Long theoryId) {
@@ -155,5 +191,4 @@ public class TheoryService {
     public Attachment getVideoLinkAttach(List<Attachment> attachment) {
         return attachment.stream().filter(attach -> attach.getType() == Type.VIDEO).findFirst().orElse(null);
     }
-
 }

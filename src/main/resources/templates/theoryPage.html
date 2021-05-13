@@ -32,20 +32,55 @@
 	</div>
 </nav>
 <div class="container" style="padding-top: 40px">
-	<h2>Теория</h2>
-	<ul class="nav nav-tabs">
-		<li th:each="category : ${categories}"><a th:utext="${category.getCategory()}" data-toggle="tab" th:href="${'#' + category.getViewUtil().getMenu()}">Основы ООП</a></li>
-	</ul>
-	<div class="tab-content">
-		<div th:each="category : ${categories}" th:id="${category.getViewUtil().getMenu()}" class="tab-pane fade">
-			<hr style="border-width: 5px"/>
-			<div th:each="theory : ${category.getTheories()}">
-				<h3 th:utext="${theory.getTitle()}">Что такое ООП?</h3>
-				<div th:utext="${theory.getParsedDescription()}"></div>
-				<hr style="border-width: 5px"/>
-			</div>
+	<h3>Поиск по:</h3>
+	<form name="filterForm" method="post" th:action="'/theory/list/' + ${category.getCategory()}" action="/theory/list">
+		<div class="form-group">
+			<label for="theory_keyword">Ключевое слово:</label>
+			<input th:if="${selectedKeyword != null}" th:value="${selectedKeyword}" name="keyword" type="text" class="form-control" id="theory_keyword">
+			<input th:if="${selectedKeyword == null}" name="keyword" type="text" class="form-control" id="theory_keyword">
 		</div>
-	</div>
+		<div style="padding-bottom: 40px">
+			<input type="submit" class="btnSubmit" value="Применить"/>
+		</div>
+	</form>
+	<ul class="list-group">
+		<a th:each="theory : ${theories}" th:href="${'/theory/detail/' + theory.getId()}" href="/">
+			<li class="list-group-item" th:utext="${theory.getTitle()}">Что такое ООП</li>
+		</a>
+		<div id="insertionDiv"></div>
+		<input type="button" class="btnSubmit" value="Еще" onclick="getMoreTheories();"/>
+	</ul>
 </div>
+<script th:inline="javascript">
+	var theoryPagination = 1;
+	function getMoreTheories() {
+		var xmlhttp = new XMLHttpRequest();
+		var additionalInfo = "";
+		if (document.getElementById("theory_keyword").value !== "") {
+			additionalInfo += "keyword=" + document.getElementById("theory_keyword").value + "&";
+		}
+		additionalInfo += "olderThan=" + theoryPagination;
+		let theoryArray;
+
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.status === 200) {
+				theoryArray = JSON.parse(xmlhttp.responseText);
+				theoryPagination++;
+				for (let i = 0; i < theoryArray.length; i++) {
+					var link = document.createElement("a");
+					link.href = "/theory/detail/" + theoryArray[i].id;
+					var line = document.createElement("li");
+					line.className = "list-group-item";
+					line.textContent = theoryArray[i].title;
+					link.appendChild(line);
+					document.getElementById("insertionDiv").append(link);
+				}
+			}
+		}
+		xmlhttp.open("POST", "/theory/list/" + [[${category.getCategory()}]] + "?" + additionalInfo, false);
+		xmlhttp.send();
+
+	}
+</script>
 </body>
 </html>
