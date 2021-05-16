@@ -22,7 +22,7 @@ public class AuthorComponent {
     private TaskReviewComponent taskReviewComponent;
 
     public List<Category> getCategories() {
-        return categoryService.getCategories(Boolean.TRUE);
+        return categoryService.getCategories();
     }
 
     public List<Task> getUnconfirmedTasks(String category, String keyword) {

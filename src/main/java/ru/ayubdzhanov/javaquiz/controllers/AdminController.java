@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -107,6 +108,53 @@ public class AdminController {
     public String saveTask(@RequestParam Map<String, String> allParams) {
         adminService.saveTask(allParams);
         return "redirect:/admin/competition";
+    }
+
+    @RequestMapping("/task/delete/{taskId}")
+    public String deleteTask(@PathVariable String taskId) {
+        adminService.deleteTask(taskId);
+        return "redirect:/admin/competition";
+    }
+
+    @RequestMapping("/categories")
+    public String getCategoryPage(Model model) {
+        model.addAttribute("categories", adminService.getCategories());
+        return "categoryPage";
+    }
+
+    @RequestMapping("/categories/add")
+    @ResponseBody
+    public ResponseEntity<String> addNewCategory(@RequestParam String categoryName) {
+        adminService.addCategoryByName(categoryName);
+        return ResponseEntity.ok("ok");
+    }
+
+    @RequestMapping("/categories/delete/{categoryId}")
+    public String deleteCategory(@PathVariable String categoryId) {
+        adminService.deleteCategoryById(categoryId);
+        return "redirect:/admin/categories";
+    }
+
+    @RequestMapping("/competition/description")
+    public String getDescriptionPage(Model model) {
+        model.addAttribute("categories", adminService.getCategories());
+        return "competitionDescriptionPage";
+    }
+
+    @RequestMapping("/competition/description/{categoryId}")
+    public String getDescriptionDetailPage(Model model,
+                                           @PathVariable String categoryId) {
+        model.addAttribute("competitionInfo", adminService.getCompetitionInfoByCategoryId(categoryId));
+        model.addAttribute("categoryId", categoryId);
+        return "competitionDescriptionDetailPage";
+    }
+
+    @RequestMapping("/competition/description/save")
+    public String saveCompetitionDescription(@RequestParam String description,
+                                             @RequestParam MultipartFile image,
+                                             @RequestParam String categoryId) {
+        adminService.saveCompetitionInfo(description, image, categoryId);
+        return "redirect:/admin/competition/description";
     }
 
     @Getter

@@ -23,7 +23,8 @@ file:
     full-path: target/classes/static/images/theory/
     web-path: /images/theory/
 html-validator:
-  url: https://validator.nu/?out=json
+#  url: https://validator.nu/?out=json
+  url: http://validator.w3.org/nu/?out=json?out=json
 #security:
 #  basic:
 #   enabled: false

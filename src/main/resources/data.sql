@@ -52,28 +52,28 @@ INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', '�
 INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
 INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
 INSERT INTO public.theory ( description, title, category_id) VALUES ( 'г4о', 'го', 6);
-INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
-VALUES (1, 'Михаил', 100, 140, 5, '01.01.2021', 145, 2);
+INSERT INTO user_data (name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES ('Михаил', 100, 140, 5, '01.01.2021', 145, 2);
 INSERT INTO user_credential (id, login, password, role)
 VALUES (1, 'm', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
-INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
-VALUES (2, 'Антон', 100, 140, 5, '01.01.2021', 145, 6);
+INSERT INTO user_data (name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES ('Антон', 100, 140, 5, '01.01.2021', 145, 6);
 INSERT INTO user_credential (id, login, password, role)
 VALUES (2, 'a', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
-INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
-VALUES (3, 'Влад', 100, 140, 5, '01.01.2021', 145, 2);
+INSERT INTO user_data (name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES ('Влад', 100, 140, 5, '01.01.2021', 145, 2);
 INSERT INTO user_credential (id, login, password, role)
 VALUES (3, 'v', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
-INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
-VALUES (4, 'Паша', 100, 140, 5, '01.01.2021', 145, 6);
+INSERT INTO user_data (name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES ('Паша', 100, 140, 5, '01.01.2021', 145, 6);
 INSERT INTO user_credential (id, login, password, role)
 VALUES (4, 'p', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'USER');
-INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
-VALUES (5, 'admin', 100, 140, 5, '01.01.2021', 145, 6);
+INSERT INTO user_data (name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES ('admin', 100, 140, 5, '01.01.2021', 145, 6);
 INSERT INTO user_credential (id, login, password, role)
 VALUES (5, 'admin', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'ADMIN');
-INSERT INTO user_data (id, name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
-VALUES (6, 'author', 100, 140, 5, '01.01.2021', 145, 6);
+INSERT INTO user_data (name, prestige, victories, defeats, registration_date, amount_of_battles, draws)
+VALUES ('author', 100, 140, 5, '01.01.2021', 145, 6);
 INSERT INTO user_credential (id, login, password, role)
 VALUES (6, 'author', '$2y$12$r3Mwhpc1T0KrxAVE9MsbJeQuKsxBsnsVNH92wVvjt37yUceZpchom', 'AUTHOR');
 INSERT INTO competition_info (image_link, description, category_id)

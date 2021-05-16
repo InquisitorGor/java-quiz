@@ -17,15 +17,25 @@ public class HtmlValidationController {
     @Autowired
     private HtmlValidatorComponent htmlValidatorComponent;
 
-    @RequestMapping("/validate")
-    public ResponseEntity<String> validateHtml(@RequestBody String content,
-                                               @RequestParam(required = false, defaultValue = "false") Boolean firstImageExist,
-                                               @RequestParam(required = false, defaultValue = "false") Boolean secondImageExist,
-                                               @RequestParam(required = false, defaultValue = "false") Boolean thirdImageExist,
-                                               @RequestParam(required = false, defaultValue = "false") Boolean videoLinkAttachExist,
-                                               @RequestParam(required = false, defaultValue = "0") String theoryId) {
+    @RequestMapping("/validateTheoryContent")
+    public ResponseEntity<String> validateTheoryContent(@RequestBody String content,
+                                                        @RequestParam(required = false, defaultValue = "false") Boolean firstImageExist,
+                                                        @RequestParam(required = false, defaultValue = "false") Boolean secondImageExist,
+                                                        @RequestParam(required = false, defaultValue = "false") Boolean thirdImageExist,
+                                                        @RequestParam(required = false, defaultValue = "false") Boolean videoLinkAttachExist,
+                                                        @RequestParam(required = false, defaultValue = "0") String theoryId) {
         try {
-            htmlValidatorComponent.checkHtml(content, firstImageExist, secondImageExist, thirdImageExist, videoLinkAttachExist, theoryId);
+            htmlValidatorComponent.validateTheoryContent(content, firstImageExist, secondImageExist, thirdImageExist, videoLinkAttachExist, theoryId);
+            return ResponseEntity.ok("ok");
+        } catch (HtmlValidationException ex) {
+            return ResponseEntity.ok(ex.getErrors());
+        }
+    }
+
+    @RequestMapping("/validateCompetitionInfoContent")
+    public ResponseEntity<String> validateCompetitionInfoContent(@RequestBody String description) {
+        try {
+            htmlValidatorComponent.validateCompetitionInfoContent(description);
             return ResponseEntity.ok("ok");
         } catch (HtmlValidationException ex) {
             return ResponseEntity.ok(ex.getErrors());

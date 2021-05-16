@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.ayubdzhanov.javaquiz.controllers.AdminController.UpdatedTheory;
 import ru.ayubdzhanov.javaquiz.domain.Attachment;
 import ru.ayubdzhanov.javaquiz.domain.Category;
+import ru.ayubdzhanov.javaquiz.domain.CompetitionInfo;
 import ru.ayubdzhanov.javaquiz.domain.Task;
 import ru.ayubdzhanov.javaquiz.domain.TaskReview;
 import ru.ayubdzhanov.javaquiz.domain.Theory;
@@ -28,11 +29,11 @@ public class AdminService {
     private TaskService taskService;
     @Autowired
     private CategoryService categoryService;
-
-    //TODO caching categories
+    @Autowired
+    private CompetitionInfoService competitionInfoService;
 
     public List<Category> getCategories() {
-        return categoryService.getCategories(Boolean.TRUE);
+        return categoryService.getCategories();
     }
 
     public List<Theory> getTheories(String category, String keyword, String olderThan) {
@@ -69,7 +70,7 @@ public class AdminService {
     public List<Task> getIncorrectTasks(String category, String keyword) {
         List<Task> unconfirmedTasks = taskService.getTasks(category, keyword, Boolean.FALSE, 0);
         return unconfirmedTasks.stream()
-            .filter(task -> task.getReviews().stream().allMatch(taskReview -> taskReview.getIsApproved() != null))
+            .filter(task -> !task.getQuestion().equals(Strings.EMPTY) && task.getReviews().stream().allMatch(taskReview -> taskReview.getIsApproved() != null))
             .collect(Collectors.toList());
     }
 
@@ -92,6 +93,30 @@ public class AdminService {
             .map(review -> "reviewed at:" + review.getReviewedAt() + " comment: " + review.getComment())
             .collect(Collectors.joining("\r\n"));
         return comments.isEmpty() ? Strings.EMPTY: comments;
+    }
+
+    public void deleteTask(String excludedTaskId) {
+        taskService.excludeTaskFromPossibleList(getTask(Long.parseLong(excludedTaskId)));
+    }
+
+    public void addCategoryByName(String categoryName) {
+        categoryService.addCategoryByName(categoryName);
+    }
+
+    public void deleteCategoryById(String categoryId) {
+        categoryService.deleteCategoryById(categoryId);
+    }
+
+    public CompetitionInfo getCompetitionInfoByCategoryId(String categoryId) {
+        return competitionInfoService.getCompetitionInfoByCategoryId(categoryId);
+    }
+
+    public void saveCompetitionInfo(String description, MultipartFile image, String categoryId) {
+        try {
+            competitionInfoService.saveCompetitionInfo(description, image, categoryId);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Getter

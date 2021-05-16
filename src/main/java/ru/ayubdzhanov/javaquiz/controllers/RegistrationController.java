@@ -22,14 +22,17 @@ public class RegistrationController {
     @PostMapping("/register")
     public String showRegistrationPage(@RequestParam String username,
                                        @RequestParam String password,
+                                       @RequestParam String login,
                                        Model model) {
         try {
-            registrationService.saveUser(username, password);
+            registrationService.saveUser(login, password, username);
             model.addAttribute("success", Boolean.TRUE);
+            return "redirect:/login";
         } catch (UserException ex) {
             model.addAttribute("success", Boolean.FALSE);
+            return "registrationPage";
         }
-        return "registrationPage";
+
     }
 
 

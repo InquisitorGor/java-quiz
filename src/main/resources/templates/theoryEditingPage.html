@@ -115,7 +115,7 @@
 			<div th:each="picture : ${theory.getAttachments()}" th:if="${picture.getType().toString() != 'VIDEO'}" th:id="${picture.getId() + 'picture'}">
 				<p style="padding-top: 10px">Картинка 1</p>
 				<div>
-					<button type="button" class="btn btn-default" th:value="${picture.getId()}" th:onclick="'deleteFile(\'' + ${picture.getId()} + '\');'">Удалить первую картинку</button>
+					<button type="button" class="btn btn-default" th:value="${picture.getId()}" th:onclick="'deleteFile(\'' + ${picture.getId()} + '\');'">Удалить картинку</button>
 				</div>
 				<div>
 					<figure>
@@ -216,7 +216,7 @@
 				}
 			}
 		};
-		xmlhttp.open("POST", "/validation/validate?" + additionalInfo, false);
+		xmlhttp.open("POST", "/validation/validateTheoryContent?" + additionalInfo, false);
 		xmlhttp.send(document.getElementById("content").value);
 		while (xmlhttp.readyState != XMLHttpRequest.DONE || status == null) {
 		}

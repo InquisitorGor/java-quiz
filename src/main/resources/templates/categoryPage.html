@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Админка</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">Java Quiz</a>
+		</div>
+		<div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/admin/competition"><span class="glyphicon glyphicon-star"></span> Админ панель (соревнования)</a></li>
+					<li><a href="/admin/theory"><span class="glyphicon glyphicon-star"></span> Админ панель (теория)</a></li>
+					<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</nav>
+<div class="container" style="padding-top: 40px">
+	<div class="container">
+		<h2>Добавить новую категорию</h2>
+		<div class="form-group">
+			<label for="category">Категория:</label>
+			<textarea name="categoryName" class="form-control" rows="1" id="category"></textarea>
+		</div>
+		<div>
+			<button type="button" class="btn btn-default" onclick="saveCategory();">Добавить новую категорию</button>
+		</div>
+	</div>
+	<div class="container">
+		<h2>Категории:</h2>
+		<div th:each="category : ${categories}" class="panel panel-default">
+			<div th:utext="${category.getCategory()}" class="panel-body">Panel Content</div>
+			<div>
+				<a th:href="'/admin/categories/delete/' + ${category.getId()}" href="/admin/categories/delete" class="btn" role="button">Удалить</a>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	function saveCategory() {
+		if (document.getElementById("category").value === "") {
+			alert("Название категории не должно быть пустым!");
+			return;
+		}
+		var xmlhttp = new XMLHttpRequest();
+		var additionalInfo = "categoryName=" + document.getElementById("category").value;
+		xmlhttp.open("POST", "/admin/categories/add?" + additionalInfo, false);
+		xmlhttp.send();
+		location.reload();
+	}
+</script>
+</body>
+</html>

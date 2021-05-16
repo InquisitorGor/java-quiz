@@ -8,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import ru.ayubdzhanov.javaquiz.dao.CategoryRepository;
-import ru.ayubdzhanov.javaquiz.dao.CompetitionInfoRepository;
 import ru.ayubdzhanov.javaquiz.dao.CompetitionRepository;
 import ru.ayubdzhanov.javaquiz.dao.ContestantInfoRepository;
 import ru.ayubdzhanov.javaquiz.dao.TaskRepository;
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 @Service
 public class CompetitionService {
     @Autowired
-    private CompetitionInfoRepository competitionInfoRepository;
+    private CompetitionInfoService competitionInfoService;
     @Autowired
     private CompetitionRepository competitionRepository;
     @Autowired
@@ -46,8 +45,6 @@ public class CompetitionService {
     private CategoryRepository categoryRepository;
     @Autowired
     private ContestantInfoRepository contestantInfoRepository;
-
-    private List<CompetitionInfo> competitionsList;
 
     public Competition getCompetition(Long categoryId, Long existedCompetitionId) {
         return existedCompetitionId == null ? getNewCompetition(categoryId) : getExistedCompetition(existedCompetitionId);
@@ -193,17 +190,11 @@ public class CompetitionService {
     }
 
     public List<CompetitionInfo> getCompetitionsList() {
-        if (competitionsList == null) {
-            competitionsList = competitionInfoRepository.findAll();
-        }
-        return competitionsList;
+        return competitionInfoService.findAll();
     }
 
-    public CompetitionInfo getCompetitionInfo(Long categoryId) {
-        Optional<CompetitionInfo> competitionInfo = competitionsList.stream()
-            .filter(competition -> competition.getCategory().getId().equals(categoryId))
-            .findFirst();
-        return competitionInfo.orElseGet(() -> competitionInfoRepository.findByCategoryId(categoryId));
+    public CompetitionInfo getCompetitionInfo(String categoryId) {
+        return competitionInfoService.getCompetitionInfoByCategoryId(categoryId);
     }
 
     private void wrapTasks(List<Task> tasks) {

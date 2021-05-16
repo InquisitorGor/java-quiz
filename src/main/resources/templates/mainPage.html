@@ -65,6 +65,8 @@
                     <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
                 </ul>
                 <ul th:if="${isAuthenticated && role == 'ROLE_ADMIN'}" class="nav navbar-nav navbar-right">
+                    <li><a href="/admin/competition/description"><span class="glyphicon glyphicon-star"></span> Админ панель (описание соревнования)</a></li>
+                    <li><a href="/admin/categories"><span class="glyphicon glyphicon-star"></span> Админ панель (категории)</a></li>
                     <li><a href="/admin/theory"><span class="glyphicon glyphicon-star"></span> Админ панель (теория)</a></li>
                     <li><a href="/admin/competition"><span class="glyphicon glyphicon-star"></span> Админ панель (соревнования)</a></li>
                     <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>

@@ -18,9 +18,12 @@ public class RegistrationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void saveUser(String name, String password) throws UserException{
-        if (userCredentialRepository.findByLogin(name) != null) throw new UserException("User already exists");
+    public void saveUser(String login, String password, String username) throws UserException{
+        if (userCredentialRepository.findByLogin(login) != null) throw new UserException("User already exists");
         UserData userData = new UserData();
-        userCredentialRepository.save(new UserCredential(name, passwordEncoder.encode(password), Roles.USER, userData));
+        userData.setName(username);
+        userData.setPrestige(0);
+        userData.setAmountOfBattles(0);
+        userCredentialRepository.save(new UserCredential(login, passwordEncoder.encode(password), Roles.USER, userData));
     }
 }

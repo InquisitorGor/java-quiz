@@ -88,8 +88,10 @@
 				<input type="submit" class="btnSubmit" value="Сохранить"/>
 			</div>
 			<div>
-				<a th:if="${task.getId() != 0 && task.getIsApproved() == true}" th:href="'/admin/task/delete/' + ${task.getId()}" class="btn btn-danger" role="button" style="float: right">Удалить запись</a>
-				<input th:if="${task.getId() != 0}" type="submit" class="btnSubmit" value="Исправить"/>
+				<input th:if="${task.getId() != 0 && !task.getIsApproved()}" type="submit" class="btnSubmit" value="Исправить"/>
+				<div th:if="${task.getId() != 0 && task.getIsApproved()}" >
+					<a th:href="'/admin/task/delete/' + ${task.getId()}" href="/admin/theory/0" class="btn" role="button" style="float: left">Снять из группы возможных вопросов</a>
+				</div>
 			</div>
 		</div>
 	</form>
@@ -109,6 +111,22 @@
 		</form>
 	</div>
 </div>
+<script>
+	function validateTaskContent() {
+		if (document.getElementById("title").value == "") {
+			document.getElementById("errorContent").value = "Вопрос для задачи отсутствует";
+			alert("Возникла ошибка. Смотри на панель \"Ошибки\"");
+			return false;
+		}
+		if (document.getElementById("firstOption").value == "" || document.getElementById("secondOption").value == "") {
+			document.getElementById("errorContent").value = "Должно быть минимум два варианта";
+			alert("Возникла ошибка. Смотри на панель \"Ошибки\"");
+			return false;
+		}
+		return true;
+	}
+
+</script>
 </body>
 
 </html>

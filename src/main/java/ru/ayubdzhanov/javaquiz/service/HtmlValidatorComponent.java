@@ -22,9 +22,8 @@ public class HtmlValidatorComponent {
     @Autowired
     private TheoryRepository theoryRepository;
 
-    //FIXME ошибка при theoryId = 0
-    public void checkHtml(String content, Boolean firstImageExist, Boolean secondImageExist,
-                          Boolean thirdImageExist, Boolean linkAttachExist, String theoryId) throws HtmlValidationException {
+    public void validateTheoryContent(String content, Boolean firstImageExist, Boolean secondImageExist,
+                                      Boolean thirdImageExist, Boolean linkAttachExist, String theoryId) throws HtmlValidationException {
         htmlValidatorAdapter.validateHtml(content);
         if ((firstImageExist && !keywordExist(content, "%картинка 1%") ||
             !firstImageExist && keywordExist(content, "%картинка 1%") && !isAttachPresent("%картинка 1%", theoryId)) ||
@@ -119,4 +118,7 @@ public class HtmlValidatorComponent {
         return !collect.isEmpty();
     }
 
+    public void validateCompetitionInfoContent(String description) {
+        htmlValidatorAdapter.validateHtml(description);
+    }
 }

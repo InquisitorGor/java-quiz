@@ -51,7 +51,7 @@ public class TaskService {
         task.setTaskOption(Collections.emptyList());
         task.setPrestige(0);
         task.setQuestion(Strings.EMPTY);
-        task.setCategory(categoryService.getCategories(Boolean.FALSE).stream().findFirst().get());
+        task.setCategory(categoryService.getCategories().stream().findFirst().get());
         return task;
     }
 
@@ -79,7 +79,7 @@ public class TaskService {
             task = getTask(Long.parseLong(allParams.get("taskId")));
             taskOptionRepository.deleteAll(task.getTaskOption());
         }
-        task.setCategory(categoryService.getCategories(Boolean.TRUE).stream()
+        task.setCategory(categoryService.getCategories().stream()
             .filter(cat -> cat.getCategory().equals(allParams.get("category"))).findFirst().get());
         task.setQuestion(allParams.get("title"));
         task.setPrestige(Integer.parseInt(allParams.get("prestige")));
@@ -116,6 +116,12 @@ public class TaskService {
             }
             taskOptions.add(taskOption);
         }
+    }
+
+    public void excludeTaskFromPossibleList(Task excludedTask) {
+        excludedTask.setIsApproved(Boolean.FALSE);
+        excludedTask.setQuestion(Strings.EMPTY);
+        taskRepository.save(excludedTask);
     }
 
     @Getter
