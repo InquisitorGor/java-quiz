@@ -216,7 +216,7 @@ public class CompetitionService {
             if (currentPlayer.getScore() == null || opponent.getScore() == null) {
                 competition.setViewUtil(ViewUtils
                     .builder()
-                    .imageLink(competitionsList.stream().filter(c -> c.getCategory().getId().equals(competition.getCategory().getId())).findFirst().get().getImageLink())
+                    .imageLink(competitionInfoService.getCompetitionInfoByCategoryId(String.valueOf(competition.getCategory().getId())).getImageLink())
                     .userData(userDataRepository.getOne(competition.getContestants().stream().filter(con -> !con.getUserData().getId().equals(userDataContainer.getId())).findFirst().get().getUserData().getId()))
                     .build());
                 return;
@@ -230,7 +230,7 @@ public class CompetitionService {
             }
             competition.setViewUtil(ViewUtils
                 .builder()
-                .imageLink(competitionsList.stream().filter(c -> c.getCategory().getId().equals(competition.getCategory().getId())).findFirst().get().getImageLink())
+                .imageLink(competitionInfoService.getCompetitionInfoByCategoryId(String.valueOf(competition.getCategory().getId())).getImageLink())
                 .userData(userDataRepository.getOne(competition.getContestants().stream().filter(con -> !con.getUserData().getId().equals(userDataContainer.getId())).findFirst().get().getUserData().getId()))
                 .style(style)
                 .build());
@@ -241,7 +241,7 @@ public class CompetitionService {
     public Competition wrapCompetition(Competition competition){
         competition.setViewUtil(ViewUtils
             .builder()
-            .imageLink(competitionsList.stream().filter(c -> c.getCategory().getId().equals(competition.getCategory().getId())).findFirst().get().getImageLink())
+            .imageLink(competitionInfoService.getCompetitionInfoByCategoryId(String.valueOf(competition.getCategory().getId())).getImageLink())
             .build());
         return competition;
     }
