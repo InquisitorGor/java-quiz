@@ -51,13 +51,18 @@
 			</div>
 		</div>
 		<div style="padding-top: 30px">
-			<label>Существующая картинка:</label>
-			<img style="width:50px;height:50px;" th:src="${competitionInfo.getImageLink()}" class="img-thumbnail"
-			     alt="Cinque Terre">
+			<div th:if="${!competitionInfo.getImageLink().isEmpty()}" id="picture">
+				<label>Существующая картинка:</label>
+				<img style="width:50px;height:50px;" th:src="${competitionInfo.getImageLink()}" class="img-thumbnail"
+				     alt="Cinque Terre">
+				<div>
+					<button type="button" class="btn btn-default" th:onclick="'deletePicture(\'' + ${competitionInfo.getId()} + '\');'">Удалить картинку</button>
+				</div>
+			</div>
 		</div>
 		<div style="padding-top: 30px">
 			<input type="submit" class="btnSubmit" value="Сохранить"/>
-			<a th:href="'/admin/theory/delete/'" href="/admin/theory/0" class="btn" role="button" style="float: right">Удалить запись</a>
+			<a th:href="'/admin/competitionInfo/delete/' + ${competitionInfo.getId()}" href="/admin/theory/0" class="btn" role="button" style="float: right">Удалить запись</a>
 		</div>
 	</form>
 </div>
@@ -93,6 +98,27 @@
 		while (xmlhttp.readyState != XMLHttpRequest.DONE || status == null) {
 		}
 		return status !== false;
+	}
+
+	function deletePicture(competitionInfoId) {
+		var xmlHttpRequest = new XMLHttpRequest();
+		xmlHttpRequest.onreadystatechange = function () {
+			if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
+				if (xmlHttpRequest.status == 200) {
+					if (xmlHttpRequest.responseText === "ok") {
+						var picture = document.getElementById('picture');
+						picture.remove();
+					}
+				} else if (xmlHttpRequest.status === 400) {
+					document.getElementById("errorContent").innerHTML = xmlHttpRequest.responseText;
+					alert('400 returned');
+				} else {
+					alert('something else other than 200 was returned');
+				}
+			}
+		};
+		xmlHttpRequest.open("POST", "/admin/competition/description/picture/delete", false);
+		xmlHttpRequest.send(competitionInfoId);
 	}
 </script>
 </body>

@@ -1,5 +1,6 @@
 package ru.ayubdzhanov.javaquiz.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import ru.ayubdzhanov.javaquiz.domain.CompetitionInfo;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CompetitionInfoService {
     @Autowired
     private CompetitionInfoRepository competitionInfoRepository;
@@ -43,4 +45,25 @@ public class CompetitionInfoService {
         return competitionInfoRepository.findAll();
     }
 
+    public void deleteCompetitionDescriptionPicture(String competitionInfoId) throws Exception {
+        CompetitionInfo competitionInfo = competitionInfoRepository.findById(Long.parseLong(competitionInfoId)).get();
+        if (competitionInfo.getId() == null) throw new Exception("There is no competition description for this request");
+        String[] split = competitionInfo.getImageLink().split("/");
+        fileComponent.deleteFile(split[split.length - 1]);
+        competitionInfo.setImageLink(null);
+        competitionInfoRepository.save(competitionInfo);
+    }
+
+    public void deleteCompetitionInfo(String competitionInfoId) {
+        try {
+            try {
+                deleteCompetitionDescriptionPicture(competitionInfoId);
+            } catch (Exception ignored) {
+
+            }
+            competitionInfoRepository.deleteById(Long.parseLong(competitionInfoId));
+        } catch (Exception ignored) {
+            log.error("There are key restrictions");
+        }
+    }
 }

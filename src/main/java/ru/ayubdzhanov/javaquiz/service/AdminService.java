@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ayubdzhanov.javaquiz.controllers.AdminController.UpdatedTheory;
@@ -92,7 +93,7 @@ public class AdminService {
             .sorted(Comparator.comparing(TaskReview::getReviewedAt).reversed())
             .map(review -> "reviewed at:" + review.getReviewedAt() + " comment: " + review.getComment())
             .collect(Collectors.joining("\r\n"));
-        return comments.isEmpty() ? Strings.EMPTY: comments;
+        return comments.isEmpty() ? Strings.EMPTY : comments;
     }
 
     public void deleteTask(String excludedTaskId) {
@@ -117,6 +118,14 @@ public class AdminService {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+    }
+
+    public void deleteCompetitionDescriptionPicture(String competitionInfoId) throws Exception {
+        competitionInfoService.deleteCompetitionDescriptionPicture(competitionInfoId);
+    }
+
+    public void deleteCompetitionInfo(String competitionInfoId) {
+        competitionInfoService.deleteCompetitionInfo(competitionInfoId);
     }
 
     @Getter

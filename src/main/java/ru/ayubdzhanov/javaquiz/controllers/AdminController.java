@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -155,6 +156,23 @@ public class AdminController {
                                              @RequestParam String categoryId) {
         adminService.saveCompetitionInfo(description, image, categoryId);
         return "redirect:/admin/competition/description";
+    }
+
+    @RequestMapping("/competitionInfo/delete/{competitionInfoId}")
+    public String deleteCompetitionInfo(@PathVariable String competitionInfoId) {
+        adminService.deleteCompetitionInfo(competitionInfoId);
+        return "redirect:/admin/competition/description";
+    }
+    @RequestMapping("/competition/description/picture/delete")
+    @ResponseBody
+    public ResponseEntity<String> deleteCompetitionDescriptionPicture(@RequestBody String competitionInfoId) {
+        try {
+            adminService.deleteCompetitionDescriptionPicture(competitionInfoId);
+            return ResponseEntity.ok("ok");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseEntity.ok(exception.getMessage());
+        }
     }
 
     @Getter

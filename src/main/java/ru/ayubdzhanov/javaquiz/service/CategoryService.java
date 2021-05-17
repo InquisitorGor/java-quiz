@@ -1,5 +1,6 @@
 package ru.ayubdzhanov.javaquiz.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ayubdzhanov.javaquiz.dao.CategoryRepository;
@@ -11,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
@@ -28,7 +30,8 @@ public class CategoryService {
     public void deleteCategoryById(String categoryId){
         try {
             categoryRepository.deleteById(Long.parseLong(categoryId));
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
+            log.error("There are key restrictions");
         }
     }
 
