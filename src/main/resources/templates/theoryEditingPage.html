@@ -31,7 +31,7 @@
 	</div>
 </nav>
 <div class="container" style="padding-top: 60px">
-	<form name="saveForm" method="post" action="/admin/theory/update" enctype="multipart/form-data" onsubmit="return(validateContent());">
+	<form name="saveForm" method="post" action="/admin/theory/update" enctype="multipart/form-data" onsubmit="validateContent(this); return false">
 		<div class="form-group">
 			<label for="theory_cat">Категория:</label>
 			<select name="category" class="form-control" id="theory_cat">
@@ -152,81 +152,74 @@
 	</form>
 </div>
 <script>
-	function validateContent() {
+	function validateContent(form) {
 		let re = new RegExp('.*(\\.jpg|\\.png)');
-		var status = null;
 		var additionalInfo = "";
 		var xmlhttp = new XMLHttpRequest();
-		if (document.getElementById("firstImage").value != "") {
+		if (document.getElementById("firstImage").value !== "") {
 			if (!re.test(document.getElementById("firstImage").value)) {
 				alert("Тип файла для первого изображения невалидный!");
 				return false;
 			}
-			if (document.getElementById("firstImageCaption").value == "") {
+			if (document.getElementById("firstImageCaption").value === "") {
 				alert("Подпись к первому рисунку отсутствует");
 				return false;
 			}
 			additionalInfo += "firstImageExist=true&";
 		}
-		if (document.getElementById("secondImage").value != "") {
+		if (document.getElementById("secondImage").value !== "") {
 			if (!re.test(document.getElementById("secondImage").value)) {
 				alert("Тип файла для второго изображения невалидный!");
 				return false;
 			}
-			if (document.getElementById("secondImageCaption").value == "") {
+			if (document.getElementById("secondImageCaption").value === "") {
 				alert("Подпись ко второму рисунку отсутствует");
 				return false;
 			}
 			additionalInfo += "secondImageExist=true&";
 		}
-		if (document.getElementById("thirdImage").value != "") {
+		if (document.getElementById("thirdImage").value !== "") {
 			if (!re.test(document.getElementById("thirdImage").value)) {
 				alert("Тип файла для третьего изображения невалидный!");
 				return false;
 			}
-			if (document.getElementById("thirdImageCaption").value == "") {
+			if (document.getElementById("thirdImageCaption").value === "") {
 				alert("Подпись к третьему рисунку отсутствует");
 				return false;
 			}
 			additionalInfo += "thirdImageExist=true&";
 		}
-		if (document.getElementById("videoLinkAttach").value != "") {
+		if (document.getElementById("videoLinkAttach").value !== "") {
 			additionalInfo += "videoLinkAttachExist=true&";
 		}
 		if (document.getElementById("hiddenTheoryId").value !== "0") {
 			additionalInfo += "theoryId=" + document.getElementById("hiddenTheoryId").value + "&";
 		}
 		xmlhttp.onreadystatechange = function () {
-			if (xmlhttp.readyState == XMLHttpRequest.DONE) {
-				if (xmlhttp.status == 200) {
+			if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+				if (xmlhttp.status === 200) {
 					if (xmlhttp.responseText === "ok") {
-						status = true;
+						form.submit();
 					} else {
 						alert('Возникла ошибка. Смотри на панель "Ошибки"');
 						document.getElementById("errorContent").innerHTML = xmlhttp.responseText;
-						status = false;
 					}
 				} else if (xmlhttp.status === 400) {
 					alert('Заполните поля');
-					status = false;
 				} else {
 					alert('something else other than 200 was returned');
-					status = false;
 				}
 			}
 		};
 		xmlhttp.open("POST", "/validation/validateTheoryContent?" + additionalInfo, false);
 		xmlhttp.send(document.getElementById("content").value);
-		while (xmlhttp.readyState != XMLHttpRequest.DONE || status == null) {
-		}
-		return status !== false;
 	}
 
 	function deleteFile(id) {
 		var xmlHttpRequest = new XMLHttpRequest();
 		xmlHttpRequest.onreadystatechange = function () {
-			if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
-				if (xmlHttpRequest.status == 200) {
+			if (xmlHttpRequest.readyState === XMLHttpRequest.DONE) {
+				if (xmlHttpRequest.status === 200) {
 					if (xmlHttpRequest.responseText === "ok") {
 						var picture = document.getElementById(id + 'picture');
 						picture.remove();

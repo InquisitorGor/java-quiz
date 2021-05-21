@@ -38,14 +38,15 @@ public class HtmlValidatorComponent {
                 "attach is present, but keyword is absent\r\n attach is absent, but keyword is present");
         }
         checkParsedHtml(content, firstImageExist, secondImageExist, thirdImageExist, linkAttachExist);
+        Theory theory = theoryRepository.findById(Long.parseLong(theoryId)).orElseThrow(() -> new HtmlValidationException("validation failed", "there is no entity"));
         if (theoryId.equals("0")) return;
         if (!firstImageExist && !keywordExist(content, "%картинка 1%") && isAttachPresent("%картинка 1%", theoryId) ||
             !secondImageExist && !keywordExist(content, "%картинка 2%") && isAttachPresent("%картинка 2%", theoryId) ||
-            !thirdImageExist && !keywordExist(content, "%картинка 3%") && isAttachPresent("%картинка 3%", theoryId)
+            !thirdImageExist && !keywordExist(content, "%картинка 3%") && isAttachPresent("%картинка 3%", theoryId) ||
+            !linkAttachExist && !keywordExist(content, "%видео%") && theory.getAttachments().stream().anyMatch(attachment -> attachment.getType() == Type.VIDEO)
         ) {
             throw new HtmlValidationException("validation failed", "You forgot to insert a keyword");
         }
-        Theory theory = theoryRepository.findById(Long.parseLong(theoryId)).orElseThrow(() -> new HtmlValidationException("validation failed", "there is no entity"));
         theory.getAttachments().stream()
             .filter(attachment -> attachment.getType() == Type.IMAGE)
             .forEach(attachment -> {

@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
@@ -35,8 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .antMatchers("/", "/registration/**", "/login", "/images/**", "/webjars/**").permitAll()
-            .antMatchers("/competition/**", "/user_page").hasRole("USER")
-            .antMatchers("/theory").hasAnyRole("USER", "ADMIN")
+            .antMatchers("/competition/**", "/user_page", "/theory/**").hasRole("USER")
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/author/**").hasRole("AUTHOR")
             .and().formLogin().loginPage("/login")
@@ -45,10 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authProvider());
     }
-
 }

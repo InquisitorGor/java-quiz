@@ -31,7 +31,7 @@
 	</div>
 </nav>
 <div class="container" style="padding-top: 40px">
-	<form method="post" action="/admin/competition/description/save" enctype="multipart/form-data" onsubmit="return(validateInfo());">
+	<form method="post" action="/admin/competition/description/save" enctype="multipart/form-data" onsubmit="validateInfo(this); return false">
 		<h2>Описание соревнования</h2>
 		<div class="form-group" id="error">
 			<label for="errorContent">Ошибки:</label>
@@ -67,37 +67,30 @@
 	</form>
 </div>
 <script>
-	function validateInfo() {
+	function validateInfo(form) {
 		if (document.getElementById("description").value === "") {
 			alert("Описание соревнования не должно быть пустым!");
 			return false;
 		}
-		var status = null;
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
-			if (xmlhttp.readyState == XMLHttpRequest.DONE) {
-				if (xmlhttp.status == 200) {
+			if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+				if (xmlhttp.status === 200) {
 					if (xmlhttp.responseText === "ok") {
-						status = true;
+						form.submit();
 					} else {
 						alert('Возникла ошибка. Смотри на панель "Ошибки"');
 						document.getElementById("errorContent").innerHTML = xmlhttp.responseText;
-						status = false;
 					}
 				} else if (xmlhttp.status === 400) {
 					alert('Заполните поля');
-					status = false;
 				} else {
 					alert('something else other than 200 was returned');
-					status = false;
 				}
 			}
 		};
 		xmlhttp.open("POST", "/validation/validateCompetitionInfoContent", false);
 		xmlhttp.send(document.getElementById("description").value);
-		while (xmlhttp.readyState != XMLHttpRequest.DONE || status == null) {
-		}
-		return status !== false;
 	}
 
 	function deletePicture(competitionInfoId) {

@@ -42,7 +42,7 @@ public class CompetitionService {
     @Autowired
     private UserDataContainer userDataContainer; //TODO enlarge container
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
     @Autowired
     private ContestantInfoRepository contestantInfoRepository;
 
@@ -99,7 +99,11 @@ public class CompetitionService {
         newCompetition.setTasks(tasks);
         newCompetition.setStartedAt(LocalDateTime.now());
         newCompetition.getContestants().add(currentContestant);
-        newCompetition.setCategory(categoryRepository.getOne(categoryId));
+        try {
+            newCompetition.setCategory(categoryService.getCategoryById(String.valueOf(categoryId)));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
         competitionRepository.save(newCompetition);
         return newCompetition;
     }
