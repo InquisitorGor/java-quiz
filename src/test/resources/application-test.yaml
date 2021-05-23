@@ -1,0 +1,29 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+  datasource:
+    data: classpath:test-data.sql
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: off
+        SQL: off
+file:
+  theory-images:
+#    full-path: src/main/resources/static/images/theory/
+    full-path: target/classes/static/images/theory/
+    web-path: /images/theory/
+html-validator:
+#  url: https://validator.nu/?out=json
+  url: http://validator.w3.org/nu/?out=json
+#security:
+#  basic:
+#   enabled: false
+#management:
+#  security:
+#    enabled: false
