@@ -43,10 +43,10 @@ public class TheoryService {
     }
 
     public List<Theory> getTheories(String category, String keyword, Integer olderThan) {
-        if ((category == null || category.equals("None")) && keyword == null) return theoryRepository.findAll(PageRequest.of(olderThan, 20)).getContent();
-        else if (category != null && keyword == null) return theoryRepository.findAllByCategoryCategory(category, PageRequest.of(olderThan, 20));
-        else if (category == null || category.equals("None")) return theoryRepository.findAllByTitle(keyword, PageRequest.of(olderThan, 20));
-        return theoryRepository.findAllByTitleAndCategory(keyword, category, PageRequest.of(olderThan, olderThan + 20));
+        if ((category == null || category.equals("None")) && keyword == null) return theoryRepository.findAll(PageRequest.of(olderThan, 10)).getContent();
+        else if (category != null && keyword == null) return theoryRepository.findAllByCategoryCategory(category, PageRequest.of(olderThan, 10));
+        else if (category == null || category.equals("None")) return theoryRepository.findAllByTitle(keyword, PageRequest.of(olderThan, 10));
+        return theoryRepository.findAllByTitleAndCategory(keyword, category, PageRequest.of(olderThan, 10));
     }
 
     public Theory wrapTheory(Theory theory) {

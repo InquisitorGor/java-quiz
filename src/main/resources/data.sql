@@ -14,19 +14,34 @@ INSERT INTO public.theory ( description, title, category_id) VALUES ( '<p>«Ко
 INSERT INTO public.theory ( description, title, category_id) VALUES ( '<p>База данных — организованный и адаптированный для обработки вычислительной системой набор информации.', 'Что такое «база данных»?', 5);
 INSERT INTO public.theory ( description, title, category_id) VALUES ( '<p>SQL, Structured query language («язык структурированных запросов») — формальный непроцедурный язык программирования, применяемый для создания, модификации и управления данными в произвольной реляционной базе данных, управляемой соответствующей системой управления базами данных (СУБД).</p>', 'Что такое «SQL»?', 6);
 INSERT INTO public.theory ( description, title, category_id) VALUES ( '<p>JDBC, Java DataBase Connectivity (соединение с базами данных на Java) — промышленный стандарт взаимодействия Java-приложений с различными СУБД. Реализован в виде пакета java.sql, входящего в состав Java SE.</p>', 'Что такое JDBC?', 7);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'на на на на', 'и носило меня', 1);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 1);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 1);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 1);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 1);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'г4о', 1);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'г4о', 'го', 1);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 1);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'г5о', 'го', 6);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
-INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что такое «абстракция»?','Что такое «абстракция»?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что представляет собой «обмен сообщениями»?','Что представляет собой «обмен сообщениями»?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Расскажите про основные понятия ООП: «класс», «объект», «интерфейс».','Расскажите про основные понятия ООП: «класс», «объект», «интерфейс».', 1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'В чем заключаются преимущества и недостатки объектно-ориентированного подхода в программировании?','В чем заключаются преимущества и недостатки объектно-ориентированного подхода в программировании?', 1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что подразумевают в плане принципов ООП выражения «является» и «имеет»?','Что подразумевают в плане принципов ООП выражения «является» и «имеет»?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'В чем разница между композицией и агрегацией?', 'В чем разница между композицией и агрегацией?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что такое статическое и динамическое связывание?','Что такое статическое и динамическое связывание?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что','Что такое композиция?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что','Что такое агрегация?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что','Что такое объект?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что','Какие проявления полиморфизма вы знаете?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что','В чем преимущества объектно-ориентированных  языков программирования?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что','Как использование объектно-ориентерованного подхода улучшает разработку программного обеспечения?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что','В  чем разница между композицией  и агрегацией?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что','В чем преимущества объектно-ориентированных  языков программирования?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что такое статическое и динамическое связывание?','Что такое статическое и динамическое связывание?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что такое статическое и динамическое связывание?','Что такое статическое и динамическое связывание?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что такое статическое и динамическое связывание?','Что такое статическое и динамическое связывание?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что такое статическое и динамическое связывание?','Что такое статическое и динамическое связывание?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что такое статическое и динамическое связывание?','Что такое статическое и динамическое связывание?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что такое «абстракция»?','Что такое «абстракция»?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'В чем разница между композицией и агрегацией?', 'В чем разница между композицией и агрегацией?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Что','Что вы подразумеваете под  полиморфизмом, инкапсуляцией и  динамическим связыванием?',  1);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'За что отвечает JVM','За что отвечает JVM',  2);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Области данных времени выполнения','Области данных времени выполнения',  2);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Frames','Frames', 2);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'Execution Engine','Execution Engine', 2);
+INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 2);
 INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го', 6);
 INSERT INTO public.theory ( description, title, category_id) VALUES ( 'го', 'го5', 6);
 INSERT INTO public.theory ( description, title, category_id) VALUES ( 'г34о', 'го', 6);
@@ -137,9 +152,7 @@ VALUES (true, 1, 1),
        (true, 5, 9),
        (false, 6, 9),
        (true, 5, 10),
-       (false, 6, 10),
-       (true, 5, 11),
-       (false, 6, 11);
+       (false, 6, 10);
 INSERT INTO competition(finished_at, started_at, category_id)
 VALUES ('2021-04-18 14:50:30.838000', '2021-04-18 14:50:02.653000', 1),
        ('2021-04-18 14:53:48.322000', '2021-04-18 14:50:53.241000', 1),

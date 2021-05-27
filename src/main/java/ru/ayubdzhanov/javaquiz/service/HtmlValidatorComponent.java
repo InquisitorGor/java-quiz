@@ -99,6 +99,7 @@ public class HtmlValidatorComponent {
     }
 
     private boolean keywordExist(String content, String keyword) {
+        content = content.replace("\n", "").replace("\r", "");
         Pattern pattern = Pattern.compile(".*(" + keyword + ").*");
         Matcher matcher = pattern.matcher(content);
         return matcher.matches();
