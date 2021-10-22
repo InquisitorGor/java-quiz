@@ -27,6 +27,7 @@ public class TheoryController {
         model.addAttribute("theories", theoryService.getTheories(category, keyword, 0));
         model.addAttribute("selectedKeyword", keyword);
         model.addAttribute("category", theoryService.getCategory(category));
+
         return "theoryPage";
     }
 
