@@ -29,6 +29,7 @@ public class TheoryController {
         model.addAttribute("category", theoryService.getCategory(category));
 
 
+
         return "theoryPage";
     }
 
