@@ -104,6 +104,7 @@ public class HtmlValidatorComponent {
         Matcher matcher = pattern.matcher(content);
         return matcher.matches();
 
+
     }
 
     private boolean isAttachPresent(String keyword, String theoryId) {
